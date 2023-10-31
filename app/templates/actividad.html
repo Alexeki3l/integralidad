@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- contenido -->
+    <div class="row justify-content-between my-3">
+        <h5 class="col-sm-4 mx-2">Actividades</h5>
+        <button class="col-sm-2 btn btn-success mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Importar Excel</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Cargar Excel</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="file" name="excel_file">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    <button type="submit" class="btn btn-primary">Cargar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-success">Cargar</button>
+            
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    
+                    <!-- <p class="text-muted font-14">
+                        DataTables has most features enabled by default, so all you need to do to use it with your own tables is to call the construction
+                        function:
+                        <code>$().DataTable();</code>. KeyTable provides Excel like cell navigation on any table. Events (focus, blur, action etc) can be assigned to individual
+                        cells, columns, rows or all cells.
+                    </p> -->
+
+                    <!-- <ul class="nav nav-tabs nav-bordered mb-3">
+                        <li class="nav-item">
+                            <a href="#basic-datatable-preview" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                                Preview
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#basic-datatable-code" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                                Code
+                            </a>
+                        </li>
+                    </ul> end nav -->
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="basic-datatable-preview">
+                            <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Aspecto</th>
+                                        <th>Activa?</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for actividad in actividades %}
+                                    <tr>
+                                        <td>{{actividad.description}}</td>
+                                        <td>{{actividad.aspecto}}</td>
+                                        {% if actividad.is_open %}
+                                        <td>Si</td>
+                                        {% else %}
+                                        <td>No</td>
+                                        {% endif %}
+                                        <td class="table-action">
+                                            <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                            <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-pencil"></i></a>
+                                            <a href="javascript: void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>                                           
+                        </div> <!-- end preview-->
+                    
+                        <div class="tab-pane" id="basic-datatable-code">
+                            <p>Please include following css file at <code>head</code> element</p>
+
+                            <pre>
+                                <span class="html escape">
+                                    &lt;!-- Datatables css --&gt;
+                                    &lt;link href=&quot;assets/css/vendor/dataTables.bootstrap5.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+                                    &lt;link href=&quot;assets/css/vendor/responsive.bootstrap5.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+                                </span>
+                            </pre> <!-- end highlight-->
+
+                            <p>Make sure to include following js files at end of <code>body</code> element</p>
+
+                            <pre class="mb-0">
+                                <span class="html escape">
+                                    &lt;!-- Datatables js --&gt;
+                                    &lt;script src=&quot;assets/js/vendor/jquery.dataTables.min.js&quot;&gt;&lt;/script&gt;
+                                    &lt;script src=&quot;assets/js/vendor/dataTables.bootstrap5.js&quot;&gt;&lt;/script&gt;
+                                    &lt;script src=&quot;assets/js/vendor/dataTables.responsive.min.js&quot;&gt;&lt;/script&gt;
+                                    &lt;script src=&quot;assets/js/vendor/responsive.bootstrap5.min.js&quot;&gt;&lt;/script&gt;
+
+                                    &lt;!-- Datatable Init js --&gt;
+                                    &lt;script src=&quot;assets/js/pages/demo.datatable-init.js&quot;&gt;&lt;/script&gt;
+                                </span>
+                            </pre> <!-- end highlight-->
+
+                            <pre class="mb-0">
+                                <span class="html escape">
+                                    &lt;table id=&quot;basic-datatable&quot; class=&quot;table dt-responsive nowrap w-100&quot;&gt;
+                                        &lt;thead&gt;
+                                            &lt;tr&gt;
+                                                &lt;th&gt;Name&lt;/th&gt;
+                                                &lt;th&gt;Position&lt;/th&gt;
+                                                &lt;th&gt;Office&lt;/th&gt;
+                                                &lt;th&gt;Age&lt;/th&gt;
+                                                &lt;th&gt;Start date&lt;/th&gt;
+                                                &lt;th&gt;Salary&lt;/th&gt;
+                                            &lt;/tr&gt;
+                                        &lt;/thead&gt;
+                                    
+                                    
+                                        &lt;tbody&gt;
+                                            &lt;tr&gt;
+                                                &lt;td&gt;Tiger Nixon&lt;/td&gt;
+                                                &lt;td&gt;System Architect&lt;/td&gt;
+                                                &lt;td&gt;Edinburgh&lt;/td&gt;
+                                                &lt;td&gt;61&lt;/td&gt;
+                                                &lt;td&gt;2011/04/25&lt;/td&gt;
+                                                &lt;td&gt;$320,800&lt;/td&gt;
+                                            &lt;/tr&gt;
+                                            &lt;tr&gt;
+                                                &lt;td&gt;Garrett Winters&lt;/td&gt;
+                                                &lt;td&gt;Accountant&lt;/td&gt;
+                                                &lt;td&gt;Tokyo&lt;/td&gt;
+                                                &lt;td&gt;63&lt;/td&gt;
+                                                &lt;td&gt;2011/07/25&lt;/td&gt;
+                                                &lt;td&gt;$170,750&lt;/td&gt;
+                                            &lt;/tr&gt;
+                                        &lt;/tbody&gt;
+                                    &lt;/table&gt;
+                                </span>
+                            </pre> <!-- end highlight-->
+                        </div> <!-- end preview code-->
+                    </div> <!-- end tab-content-->
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+    
+{% endblock content %}

@@ -3,20 +3,57 @@ from authentication.models import Profile
 from django.contrib.auth.models import User
 # Create your models here.
 
-class Activity(models.Model):
+class Aspecto(models.Model):
     name = models.CharField(max_length=1500)
-    month =  models.CharField(max_length=50)
-    weight = models.FloatField()
-    is_valid = models.BooleanField(default=True)
-    is_open = models.BooleanField(default=True)
+    
+    create_at = models.DateTimeField(auto_now=True)
+    update_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
 
-
+class Activity(models.Model):
+    MONTHS = (
+        (0, '--'),
+        (1, 'enero'),
+        (2, 'febrero'),
+        (3, 'marzo'),
+        (4, 'abril'),
+        (5, 'mayo'),
+        (6, 'junio'),
+        (7, 'julio'),
+        (8, 'agosto'),
+        (9, 'septiembre'),
+        (10, 'octubre'),
+        (11, 'noviembre'),
+        (12, 'diciembre'),
+    )
+    
+    
+    description = models.CharField(max_length=2500, null=True, blank=True)
+    month =  models.IntegerField(choices=MONTHS, default=0, null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)
+    is_open = models.BooleanField(default=True, null=True, blank=True)
+    aspecto = models.ForeignKey(Aspecto, on_delete=models.CASCADE, null=True, blank=True)
+    
+    profiles = models.ManyToManyField(Profile, through="ActivityAndStudent")
+    
     create_at = models.DateTimeField(auto_now=True)
     update_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
-
+        return self.description
+    
+class ActivityAndStudent(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    is_valid = models.BooleanField(default=True, null=True, blank=True)
+    
+    create_at = models.DateTimeField(auto_now=True)
+    update_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.description} {self.profile.user.first_name}'
 
 class Caracterizacion(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -13,19 +13,26 @@ def generate_excel_data():
     sheet = workbook.active
 
     # Agregar encabezados
-    sheet['A1'] = "Nombre"
-    sheet['B1'] = "Apellidos"
-    sheet['C1'] = "Genero"
-    sheet['D1'] = "Provincia"
-    sheet['E1'] = "Municipio"
+    sheet['A1'] = "nombre"
+    sheet['B1'] = "apellidos"
+    sheet['C1'] = "genero"
+    sheet['D1'] = "provincia"
+    sheet['E1'] = "municipio"
 
-    sheet['F1'] = "Usuario"
-    sheet['G1'] = "Correo"
-    sheet['H1'] = "Contraseña"
+    sheet['F1'] = "usuario"
+    sheet['G1'] = "correo"
+    sheet['H1'] = "contraseña"
     
-    sheet['I1'] = "Grupo"
-    sheet['J1'] = "Año"
-    sheet['K1'] = "Rol"
+    sheet['I1'] = "grupo"
+    sheet['J1'] = "año"
+    sheet['K1'] = "rol_facultad"
+    
+    sheet['L1'] = "rol_universitario"
+    sheet['M1'] = "solapin"
+    
+    sheet['N1'] = "carrera"
+    sheet['O1'] = "carnet_identidad"
+    sheet['P1'] = "id_expediente"
     
     list_user = []
 
@@ -33,10 +40,10 @@ def generate_excel_data():
                     "Camaguey", "Villa Clara", "Sancti Spíritus", "Ciego de Avila", "Cienfuegos",
                     "Matanzas", "Mayabeque", "Artemisa","La Habana","Pinar del Rio", "Isla de la Juventud"]
     
-    list_group = ["2101", "2102", "2103", "2104", "2105", 
-                  "2201", "2202", "2203", "2204", "2205", 
-                  "2301", "2302", "2303", "2304", "2305", 
-                  "2401", "2402", "2403", "2404", "2405"]
+    list_group = ["IDF2101", "IDF2102", "IDF2103", "IDF2104", "IDF2105", 
+                  "IDF2201", "IDF2202", "IDF2203", "IDF2204", "IDF2205", 
+                  "IDF2301", "IDF2302", "IDF2303", "IDF2304", "IDF2305", 
+                  "IDF2401", "IDF2402", "IDF2403", "IDF2404", "IDF2405"]
     
     list_rol = ["estudiante", "profesor guia", "profesor de año", "vice-decana/o"]
     
@@ -83,34 +90,55 @@ def generate_excel_data():
             password = 'mi55ing****'
             
             group = random.choice(list_group)
-            year = group[1]
-            group = int(group)
+            year = group[4]
+            group = str(group)
             year = int(year)
+            
+            carrera = 'Ingenieria en Ciencias Informaticas'
+            
+            solapin = random.randint(100000, 999999)
+            carnet_identidad = random.randint(100000000, 999999999)
+            
+            id_expediente = random.randint(10000, 99999)
+            id_expediente = f'EH{str(id_expediente)}'
             
             rol = random.choice(list_rol)
             if rol == "profesor guia":
                 group = random.choice(list_group_copy)
                 list_group_copy.remove(group)
-                year = group[1]
-                group = int(group)
+                year = group[4]
+                group = str(group)
                 year = int(year)
+                solapin = f'T{str(solapin)}'
+                carnet_identidad = int(f'83{str(carnet_identidad)}')
                 
                 if len(list_group_copy) == 0:
                     list_rol.remove(rol)
             
-            if rol == "profesor de año":
+            elif rol == "profesor de año":
                 group=""
                 year=random.choice(list_years)
                 list_years.remove(year)
-                
+                solapin = f'T{str(solapin)}'
+                carnet_identidad = int(f'83{str(carnet_identidad)}')
                 if len(list_years) == 0:
                     list_rol.remove(rol)
                 
-            if rol == "vice-decana/o":
+            elif rol == "vice-decana/o":
                 group=""
                 year=""
                 list_rol.remove(rol)
+                rol_universitario = "vicedecano"
+                solapin = f'T{str(solapin)}'
+                carnet_identidad = int(f'83{str(carnet_identidad)}')
+            
+            else:
+                rol_universitario = "estudiante"
+                solapin = f'E{str(solapin)}'
+                carnet_identidad = int(f'96{str(carnet_identidad)}')
                 
+            if 'profesor' in rol:
+                rol_universitario = 'profesor'
                 
             
             sheet.cell(row, 1, name)
@@ -125,8 +153,15 @@ def generate_excel_data():
             
             sheet.cell(row, 9, group)
             sheet.cell(row, 10, year)
-            
             sheet.cell(row, 11, rol)
+            
+            sheet.cell(row, 12, rol_universitario)
+            sheet.cell(row, 13, solapin)
+            sheet.cell(row, 14, carrera)
+            
+            sheet.cell(row, 15, carnet_identidad)
+            sheet.cell(row, 16, id_expediente)
+            
             row += 1
             
         

@@ -46,7 +46,11 @@ MY_APPS = [
     
 ]
 
-INSTALLED_APPS = DEFAULTS + MY_APPS
+THIRD = [
+    "django_htmx", 
+]
+
+INSTALLED_APPS = DEFAULTS + MY_APPS + THIRD
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = 'integralidad.urls'

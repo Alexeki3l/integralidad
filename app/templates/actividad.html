@@ -15,7 +15,7 @@
                     <div class="tab-content">
                         <div class="row justify-content-between">
                             <div class="col-4">
-                                <div class="row">
+                                {% comment %} <div class="row">
                                     <div class="col-auto">
                                         Mostar
                                     </div>
@@ -29,31 +29,17 @@
                                     <div class="col-auto">
                                         entradas
                                     </div>
-                                  </div>
+                                  </div> {% endcomment %}
                             </div>
                             <div class="col-3">
-                                <!-- <form class="d-flex" role="search">
-                                    <input 
-                                    class="form-control form-control-sm me-2" 
-                                    type="search" 
-                                    placeholder="Buscar..." 
-                                    aria-label="Search">
-                                </form> -->
-                                <form class="d-flex"
-                                        role="search"
-                                        hx-get="{% url 'home' %}"
-                                        hx-trigger="keyup changed delay:500ms"
-                                        hx-target="#search-results">
-                                    <input 
-                                    class="form-control form-control-sm me-2" 
-                                    placeholder="Buscar..." 
-                                    aria-label="Search"
-                                    name="search_query" id="search_query"
-                                    type="text"
-                                    >
-                                </form>
-                                <div id="search-results"></div>
-                                  
+                                
+                                <input class="form-control form-control-sm" type="search" 
+                                name="search_activities" placeholder="Begin Typing To Search Users..." 
+                                hx-get="{% url "search_activities" %}" 
+                                hx-trigger="keyup changed delay:500ms, search" 
+                                hx-target="#search-results" 
+                                {% comment %} hx-indicator=".htmx-indicator" {% endcomment %}
+                                >
                             </div>
                           </div>
                         
@@ -69,7 +55,8 @@
                                     </tr>
                                 </thead>
                                 
-                                <tbody>
+                                <tbody id="search-results">
+                                    {% if flag %}
                                     {% for actividad in actividades %}
                                     <tr>
                                         <td>{{actividad.description}}</td>
@@ -86,6 +73,7 @@
                                         </td>
                                     </tr>
                                     {% endfor %}
+                                    {% endif %}
                                 </tbody>
                             </table>                                           
                         </div> <!-- end preview-->
@@ -106,7 +94,7 @@
                                     </ul>
                                 </nav>
                             </div>
-                          </div>
+                          </div> 
                     
                         <div class="tab-pane" id="basic-datatable-code">
                             <p>Please include following css file at <code>head</code> element</p>

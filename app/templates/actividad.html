@@ -36,7 +36,7 @@
                                 
                                 <input class="form-control form-control-sm" type="search" 
                                 name="search_activities" placeholder="Buscar..." 
-                                hx-get="{% url "activities" %}" 
+                                hx-get="{% url "activities" 0 %}" 
                                 hx-trigger="keyup changed delay:500ms, search" 
                                 hx-target="#search-results" 
                                 {% comment %} hx-indicator=".htmx-indicator" {% endcomment %}
@@ -81,16 +81,18 @@
 
                         <div class="row justify-content-between my-2">
                             <div class="col-4">
-                                Mostrando 1 a 1 de total entradas
+                                Mostrando 1 a 1 de {{total}} entradas
                             </div>
                             <div class="col-3">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination pagination-sm justify-content-end">
                                       <li class="page-item disabled"><a class="page-link">Previous</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                      <li class="page-item disabled"><a class="page-link" href="#">2</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                      <li class="page-item"><a class="page-link" href="#">Next</a>
+                                      {% for number_page in pages %}
+                                        <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities" number_page %}">{{number_page|add:1}}</a></li>
+                                      {% endfor %}
+                                      {% comment %} <li class="page-item"><a class="page-link" href="">2</a></li>
+                                      <li class="page-item"><a class="page-link" href="#">3</a></li> {% endcomment %}
+                                      <li class="page-item disabled"><a class="page-link" href="#">Next</a>
                                       </li>
                                     </ul>
                                 </nav>

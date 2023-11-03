@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>S.G.P.I.</title>
     
     <link href="{% static 'app/assets_2/css/vendor/dataTables.bootstrap5.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'app/assets_2/css/vendor/responsive.bootstrap5.css' %}" rel="stylesheet" type="text/css">
@@ -37,7 +37,7 @@
                     <a class="nav-link" aria-current="page" href="#">Home</a>
                   </li> -->
                   <li class="nav-item">
-                    <a class="nav-link {% if request.path|slice:':1' == '/' %}active {% endif %}" href="index.html">Actividades</a>
+                    <a class="nav-link {% if request.path|slice:':1' == '/' %}active {% endif %}" href="{% url "activities" %}">Actividades</a>
                   </li>
                   <li class="nav-item dropdown-center">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

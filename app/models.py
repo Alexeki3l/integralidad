@@ -1,6 +1,8 @@
 from django.db import models
 from authentication.models import Profile
 from django.contrib.auth.models import User
+
+from django.urls import reverse, reverse_lazy
 # Create your models here.
 
 class Aspecto(models.Model):
@@ -29,12 +31,11 @@ class Activity(models.Model):
         (12, 'diciembre'),
     )
     
-    
-    description = models.CharField(max_length=2500, null=True, blank=True)
-    month =  models.IntegerField(choices=MONTHS, default=0, null=True, blank=True)
-    weight = models.FloatField(null=True, blank=True)
-    is_open = models.BooleanField(default=True, null=True, blank=True)
-    aspecto = models.ForeignKey(Aspecto, on_delete=models.CASCADE, null=True, blank=True)
+    description = models.CharField(max_length=2500)
+    month =  models.IntegerField(choices=MONTHS, default=0)
+    weight = models.FloatField()
+    is_open = models.BooleanField(default=True)
+    aspecto = models.ForeignKey(Aspecto, on_delete=models.CASCADE)
     
     profiles = models.ManyToManyField(Profile, through="ActivityAndStudent")
     
@@ -43,6 +44,9 @@ class Activity(models.Model):
 
     def __str__(self):
         return self.description
+    
+    def get_absolute_url(self):
+        return reverse('activities')
     
 class ActivityAndStudent(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)

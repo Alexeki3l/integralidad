@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1l9gc*@*z!crc%v&43^8o)1jk7t7hk7b9&c9fe93a13v80b3_s'
+SECRET_KEY = config('ENV_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('ENV_DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,7 +44,6 @@ DEFAULTS = [
 MY_APPS = [
     'app',
     'authentication',
-    
 ]
 
 THIRD = [
@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'integralidad.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'integralidad',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': config('ENV_DATABASE_NAME'),
+        'USER': config('ENV_DATABASE_USER'),
+        'PASSWORD': config('ENV_DATABASE_PASSWORD'),
+        'HOST': config('ENV_DATABASE_HOST'),
+        'PORT': config('ENV_DATABASE_PORT'),
     }
 }
 
@@ -149,3 +149,6 @@ LOGOUT_REDIRECT_URL="/"
 # para que las imagenes cargadas se guarden en esa direccion
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR ,'media')
+
+
+SESSION_COOKIE_SECURE = 'True'

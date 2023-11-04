@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Activity, Aspecto
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.db.models import Q
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import AddActivityView, EditActivityView
 
 from django.urls import reverse, reverse_lazy
-from .utils import return_list_activities_html
+from .utils import return_list_activities_html, return_content_full_table_html
 
 import math
 
@@ -16,54 +16,115 @@ import math
 
 def activities(request, number_page=0):
     if request.user.is_authenticated:
-        print(number_page)
-        var = 20
+        if request.method == 'GET':
+            var = 10
+            number_page = 0
+            
+        try:
+            if request.headers['Hx-Trigger-Name'] == 'siguiente':
+                number_page += 1
+        except KeyError:
+            pass
         begin = var*number_page
         end = (number_page + 1)*var + number_page
         
-        # Hacemos un paginado
-        all_activities = Activity.objects.all()
+        # --------Hacemos un paginado------------
+        all_activities = Activity.objects.all().order_by('-id')
         activities = all_activities[begin:end]
-        count = all_activities.count()
-        cant_page = math.ceil(count/20)
+        count_total_objects = all_activities.count()
+        cant_page = math.ceil(count_total_objects/var)
         cant_page = list(range(0, cant_page))
-        print(cant_page)
+        is_pagination = False
+        if end > count_total_objects:
+            end = count_total_objects
+            
+        begin += 1
         
-        disabled = False
-        print(request.path)
-        if str(number_page) in request.path:
-            disabled = True
+        # -----------Hojear paginas--------------
+        anterior = 0
+        siguiente = 0
+        response = HttpResponse()
         
+        if request.htmx:
+            number_page = int(request.path[-1])
+        
+        try:
+            if cant_page[number_page - 1]:
+                anterior = number_page - 1
+        except IndexError:
+            anterior = 0
+        
+        try:
+            if cant_page[number_page + 1]:
+                siguiente = number_page + 1
+        except IndexError:
+            siguiente = 0
+            
+        # try:
+        #     if request.headers['Hx-Trigger-Name'] == 'siguiente':
+        #         response.set_cookie(key='siguiente', value=siguiente)
+        # except:
+        #     pass
+        
+        print('COOKIES 1',request.COOKIES)
+        print('COOKIES',request.COOKIES.get('siguiente'))
+        # response.set_cookie('siguiente', siguiente)
+        print(request.headers)
+        print('siguiente',siguiente)
+        # ----------------------------------------
         # Cuando halla una peticion HTMX
         if request.htmx:
-            if request.htmx.target == 'search-results':
+            # ----------------- PAGINACION -----------------
+            # Boton Siguiente
+            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'siguiente':
+                    response = HttpResponse(
+                        return_content_full_table_html(activities)
+                        )
+                    response.set_cookie(key='siguiente', value=siguiente)
+                    return response
+                    
+                    
+            # -------------- END PAGINATION ----------------------
+            
+            # ------------ BUSCAR ACTIVIDADES --------------------
+            
+            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'search_activities':
                 search_input = request.GET.get('search_activities', None)
+                print(search_input)
                 if search_input:
                     # print(request.path)
                     patterns =Q(description__icontains=search_input) | Q(aspecto_id__in=Aspecto.objects.filter(name__icontains = search_input).values_list('id', flat=True))
                     activities = all_activities.filter(patterns)
-                    print(return_list_activities_html(activities))
+                    # print(return_list_activities_html(activities))
                     return HttpResponse(
-                            return_list_activities_html(activities)
+                            return_content_full_table_html(activities)
                         )
                     # else:
                     #     return HttpResponse(
                     #         '<p class="text-center">Center aligned text on all viewport sizes.</p>'
                     #         )
+                
                 else:
                     # activities = Activity.objects.all()
                     return HttpResponse(
-                        return_list_activities_html(activities)
+                        return_content_full_table_html(activities)
                         )
-        # Si es un GET
+                    
+            # -------------END BUSCAR ACTIVIDADES -------------
+        
         context = {
             'actividades': activities,
-            'total':count,
+            'begin':begin,
+            'end':end,
+            'count_total_objects':count_total_objects,
             'pages':cant_page,
-            'disabled':disabled,
-            'flag': True
+            # 'disabled':disabled,
+            'anterior':anterior,
+            'siguiente':siguiente,
+            'flag': True,
+            'is_pagination':is_pagination
         }
-        return render(request, 'actividad.html', context=context)
+        return render(request, 'activity/activities.html', context=context)
     else:
         return redirect('login')
         
@@ -72,7 +133,7 @@ def activities(request, number_page=0):
 class AddActivityView(LoginRequiredMixin, CreateView):
     model = Activity
     form_class = AddActivityView
-    template_name = 'add_activity.html'
+    template_name = 'activity/add_activity.html'
 
     # def form_valid(self, form):
     #     form.instance.created = timezone.now()
@@ -83,7 +144,7 @@ class AddActivityView(LoginRequiredMixin, CreateView):
 # Detalle Actividades
 class DetailsActivityView(DetailView):
     model = Activity
-    template_name = 'details_activity.html'
+    template_name = 'activity/details_activity.html'
     context_object_name = 'activity'
 
     # def get_context_data(self, **kwargs):
@@ -106,7 +167,7 @@ class DetailsActivityView(DetailView):
 class EditActivityView(UpdateView):
     model = Activity
     form_class = EditActivityView
-    template_name='edit_activity.html'
+    template_name='activity/edit_activity.html'
     
     # def form_valid(self, form):
     #     form.instance.updated = timezone.now()
@@ -117,8 +178,14 @@ class EditActivityView(UpdateView):
 # Eliminar Actividades
 class DeleteActivityView(LoginRequiredMixin, DeleteView):
     model = Activity
-    template_name = "delete_activity.html"
-    success_url = reverse_lazy('activities')
+    template_name = "activity/delete_activity.html"
+    success_url = reverse_lazy('activities', args=[0])
     
     
-# -------------- (FIN) CRUD de Actividad ------------------------------------------
+# ----------------------- (FIN) CRUD de Actividad ----------------------------
+
+# ----------------------- TRATAMIENTO DE ERRORES -----------------------------
+
+# Error 404
+def custom_404(request, exception):
+    return render(request, 'error/404.html', status=404)

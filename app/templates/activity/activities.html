@@ -36,17 +36,18 @@
                                 
                                 <input class="form-control form-control-sm" type="search" 
                                 name="search_activities" placeholder="Buscar..." 
-                                hx-get="{% url "activities" 0 %}" 
+                                hx-get="{% url "activities_htmx" %}" 
                                 hx-trigger="keyup changed delay:500ms, search" 
                                 hx-target="#basic-datatable-preview" 
                                 hx-swap="innerHTML"
                                 {% comment %} hx-indicator=".htmx-indicator" {% endcomment %}
                                 >
                             </div>
-                          </div>
+                        </div>
                         
                         <!-- Contenido de la tabla -->
                         <div class="tab-pane show active my-3" id="basic-datatable-preview">
+                            
                             <table id="basic-datatable" class="table dt-responsive nowrap w-100">
                                 <thead>
                                     <tr>
@@ -88,32 +89,34 @@
                             <div class="col-3">
                                 <nav aria-label="Page navigation example">
                                     <ul class="pagination pagination-sm justify-content-end">
-                                        {% if anterior < 0 %}
+                                        {% if anterior <= 0 %}
                                         <li class="page-item disabled">
                                             <a href="#" class="page-link">Anterior</a>
                                         </li>
                                         {% else %}
-                                        <li class="page-item ">
+                                        {% comment %} <li class="page-item ">
                                             <a href="{% url "activities" anterior %}" class="page-link">Anterior</a>
-                                        </li>
+                                        </li> {% endcomment %}
                                         {% endif %}
 
                                         {% for number_page in pages %}
-                                            <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities" number_page %}">{{number_page|add:1}}</a></li>
+                                            <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities_htmx" %}">{{number_page|add:1}}</a></li>
                                         {% endfor %}
                                         
-                                        {% if siguiente == 0 %}
+                                        {% if not request.COOKIES.siguiente %}
                                             <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a>
+                                        {% comment %} {% elif not siguiente %}
+                                            <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a> {% endcomment %}
                                         {% else %}
                                             {% comment %} <li class="page-item"><a class="page-link" href="{% url "activities" siguiente %}">Siguiente</a> {% endcomment %}
                                                 <li class="page-item">
                                                     <a  name="siguiente"
-                                                        href="{% url "activities" siguiente %}"
-                                                        hx-get="{% url "activities" siguiente %}" 
+                                                        href="{% url "activities_htmx"  %}"
+                                                        hx-get="{% url "activities_htmx"  %}" 
                                                         hx-trigger="click" 
                                                         hx-target="#basic-datatable-preview" 
                                                         hx-swap="innerHTML"
-                                                        {% comment %} hx-headers="{'Mi-Encabezado': 'Valor del encabezado personalizado'}" {% endcomment %}
+                                                        {% comment %} hx-headers="{'Mi-Encabezado': 'Valor del encabezado personalizado fdsgdfg'}" {% endcomment %}
                                                         class="page-link"
                                                         >Siguiente</a>
                                                 </li>
@@ -125,67 +128,6 @@
                             </div>
                         </div> 
                     
-                        <div class="tab-pane" id="basic-datatable-code">
-                            <p>Please include following css file at <code>head</code> element</p>
-
-                            <pre>
-                                <span class="html escape">
-                                    &lt;!-- Datatables css --&gt;
-                                    &lt;link href=&quot;{% static 'app/assets_2/css/vendor/dataTables.bootstrap5.css' %}&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-                                    &lt;link href=&quot;{% static 'app/assets_2/css/vendor/responsive.bootstrap5.css' %}&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-                                </span>
-                            </pre> <!-- end highlight-->
-
-                            <p>Make sure to include following js files at end of <code>body</code> element</p>
-
-                            <pre class="mb-0">
-                                <span class="html escape">
-                                    &lt;!-- Datatables js --&gt;
-                                    &lt;script src=&quot;{% static 'app/assets_2/js/vendor/jquery.dataTables.min.js' %}&quot;&gt;&lt;/script&gt;
-                                    &lt;script src=&quot;{% static 'app/assets_2/js/vendor/dataTables.bootstrap5.js' %}&quot;&gt;&lt;/script&gt;
-                                    &lt;script src=&quot;{% static 'app/assets_2/js/vendor/dataTables.responsive.min.js' %}&quot;&gt;&lt;/script&gt;
-                                    &lt;script src=&quot;{% static 'app/assets_2/js/vendor/responsive.bootstrap5.min.js' %}&quot;&gt;&lt;/script&gt;
-
-                                    &lt;!-- Datatable Init js --&gt;
-                                    &lt;script src=&quot;{% static 'app/assets_2/js/pages/demo.datatable-init.js' %}&quot;&gt;&lt;/script&gt;
-                                </span>
-                            </pre> <!-- end highlight-->
-
-                            <pre class="mb-0">
-                                <span class="html escape">
-                                    &lt;table id=&quot;basic-datatable&quot; class=&quot;table dt-responsive nowrap w-100&quot;&gt;
-                                        &lt;thead&gt;
-                                            &lt;tr&gt;
-                                                &lt;th&gt;Nombre&lt;/th&gt;
-                                                &lt;th&gt;Aspecto&lt;/th&gt;
-                                                &lt;th&gt;Activa?&lt;/th&gt;
-                                                &lt;th&gt;Acciones&lt;/th&gt;
-                                            &lt;/tr&gt;
-                                        &lt;/thead&gt;
-                                    
-                                    
-                                        &lt;tbody&gt;
-                                            &lt;tr&gt;
-                                                &lt;td&gt;Tiger Nixon&lt;/td&gt;
-                                                &lt;td&gt;System Architect&lt;/td&gt;
-                                                &lt;td&gt;Edinburgh&lt;/td&gt;
-                                                &lt;td&gt;61&lt;/td&gt;
-                                                &lt;td&gt;2011/04/25&lt;/td&gt;
-                                                &lt;td&gt;$320,800&lt;/td&gt;
-                                            &lt;/tr&gt;
-                                            &lt;tr&gt;
-                                                &lt;td&gt;Garrett Winters&lt;/td&gt;
-                                                &lt;td&gt;Accountant&lt;/td&gt;
-                                                &lt;td&gt;Tokyo&lt;/td&gt;
-                                                &lt;td&gt;63&lt;/td&gt;
-                                                &lt;td&gt;2011/07/25&lt;/td&gt;
-                                                &lt;td&gt;$170,750&lt;/td&gt;
-                                            &lt;/tr&gt;
-                                        &lt;/tbody&gt;
-                                    &lt;/table&gt;
-                                </span>
-                            </pre> <!-- end highlight-->
-                        </div> 
                         <!-- end preview code-->
                     </div> <!-- end tab-content-->
 

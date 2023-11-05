@@ -8,7 +8,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import AddActivityView, EditActivityView
 
 from django.urls import reverse, reverse_lazy
-from .utils import return_list_activities_html, return_content_full_table_html
+from .utils import return_list_activities_html, return_content_full_table_html,\
+delete_key_values_in_cookies
 
 import math
 
@@ -81,6 +82,8 @@ def activities(request, number_page=0):
                         return_content_full_table_html(activities)
                         )
                     response.set_cookie(key='siguiente', value=siguiente)
+                    response.set_cookie(key='number_page', value=number_page)
+                    print('COOKIES 1',request.COOKIES)
                     return response
                     
                     
@@ -125,6 +128,134 @@ def activities(request, number_page=0):
             'is_pagination':is_pagination
         }
         return render(request, 'activity/activities.html', context=context)
+    else:
+        return redirect('login')
+    
+def activities_htmx(request):
+    if request.user.is_authenticated:
+        
+        response = HttpResponse()
+        if request.method == 'GET':
+            var = 10
+            number_page = 0
+            response.set_cookie(key='number_page', value=0)
+        try:  
+            if request.headers['Hx-Trigger-Name'] == 'siguiente':
+                number_page = int(request.COOKIES.get('number_page'))
+                number_page += 1
+                
+        except:
+            pass
+        
+        begin = var*number_page
+        end = (number_page + 1)*var + number_page
+        
+        # --------Hacemos un paginado------------
+        all_activities = Activity.objects.all().order_by('-id')
+        if end > all_activities.count():
+            activities = all_activities[begin:all_activities.count()]
+        else:
+            activities = all_activities[begin:end]
+            
+        count_total_objects = all_activities.count()
+        cant_page = math.ceil(count_total_objects/var)
+        cant_page = list(range(0, cant_page))
+        print('cant_page',cant_page)
+        is_pagination = False
+        if end > count_total_objects:
+            end = count_total_objects
+            
+        begin += 1
+        
+        # -----------Hojear paginas--------------
+        # if not request.headers['Hx-Trigger-Name'] == 'siguiente':
+        anterior = 0
+        siguiente = 0
+        
+        print(number_page)
+        try:
+            if cant_page[number_page - 1]:
+                anterior = number_page - 1
+        except IndexError:
+            anterior = 0
+        
+        try:
+            if cant_page[number_page + 1]:
+                siguiente = number_page + 1
+        except IndexError:
+            siguiente = 0
+            number_page = -1
+        print('siguiente', siguiente)
+        # try:
+        #     if request.headers['Hx-Trigger-Name'] == 'siguiente':
+        #         response.set_cookie(key='siguiente', value=siguiente)
+        # except:
+        #     pass
+        
+        print('COOKIES 1',request.COOKIES)
+        
+        # ----------------------------------------
+        # Cuando halla una peticion HTMX
+        if request.htmx:
+            # ----------------- PAGINACION -----------------
+            # Boton Siguiente
+            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'siguiente':
+                    print(request.COOKIES['siguiente'])
+                    response = HttpResponse(
+                        return_content_full_table_html(activities)
+                        )
+                    
+                    response.set_cookie(key='siguiente', value=siguiente)
+                    response.set_cookie(key='number_page', value=number_page)
+                    return response
+                    
+                    
+            # -------------- END PAGINATION ----------------------
+            
+            # ------------ BUSCAR ACTIVIDADES --------------------
+            
+            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'search_activities':
+                search_input = request.GET.get('search_activities', None)
+                print(search_input)
+                if search_input:
+                    # print(request.path)
+                    patterns =Q(description__icontains=search_input) | Q(aspecto_id__in=Aspecto.objects.filter(name__icontains = search_input).values_list('id', flat=True))
+                    activities = all_activities.filter(patterns)
+                    # print(return_list_activities_html(activities))
+                    return HttpResponse(
+                            return_content_full_table_html(activities)
+                        )
+                    # else:
+                    #     return HttpResponse(
+                    #         '<p class="text-center">Center aligned text on all viewport sizes.</p>'
+                    #         )
+                
+                else:
+                    # activities = Activity.objects.all()
+                    return HttpResponse(
+                        return_content_full_table_html(activities)
+                        )
+                    
+            # -------------END BUSCAR ACTIVIDADES -------------
+        
+        context = {
+            'actividades': activities,
+            'begin':begin,
+            'end':end,
+            'count_total_objects':count_total_objects,
+            'pages':cant_page,
+            # 'disabled':disabled,
+            # 'anterior':anterior,
+            # 'siguiente':siguiente,
+            'flag': True,
+            'is_pagination':is_pagination
+        }
+        html =  render(request, 'activity/activities.html', context=context)
+        response.set_cookie(key='siguiente', value=siguiente)
+        response['encabezado'] = 'TESTING'
+        print(request.headers.keys())
+        response.content = html.content
+        return response
     else:
         return redirect('login')
         

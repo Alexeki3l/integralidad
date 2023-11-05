@@ -96,3 +96,69 @@ def elements_footer_table():
                             </div>
                         </div> """
     return html
+
+def delete_key_values_in_cookies(response, key, value=''):
+    try:
+        response.set_cookie(key, value, expires='Thu, 01 Jan 1970 00:00:00 GMT')
+        # return True
+    except:
+        pass
+    
+def data_page(begin, end, total):
+    cadena = f"Mostrando {begin} a {end} de {total} entradas"
+    return cadena
+    
+    
+    
+# def html_content(activities):
+    
+#     html = """
+#         <div class="row justify-content-between">
+#                             <div class="col-4">
+#                                 {% comment %} <div class="row">
+#                                     <div class="col-auto">
+#                                         Mostar
+#                                     </div>
+#                                     <div class="col-auto px-0">
+#                                         <select class="form-select form-select-sm" aria-label="Small select example">
+#                                             <option value="1">10</option>
+#                                             <option value="2">20</option>
+#                                             <option value="3">50</option>
+#                                           </select>
+#                                     </div>
+#                                     <div class="col-auto">
+#                                         entradas
+#                                     </div>
+#                                   </div> {% endcomment %}
+#                             </div>
+#                             <div class="col-3">
+                                
+#                                 <input class="form-control form-control-sm" type="search" 
+#                                 name="search_activities" placeholder="Buscar..." 
+#                                 hx-get="{% url "activities_htmx" %}" 
+#                                 hx-trigger="keyup changed delay:500ms, search" 
+#                                 hx-target="#basic-datatable-preview" 
+#                                 hx-swap="innerHTML"
+#                                 {% comment %} hx-indicator=".htmx-indicator" {% endcomment %}
+#                                 >
+#                             </div>
+#                         </div>
+#     """
+#     html += """
+#         <div class="tab-pane show active my-3" id="basic-datatable-preview">
+#     """
+    
+#     table = return_content_full_table_html(activities)
+    
+#     html += table
+    
+#     html += """
+#         </div>
+#     """
+    
+#     html += elements_footer_table()
+    
+#     return html
+    
+    
+    

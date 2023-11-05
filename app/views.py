@@ -8,24 +8,23 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import AddActivityView, EditActivityView
 
 from django.urls import reverse, reverse_lazy
-from .utils import return_list_activities_html, return_content_full_table_html,\
+from .custom_html_response import return_list_activities_html, return_content_full_table_html,\
 delete_key_values_in_cookies
 
 import math
 
 # Create your views here.
-
-def activities(request, number_page=0):
+def list_activities(request):
     if request.user.is_authenticated:
-        if request.method == 'GET':
-            var = 10
-            number_page = 0
+        print('HEADERS GET', request.headers)
+        
+        response = HttpResponse()
+        
+        var = 10
+        number_page = 0
+        response.set_cookie(key='number_page', value=0)
+        response.set_cookie(key='cant_element', value=var)
             
-        try:
-            if request.headers['Hx-Trigger-Name'] == 'siguiente':
-                number_page += 1
-        except KeyError:
-            pass
         begin = var*number_page
         end = (number_page + 1)*var + number_page
         
@@ -36,18 +35,15 @@ def activities(request, number_page=0):
         cant_page = math.ceil(count_total_objects/var)
         cant_page = list(range(0, cant_page))
         is_pagination = False
+        
         if end > count_total_objects:
             end = count_total_objects
-            
+
         begin += 1
         
         # -----------Hojear paginas--------------
         anterior = 0
         siguiente = 0
-        response = HttpResponse()
-        
-        if request.htmx:
-            number_page = int(request.path[-1])
         
         try:
             if cant_page[number_page - 1]:
@@ -61,60 +57,8 @@ def activities(request, number_page=0):
         except IndexError:
             siguiente = 0
             
-        # try:
-        #     if request.headers['Hx-Trigger-Name'] == 'siguiente':
-        #         response.set_cookie(key='siguiente', value=siguiente)
-        # except:
-        #     pass
-        
-        print('COOKIES 1',request.COOKIES)
-        print('COOKIES',request.COOKIES.get('siguiente'))
-        # response.set_cookie('siguiente', siguiente)
-        print(request.headers)
-        print('siguiente',siguiente)
         # ----------------------------------------
         # Cuando halla una peticion HTMX
-        if request.htmx:
-            # ----------------- PAGINACION -----------------
-            # Boton Siguiente
-            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'siguiente':
-                    response = HttpResponse(
-                        return_content_full_table_html(activities)
-                        )
-                    response.set_cookie(key='siguiente', value=siguiente)
-                    response.set_cookie(key='number_page', value=number_page)
-                    print('COOKIES 1',request.COOKIES)
-                    return response
-                    
-                    
-            # -------------- END PAGINATION ----------------------
-            
-            # ------------ BUSCAR ACTIVIDADES --------------------
-            
-            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'search_activities':
-                search_input = request.GET.get('search_activities', None)
-                print(search_input)
-                if search_input:
-                    # print(request.path)
-                    patterns =Q(description__icontains=search_input) | Q(aspecto_id__in=Aspecto.objects.filter(name__icontains = search_input).values_list('id', flat=True))
-                    activities = all_activities.filter(patterns)
-                    # print(return_list_activities_html(activities))
-                    return HttpResponse(
-                            return_content_full_table_html(activities)
-                        )
-                    # else:
-                    #     return HttpResponse(
-                    #         '<p class="text-center">Center aligned text on all viewport sizes.</p>'
-                    #         )
-                
-                else:
-                    # activities = Activity.objects.all()
-                    return HttpResponse(
-                        return_content_full_table_html(activities)
-                        )
-                    
-            # -------------END BUSCAR ACTIVIDADES -------------
-        
         context = {
             'actividades': activities,
             'begin':begin,
@@ -127,28 +71,43 @@ def activities(request, number_page=0):
             'flag': True,
             'is_pagination':is_pagination
         }
-        return render(request, 'activity/activities.html', context=context)
+        
+        html =  render(request, 'activity/activities.html', context=context)
+        response.set_cookie(key='siguiente', value=siguiente)
+        response.set_cookie(key='anterior', value=anterior)
+        
+        response.content = html.content
+        return response
     else:
         return redirect('login')
     
-def activities_htmx(request):
+    
+def list_activities_htmx(request):
     if request.user.is_authenticated:
-        
+        print('-----------------------------')
+        print('HEADERS HTMX', request.headers)
+        print('-----------------------------')
         response = HttpResponse()
-        if request.method == 'GET':
-            var = 10
-            number_page = 0
-            response.set_cookie(key='number_page', value=0)
         try:  
             if request.headers['Hx-Trigger-Name'] == 'siguiente':
+                print('pasa por aqui')
+                cant_element = int(request.COOKIES.get('cant_element'))
                 number_page = int(request.COOKIES.get('number_page'))
-                number_page += 1
+                # number_page += 1
+                
+            elif request.headers['Hx-Trigger-Name'] == 'select_cant':
+                cant_element = int(request.COOKIES.get('cant_element'))
+                number_page = int(request.COOKIES.get('number_page'))
+                
+            else:
+                cant_element = int(request.COOKIES.get('cant_element'))
+                number_page = int(request.COOKIES.get('number_page'))
                 
         except:
             pass
         
-        begin = var*number_page
-        end = (number_page + 1)*var + number_page
+        begin = cant_element*number_page
+        end = (number_page + 1)*cant_element + number_page
         
         # --------Hacemos un paginado------------
         all_activities = Activity.objects.all().order_by('-id')
@@ -158,7 +117,7 @@ def activities_htmx(request):
             activities = all_activities[begin:end]
             
         count_total_objects = all_activities.count()
-        cant_page = math.ceil(count_total_objects/var)
+        cant_page = math.ceil(count_total_objects/cant_element)
         cant_page = list(range(0, cant_page))
         print('cant_page',cant_page)
         is_pagination = False
@@ -169,10 +128,9 @@ def activities_htmx(request):
         
         # -----------Hojear paginas--------------
         # if not request.headers['Hx-Trigger-Name'] == 'siguiente':
-        anterior = 0
-        siguiente = 0
+        anterior = int(request.COOKIES.get('anterior'))
+        siguiente = int(request.COOKIES.get('siguiente'))
         
-        print(number_page)
         try:
             if cant_page[number_page - 1]:
                 anterior = number_page - 1
@@ -181,60 +139,82 @@ def activities_htmx(request):
         
         try:
             if cant_page[number_page + 1]:
-                siguiente = number_page + 1
+                number_page += 1
+                siguiente = number_page
+                
+            if cant_page[siguiente]:
+                pass
         except IndexError:
             siguiente = 0
-            number_page = -1
-        print('siguiente', siguiente)
-        # try:
-        #     if request.headers['Hx-Trigger-Name'] == 'siguiente':
-        #         response.set_cookie(key='siguiente', value=siguiente)
-        # except:
-        #     pass
-        
-        print('COOKIES 1',request.COOKIES)
+            number_page = 0
         
         # ----------------------------------------
         # Cuando halla una peticion HTMX
         if request.htmx:
             # ----------------- PAGINACION -----------------
-            # Boton Siguiente
+            # --------------- Boton Siguiente -------------
             if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'siguiente':
-                    print(request.COOKIES['siguiente'])
+                    print('SGUIENTE')
                     response = HttpResponse(
-                        return_content_full_table_html(activities)
+                        return_content_full_table_html(activities, begin, end, count_total_objects, anterior, siguiente)
                         )
-                    
+                    # valor = int(request.COOKIES.get('cant_element'))
+                    # response.set_cookie(key='cant_element', value=valor)
+                    # siguiente = int(request.COOKIES.get('siguiente'))
+                        
                     response.set_cookie(key='siguiente', value=siguiente)
                     response.set_cookie(key='number_page', value=number_page)
                     return response
                     
                     
             # -------------- END PAGINATION ----------------------
+            #----------- Selector de Cantidad de Elementos--------
+            if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'select_cant':
+                print('SELECT')
+                list_aux = [0, 10, 20, 50, 100]
+                valor_seleccionado = request.GET.get('select_cant')
+                valor = list_aux[int(valor_seleccionado)]
+                if valor > all_activities.count():
+                    valor = all_activities.count()
+                    siguiente = -1
+                    end = valor
+                activities = all_activities[:valor]
+                
+                response = HttpResponse(
+                            return_content_full_table_html(activities, begin, end, count_total_objects, anterior, siguiente)
+                        )
+                response.set_cookie(key='cant_element', value=valor)
+                response.set_cookie(key='siguiente', value=siguiente)
+                response.set_cookie(key='number_page', value=number_page)
+                return response
             
+            # ------- END Selector de Cantidad de Elementos ------------
             # ------------ BUSCAR ACTIVIDADES --------------------
             
             if request.htmx.target == 'basic-datatable-preview' and request.htmx.trigger_name == 'search_activities':
+                print('BUSCAR')
                 search_input = request.GET.get('search_activities', None)
-                print(search_input)
                 if search_input:
-                    # print(request.path)
                     patterns =Q(description__icontains=search_input) | Q(aspecto_id__in=Aspecto.objects.filter(name__icontains = search_input).values_list('id', flat=True))
                     activities = all_activities.filter(patterns)
-                    # print(return_list_activities_html(activities))
-                    return HttpResponse(
-                            return_content_full_table_html(activities)
+                    response =  HttpResponse(
+                            return_content_full_table_html(activities, begin, end, count_total_objects, anterior, siguiente)
                         )
-                    # else:
-                    #     return HttpResponse(
-                    #         '<p class="text-center">Center aligned text on all viewport sizes.</p>'
-                    #         )
-                
+                    
+                    # valor = int(request.COOKIES.get('cant_element'))
+                    # response.set_cookie(key='cant_element', value=valor)
+                    # response.set_cookie(key='siguiente', value=siguiente)
+                    # response.set_cookie(key='number_page', value=number_page)
+                    return response
                 else:
-                    # activities = Activity.objects.all()
-                    return HttpResponse(
-                        return_content_full_table_html(activities)
+                    response =  HttpResponse(
+                            return_content_full_table_html(activities, begin, end, count_total_objects, anterior, siguiente)
                         )
+                    # valor = int(request.COOKIES.get('cant_element'))
+                    # response.set_cookie(key='cant_element', value=valor)
+                    # response.set_cookie(key='siguiente', value=siguiente)
+                    # response.set_cookie(key='number_page', value=number_page)
+                    return response
                     
             # -------------END BUSCAR ACTIVIDADES -------------
         

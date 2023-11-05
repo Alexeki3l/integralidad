@@ -16,27 +16,34 @@
                     <div class="tab-content">
                         <div class="row justify-content-between">
                             <div class="col-4">
-                                {% comment %} <div class="row">
+                                <div class="row">
                                     <div class="col-auto">
                                         Mostar
                                     </div>
                                     <div class="col-auto px-0">
-                                        <select class="form-select form-select-sm" aria-label="Small select example">
+                                        <select name="select_cant"
+                                                class="form-select form-select-sm" 
+                                                aria-label="Small select example"
+                                                hx-get="{% url 'list_activities_htmx' %}" 
+                                                hx-trigger="change" 
+                                                hx-target="#basic-datatable-preview">
+
                                             <option value="1">10</option>
                                             <option value="2">20</option>
                                             <option value="3">50</option>
+                                            <option value="4">100</option>
                                           </select>
                                     </div>
                                     <div class="col-auto">
                                         entradas
                                     </div>
-                                  </div> {% endcomment %}
+                                  </div>
                             </div>
                             <div class="col-3">
                                 
                                 <input class="form-control form-control-sm" type="search" 
                                 name="search_activities" placeholder="Buscar..." 
-                                hx-get="{% url "activities_htmx" %}" 
+                                hx-get="{% url "list_activities_htmx" %}" 
                                 hx-trigger="keyup changed delay:500ms, search" 
                                 hx-target="#basic-datatable-preview" 
                                 hx-swap="innerHTML"
@@ -46,88 +53,89 @@
                         </div>
                         
                         <!-- Contenido de la tabla -->
-                        <div class="tab-pane show active my-3" id="basic-datatable-preview">
-                            
-                            <table id="basic-datatable" class="table dt-responsive nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Aspecto</th>
-                                        <th>Activa?</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
+                        <div id="basic-datatable-preview">
+                            <div class="tab-pane show active my-3" >
                                 
-                                <tbody id="search-results">
-                                    {% if flag %}
-                                    {% for actividad in actividades %}
-                                    <tr>
-                                        <td>{{actividad.description}}</td>
-                                        <td>{{actividad.aspecto}}</td>
-                                        {% if actividad.is_open %}
-                                            <td>Si</td>
-                                        {% else %}
-                                            <td>No</td>
-                                        {% endif %}
-                                        <td class="table-action">
-                                            <a href="{% url "details_activity" actividad.pk %}" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
-                                            <a href="{% url "edit_activity" actividad.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
-                                            <a href="{% url "delete_activity" actividad.pk %}" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    {% endif %}
-                                </tbody>
-                                
-                            </table>                                           
-                        </div> <!-- end preview-->
-
-                        <div class="row justify-content-between my-2">
-                            <div class="col-4">
-                                Mostrando {{begin}} a {{end}} de {{count_total_objects}} entradas
-                            </div>
-                            <div class="col-3">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination pagination-sm justify-content-end">
-                                        {% if anterior <= 0 %}
-                                        <li class="page-item disabled">
-                                            <a href="#" class="page-link">Anterior</a>
-                                        </li>
-                                        {% else %}
-                                        {% comment %} <li class="page-item ">
-                                            <a href="{% url "activities" anterior %}" class="page-link">Anterior</a>
-                                        </li> {% endcomment %}
-                                        {% endif %}
-
-                                        {% for number_page in pages %}
-                                            <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities_htmx" %}">{{number_page|add:1}}</a></li>
+                                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Aspecto</th>
+                                            <th>Activa?</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody id="search-results">
+                                        {% if flag %}
+                                        {% for actividad in actividades %}
+                                        <tr>
+                                            <td>{{actividad.description}}</td>
+                                            <td>{{actividad.aspecto}}</td>
+                                            {% if actividad.is_open %}
+                                                <td>Si</td>
+                                            {% else %}
+                                                <td>No</td>
+                                            {% endif %}
+                                            <td class="table-action">
+                                                <a href="{% url "details_activity" actividad.pk %}" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
+                                                <a href="{% url "edit_activity" actividad.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
+                                                <a href="{% url "delete_activity" actividad.pk %}" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a>
+                                            </td>
+                                        </tr>
                                         {% endfor %}
-                                        
-                                        {% if not request.COOKIES.siguiente %}
-                                            <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a>
-                                        {% comment %} {% elif not siguiente %}
-                                            <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a> {% endcomment %}
-                                        {% else %}
-                                            {% comment %} <li class="page-item"><a class="page-link" href="{% url "activities" siguiente %}">Siguiente</a> {% endcomment %}
-                                                <li class="page-item">
-                                                    <a  name="siguiente"
-                                                        href="{% url "activities_htmx"  %}"
-                                                        hx-get="{% url "activities_htmx"  %}" 
-                                                        hx-trigger="click" 
-                                                        hx-target="#basic-datatable-preview" 
-                                                        hx-swap="innerHTML"
-                                                        {% comment %} hx-headers="{'Mi-Encabezado': 'Valor del encabezado personalizado fdsgdfg'}" {% endcomment %}
-                                                        class="page-link"
-                                                        >Siguiente</a>
-                                                </li>
                                         {% endif %}
-                                        
-                                      </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div> 
-                    
+                                    </tbody>
+                                    
+                                </table>                                           
+                            </div> <!-- end preview-->
+
+                            <div class="row justify-content-between my-2">
+                                <div class="col-4">
+                                    Mostrando {{begin}} a {{end}} de {{count_total_objects}} entradas
+                                </div>
+                                <div class="col-3">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination pagination-sm justify-content-end">
+                                            {% if anterior <= 0 %}
+                                            <li class="page-item disabled">
+                                                <a href="#" class="page-link">Anterior</a>
+                                            </li>
+                                            {% else %}
+                                            {% comment %} <li class="page-item ">
+                                                <a href="{% url "activities" anterior %}" class="page-link">Anterior</a>
+                                            </li> {% endcomment %}
+                                            {% endif %}
+
+                                            {% comment %} {% for number_page in pages %}
+                                                <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities_htmx" %}">{{number_page|add:1}}</a></li>
+                                            {% endfor %} {% endcomment %}
+                                            
+                                            {% if not request.COOKIES.siguiente %}
+                                                <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a>
+                                            {% comment %} {% elif not siguiente %}
+                                                <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a> {% endcomment %}
+                                            {% else %}
+                                                {% comment %} <li class="page-item"><a class="page-link" href="{% url "activities" siguiente %}">Siguiente</a> {% endcomment %}
+                                                    <li class="page-item">
+                                                        <a  name="siguiente"
+                                                            href="{% url "list_activities_htmx"  %}"
+                                                            hx-get="{% url "list_activities_htmx"  %}" 
+                                                            hx-trigger="click" 
+                                                            hx-target="#basic-datatable-preview" 
+                                                            hx-swap="innerHTML"
+                                                            {% comment %} hx-headers="{'Mi-Encabezado': 'Valor del encabezado personalizado fdsgdfg'}" {% endcomment %}
+                                                            class="page-link"
+                                                            >Siguiente</a>
+                                                    </li>
+                                            {% endif %}
+                                            
+                                        </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div> 
+                        </div>
                         <!-- end preview code-->
                     </div> <!-- end tab-content-->
 

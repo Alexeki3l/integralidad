@@ -17,7 +17,7 @@ def return_list_activities_html(activities):
     return list_aux
 
 
-def return_content_full_table_html(activities):
+def return_content_full_table_html(activities, begin, end, count_total_objects, anterior, siguiente):
     """Se encarga de iterar la lista de actividades enviada por parametro y retorna una 
     estructura en html lista para enviarse al template"""
     
@@ -48,54 +48,54 @@ def return_content_full_table_html(activities):
                                 
                             </table>  """
                             
-    result = head + list_aux + footer
+    result = head + list_aux + footer + elements_footer_table(begin, end, count_total_objects, anterior, siguiente)
     
     return result
 
-def elements_footer_table():
-    html = """<div class="row justify-content-between my-2">
-                            <div class="col-4">
-                                Mostrando {{begin}} a {{end}} de {{count_total_objects}} entradas
-                            </div>
-                            <div class="col-3">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination pagination-sm justify-content-end">
-                                        {% if anterior < 0 %}
-                                        <li class="page-item disabled">
-                                            <a href="#" class="page-link">Anterior</a>
-                                        </li>
-                                        {% else %}
-                                        <li class="page-item ">
-                                            <a href="{% url "activities" anterior %}" class="page-link">Anterior</a>
-                                        </li>
-                                        {% endif %}
+def elements_footer_table(begin, end, count_total_objects, anterior, siguiente):
+    
+    if anterior < 0:
+        anterior_html = """<li class="page-item disabled">
+                                <a href="#" class="page-link">Anterior</a>
+                            </li>"""
+    else:
+        anterior_html = """<li class="page-item ">
+                                <a href="{% url "activities" anterior %}" class="page-link">Anterior</a>
+                            </li>"""
+                            
+    if siguiente < 0:
+        siguiente_html = """<li class="page-item disabled"><a class="page-link" href="#">Siguiente</a>"""
+    else:
+        
+        url_django = f"""list_activities_htmx/"""
+        siguiente_html = f"""<li class="page-item">
+                                <a  name="siguiente"
+                                    href="{url_django}"
+                                    hx-get="{url_django}" 
+                                    hx-trigger="click" 
+                                    hx-target="#basic-datatable-preview" 
+                                    hx-swap="innerHTML"
+                                    class="page-link"
+                                >Siguiente</a>
+                            </li>"""
+    
+    html = f"""<div class="col-3">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination pagination-sm justify-content-end">
+                        {anterior_html}
 
-                                        {% for number_page in pages %}
-                                            <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities" number_page %}">{{number_page|add:1}}</a></li>
-                                        {% endfor %}
-                                        
-                                        {% if siguiente == 0 %}
-                                            <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a>
-                                        {% else %}
-                                            {% comment %} <li class="page-item"><a class="page-link" href="{% url "activities" siguiente %}">Siguiente</a> {% endcomment %}
-                                                <li class="page-item">
-                                                    <a  name="siguiente"
-                                                        href="{% url "activities" siguiente %}"
-                                                        hx-get="{% url "activities" siguiente %}" 
-                                                        hx-trigger="click" 
-                                                        hx-target="#basic-datatable-preview" 
-                                                        hx-swap="innerHTML"
-                                                        class="page-link"
-                                                        >Siguiente</a>
-                                                </li>
-                                        {% endif %}
-                                        
-                                      </li>
-                                    </ul>
-                                </nav>
+                        {siguiente_html}
+                    </ul>
+                </nav>
+            </div>"""
+    html_1 = f"""<div class="row justify-content-between my-2">
+                            <div class="col-4">
+                                Mostrando {begin} a {end} de {count_total_objects} entradas
                             </div>
+                            {html}
                         </div> """
-    return html
+    
+    return html_1
 
 def delete_key_values_in_cookies(response, key, value=''):
     try:

@@ -151,4 +151,4 @@ MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR ,'media')
 
 
-SESSION_COOKIE_SECURE = 'True'
+# SESSION_COOKIE_SECURE = 'True'

@@ -8,7 +8,7 @@ from django.contrib import messages
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('activities_htmx')
+        return redirect('list_activities')
     
     if request.method == 'POST':
         username = request.POST['username']
@@ -18,7 +18,7 @@ def login_view(request):
             login(request, user)
             # El usuario ha iniciado sesión correctamente.
             # Puedes redirigirlo a la página que desees.
-            return redirect('activities_htmx')  # Reemplaza 'home' con la URL a la que deseas redirigir.
+            return redirect('list_activities')  # Reemplaza 'home' con la URL a la que deseas redirigir.
         else:
             # El inicio de sesión falló. Muestra un mensaje de error.
             messages.error(request, 'Credenciales inválidas. Por favor, inténtalo de nuevo.')

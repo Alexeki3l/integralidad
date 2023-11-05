@@ -3,8 +3,9 @@ from . import views
 
 urlpatterns = [
     # ...
-    # path('activities/<int:number_page>', views.activities, name='activities'),
-    path('activities/', views.activities_htmx, name='activities_htmx'),
+   
+    path('', views.list_activities, name='list_activities'),
+    path('list_activities_htmx/', views.list_activities_htmx, name='list_activities_htmx'),
     # path('search_activities/', views.search_activities, name='search_activities'),
     path('add_activities/', views.AddActivityView.as_view(), name='add_activities'),
     

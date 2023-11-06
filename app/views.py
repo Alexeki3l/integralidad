@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render, redirect
 from .models import Activity, Aspecto
 from django.http import HttpResponse, HttpRequest, JsonResponse
@@ -10,6 +11,8 @@ from .forms import AddActivityView, EditActivityView
 from django.urls import reverse, reverse_lazy
 from .custom_html_response import return_list_activities_html, return_content_full_table_html,\
 delete_key_values_in_cookies
+
+from authentication.models import Profile
 
 import math
 
@@ -295,6 +298,21 @@ class DeleteActivityView(LoginRequiredMixin, DeleteView):
     
 # ----------------------- (FIN) CRUD de Actividad ----------------------------
 
+# ----------------------------- ROLES -------------------------------
+class RolesListView(ListView):
+    model = Profile  # Especifica el modelo que deseas mostrar en la lista
+    template_name = 'roles/all_roles.html'  # Especifica la plantilla HTML para la lista
+    context_object_name = 'roles'
+    
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        if int(str(self.request.path)[-1]) in [1,2,3]:
+            profiles = Profile.objects.filter(rol_fac = int(str(self.request.path)[-1]))
+            context['roles'] = profiles
+            profile_obj = profiles[0]
+            context['rol'] = profile_obj.get_rol_fac_display()
+        return context
+            
 
 # ----------------------- TRATAMIENTO DE ERRORES -----------------------------
 

@@ -44,11 +44,11 @@
                       Roles
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Jefes de Años</a></li>
-                      <li><a class="dropdown-item" href="#">Jefes de Grupos</a></li>
-                      <li><a class="dropdown-item" href="#">Estudiantes</a></li>
+                      <li><a class="dropdown-item" href="{% url "list_roles" 3 %}">Profesores Año</a></li>
+                      <li><a class="dropdown-item" href="{% url "list_roles" 2 %}">Profesores Guia</a></li>
+                      <li><a class="dropdown-item" href="{% url "list_roles" 1 %}">Estudiantes</a></li>
                       <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Todos</a></li>
+                      <li><a class="dropdown-item" href="{% url "list_roles" 0 %}">Todos</a></li>
                     </ul>
                   </li>
                   <li class="nav-item">

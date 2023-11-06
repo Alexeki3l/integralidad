@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <!-- contenido -->
+    <div class="row justify-content-between my-3">
+        <h5 class="col-sm-4 mx-2">Rol: {{rol}}</h5>
+        {% comment %} <button class="col-sm-1 btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="mdi mdi-plus"></i></button>  {% endcomment %}
+        <a href="{% url "add_activities" %}" class="col-sm-1 btn btn-success mx-3"><i class="mdi mdi-plus"></i></a>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card shadow rounded-4">
+                <div class="card-body">
+
+                    <div class="tab-content">
+                        <div class="row justify-content-between">
+                            <div class="col-4">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        Mostar
+                                    </div>
+                                    <div class="col-auto px-0">
+                                        <select name="select_cant"
+                                                class="form-select form-select-sm" 
+                                                aria-label="Small select example"
+                                                hx-get="{% url 'list_activities_htmx' %}" 
+                                                hx-trigger="change" 
+                                                hx-target="#basic-datatable-preview">
+
+                                            <option value="1">10</option>
+                                            <option value="2">20</option>
+                                            <option value="3">50</option>
+                                            <option value="4">100</option>
+                                          </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        entradas
+                                    </div>
+                                  </div>
+                            </div>
+                            <div class="col-3">
+                                
+                                <input class="form-control form-control-sm" type="search" 
+                                name="search_activities" placeholder="Buscar..." 
+                                hx-get="{% url "list_activities_htmx" %}" 
+                                hx-trigger="keyup changed delay:500ms, search" 
+                                hx-target="#basic-datatable-preview" 
+                                hx-swap="innerHTML"
+                                {% comment %} hx-indicator=".htmx-indicator" {% endcomment %}
+                                >
+                            </div>
+                        </div>
+                        
+                        <!-- Contenido de la tabla -->
+                        <div id="basic-datatable-preview">
+                            <div class="tab-pane show active my-3" >
+                                
+                                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>correo</th>
+                                            <th>Rol Facultad</th>
+                                            <th>Grupo</th>
+                                            <th>Accion</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody id="search-results">
+                                        {% comment %} {% if flag %} {% endcomment %}
+                                        {% for rol in roles %}
+                                        <tr>
+                                            <td>{{rol.user.first_name}}</td>
+                                            <td>{{rol.user.last_name}}</td>
+                                            <td>{{rol.user.email}}</td>
+                                            <td>{{rol.get_rol_fac_display}}</td>
+                                            {% if rol.rol_fac == 3 %}
+                                                <td>{{rol.academy_year}}</td>
+                                            {% else %}
+                                                <td>{{rol.grupo}}</td>
+                                            {% endif %}
+                                            
+                                            {% comment %} {% if rol.is_open %}
+                                                <td>Si</td>
+                                            {% else %}
+                                                <td>No</td>
+                                            {% endif %} {% endcomment %}
+                                            <td class="table-action">
+                                                <a href="" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
+                                                <a href="" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
+                                                <a href="" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% comment %} {% endif %} {% endcomment %}
+                                    </tbody>
+                                    
+                                </table>                                           
+                            </div> <!-- end preview-->
+
+                            <div class="row justify-content-between my-2">
+                                <div class="col-4">
+                                    Mostrando {{begin}} a {{end}} de {{count_total_objects}} entradas
+                                </div>
+                                <div class="col-3">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination pagination-sm justify-content-end">
+                                            {% if anterior <= 0 %}
+                                            <li class="page-item disabled">
+                                                <a href="#" class="page-link">Anterior</a>
+                                            </li>
+                                            {% else %}
+                                            {% comment %} <li class="page-item ">
+                                                <a href="{% url "activities" anterior %}" class="page-link">Anterior</a>
+                                            </li> {% endcomment %}
+                                            {% endif %}
+
+                                            {% comment %} {% for number_page in pages %}
+                                                <li class="page-item {% if number_page|stringformat:"d" in request.path %} disabled {% endif %}" ><a class="page-link" href="{% url "activities_htmx" %}">{{number_page|add:1}}</a></li>
+                                            {% endfor %} {% endcomment %}
+                                            
+                                            {% if not request.COOKIES.siguiente %}
+                                                <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a>
+                                            {% comment %} {% elif not siguiente %}
+                                                <li class="page-item disabled"><a class="page-link" href="#">Siguiente</a> {% endcomment %}
+                                            {% else %}
+                                                {% comment %} <li class="page-item"><a class="page-link" href="{% url "activities" siguiente %}">Siguiente</a> {% endcomment %}
+                                                    <li class="page-item">
+                                                        <a  name="siguiente"
+                                                            href="{% url "list_activities_htmx"  %}"
+                                                            hx-get="{% url "list_activities_htmx"  %}" 
+                                                            hx-trigger="click" 
+                                                            hx-target="#basic-datatable-preview" 
+                                                            hx-swap="innerHTML"
+                                                            {% comment %} hx-headers="{'Mi-Encabezado': 'Valor del encabezado personalizado fdsgdfg'}" {% endcomment %}
+                                                            class="page-link"
+                                                            >Siguiente</a>
+                                                    </li>
+                                            {% endif %}
+                                            
+                                        </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div> 
+                        </div>
+                        <!-- end preview code-->
+                    </div> <!-- end tab-content-->
+
+                </div> <!-- end card body-->
+            </div> <!-- end card -->
+        </div><!-- end col-->
+    </div>
+    <script src="{% static 'app/htmx/htmx.min.js' %}" defer></script>
+{% endblock content %}

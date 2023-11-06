@@ -4,8 +4,8 @@ from . import views
 # from ..authentication.views import update_data
 
 urlpatterns = [
-    # ...
-   
+    # ...Actividades....
+    
     path('', views.list_activities, name='list_activities'),
     path('list_activities_htmx/', views.list_activities_htmx, name='list_activities_htmx'),
     # path('search_activities/', views.search_activities, name='search_activities'),
@@ -19,7 +19,7 @@ urlpatterns = [
     path('activities/edit_activity/<int:pk>', views.EditActivityView.as_view(), name='edit_activity'),
     path('activities/delete_activity/<int:pk>', views.DeleteActivityView.as_view(), name='delete_activity'),
     
+    # ...Roles
     
-    
-    # ...
+    path('roles/<int:id_rol>', views.RolesListView.as_view(), name='list_roles'),
 ]

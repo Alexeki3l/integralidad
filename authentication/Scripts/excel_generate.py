@@ -45,7 +45,7 @@ def generate_excel_data():
                   "IDF2301", "IDF2302", "IDF2303", "IDF2304", "IDF2305", 
                   "IDF2401", "IDF2402", "IDF2403", "IDF2404", "IDF2405"]
     
-    list_rol = ["estudiante", "profesor guia", "profesor de año", "vice-decana/o"]
+    list_rol = ["estudiante", "profesor guia", "profesor de año", "vicedecana/o"]
     
     list_years = [1, 2, 3, 4]
     
@@ -124,11 +124,11 @@ def generate_excel_data():
                 if len(list_years) == 0:
                     list_rol.remove(rol)
                 
-            elif rol == "vice-decana/o":
+            elif rol == "vicedecana/o":
                 group=""
                 year=""
                 list_rol.remove(rol)
-                rol_universitario = "vicedecano"
+                rol_universitario = "vicedecana/o"
                 solapin = f'T{str(solapin)}'
                 carnet_identidad = int(f'83{str(carnet_identidad)}')
             
@@ -164,10 +164,9 @@ def generate_excel_data():
             
             row += 1
             
-        
 
     # Guardar el archivo de Excel
-    workbook.save("user_ramdon.xlsx")
+    workbook.save("./user_random.xlsx")
     
 def generate_user(list_user, name, last_name):
     for pos, _ in enumerate(last_name):

@@ -46,7 +46,7 @@ class Activity(models.Model):
         return self.description
     
     def get_absolute_url(self):
-        return reverse('activities', args=[0])
+        return reverse('list_activities')
     
 class ActivityAndStudent(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)

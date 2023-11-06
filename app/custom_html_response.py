@@ -46,7 +46,7 @@ def return_content_full_table_html(activities, begin, end, count_total_objects, 
     
     footer = """</tbody>
                                 
-                            </table>  """
+                </table>  """
                             
     result = head + list_aux + footer + elements_footer_table(begin, end, count_total_objects, anterior, siguiente)
     

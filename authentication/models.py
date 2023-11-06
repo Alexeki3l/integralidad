@@ -32,7 +32,7 @@ class Profile(models.Model):
     image = models.ImageField(null=True, blank=True)
     
     def __str__(self):
-        return f'{self.user} -- {self.user.first_name} {self.user.last_name}'
+        return f'{self.user} -- {self.user.first_name} {self.user.last_name} -- {self.id}'
     
     def image_url(self):
         if self.image and hasattr(self.image, 'url'):

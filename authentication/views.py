@@ -4,7 +4,11 @@ from django.contrib.auth.models import User
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
+
+from django.http import HttpResponse
 # Create your views here.
+
+from .utils import populate_bd_with_excel_file
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -24,3 +28,9 @@ def login_view(request):
             messages.error(request, 'Credenciales inválidas. Por favor, inténtalo de nuevo.')
 
     return render(request, 'login.html')
+
+
+def update_data(request):
+    response = HttpResponse('<h4>CARGAR LOS DATOS CON HTMX</h4><p>Actualizaremos los datos de usuarios</p>')
+    populate_bd_with_excel_file()
+    return response

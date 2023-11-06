@@ -71,11 +71,11 @@
                     <a href="" class="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{user.profile.image_url}}"  class="img-fluid rounded-circle" width="32" height="32" alt=""></a> 
                     
                   {% else %}
-                    <a href="" class="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><img src="{% static 'app/assets_2/images/tesis/user-img.png' %}"  class="img-fluid rounded-circle" width="32" height="32" alt=""></a> 
+                    <a href="" class="dropdown" data-bs-toggle="dropdown" aria-expanded="false"><img src="{% static 'app/assets_2/images/tesis/user-img.png' %}"  class="img-fluid rounded-circle" width="32" height="32" alt=""><i class="mdi mdi-person-circle"></i></a> 
                   {% endif %}
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-start">
                         <li><a class="dropdown-item" href="#">More Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="{% url "update_data" %}">Actualizar Datos</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url "cerrar_seccion" %}"><i class="mdi mdi-door-closed"></i> Salir</a></li>
                       </ul>

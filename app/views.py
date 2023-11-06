@@ -290,10 +290,11 @@ class EditActivityView(UpdateView):
 class DeleteActivityView(LoginRequiredMixin, DeleteView):
     model = Activity
     template_name = "activity/delete_activity.html"
-    success_url = reverse_lazy('activities', args=[0])
+    success_url = reverse_lazy('list_activities')
     
     
 # ----------------------- (FIN) CRUD de Actividad ----------------------------
+
 
 # ----------------------- TRATAMIENTO DE ERRORES -----------------------------
 

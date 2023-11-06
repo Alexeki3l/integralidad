@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+# from ..authentication.views import update_data
+
 urlpatterns = [
     # ...
    
@@ -16,5 +18,8 @@ urlpatterns = [
     path('activities/details_activity/<int:pk>', views.DetailsActivityView.as_view(), name='details_activity'),
     path('activities/edit_activity/<int:pk>', views.EditActivityView.as_view(), name='edit_activity'),
     path('activities/delete_activity/<int:pk>', views.DeleteActivityView.as_view(), name='delete_activity'),
+    
+    
+    
     # ...
 ]

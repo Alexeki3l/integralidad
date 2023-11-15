@@ -310,14 +310,29 @@ class DeleteActivityView(LoginRequiredMixin, DeleteView):
 # ----------------------------- ROLES -------------------------------
 def list_roles(request, id_rol):
     profiles = Profile.objects.all()
+    rol = 'Todos'
     if id_rol == 1:
         profiles = profiles.filter(rol_fac = 1)
+        rol = 'Estudiantes'
     if id_rol == 2:
         profiles = profiles.filter(rol_fac = 2)
+        rol = 'Profesores Guias'
     if id_rol == 3:
         profiles = profiles.filter(rol_fac = 3)
+        rol = 'Profesores de Año'
+    
+    obj = profiles[0]
+    print(obj.get_rol_fac_display())
+
+    if str(obj.grupo) == 'nan':
+        flag = True
+    else:
+        flag = False
+    
     context = {
-        'profiles':profiles
+        'profiles':profiles,
+        'rol':rol,
+        'flag':flag
     }
     return render(request, 'roles/all_roles.html', context=context)
 

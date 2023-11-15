@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from django.shortcuts import render, redirect
@@ -12,7 +12,7 @@ from .utils import populate_bd_with_excel_file
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('data_table')
+        return redirect('list_activities')
     
     if request.method == 'POST':
         username = request.POST['username']
@@ -22,12 +22,19 @@ def login_view(request):
             login(request, user)
             # El usuario ha iniciado sesión correctamente.
             # Puedes redirigirlo a la página que desees.
-            return redirect('data_table')  # Reemplaza 'home' con la URL a la que deseas redirigir.
+            return redirect('list_activities')  # Reemplaza 'home' con la URL a la que deseas redirigir.
         else:
             # El inicio de sesión falló. Muestra un mensaje de error.
             messages.error(request, 'Credenciales inválidas. Por favor, inténtalo de nuevo.')
 
     return render(request, 'login.html')
+
+
+def logout_view(request):
+    logout(request)
+    # Redirige a la página que desees después del logout
+    return redirect('login')  # Reemplaza 'nombre_de_la_ruta' con la ruta a la que deseas redirigir
+
 
 
 def update_data(request):

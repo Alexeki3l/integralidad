@@ -9,7 +9,7 @@ from django import forms
 class AddActivityView(forms.ModelForm):
     class Meta:
         model  = Activity  
-        fields = ('description','month','weight','is_open','aspecto',)
+        fields = ('name','is_open','aspecto',)
         # fields = ('__all__')
         # widgets={
         #     'description':forms.CharField(attrs={'class':'form-control'}),
@@ -29,7 +29,7 @@ class AddActivityView(forms.ModelForm):
 class EditActivityView(forms.ModelForm):
     class Meta:
         model  = Activity  
-        fields = ('description','month','weight','is_open','aspecto',)
+        fields = ('name','is_open','aspecto',)
         # fields = ('__all__')
         # widgets={
         #     'description':forms.CharField(attrs={'class':'form-control'}),

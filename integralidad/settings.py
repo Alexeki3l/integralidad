@@ -44,6 +44,7 @@ DEFAULTS = [
 MY_APPS = [
     'app',
     'authentication',
+    'multimedia',
 ]
 
 THIRD = [

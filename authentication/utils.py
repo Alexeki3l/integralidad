@@ -7,8 +7,8 @@ import pandas as pd
 import os
 
 def populate_bd_with_excel_file():
-    try:
-        if User.objects.all().count() < 5:
+        try:
+            list_user_database_old = User.objects.all().values_list('username', flat=True)
             try:
                 ruta_actual = os.path.abspath(__file__)
                 ruta_raiz = str(ruta_actual)[:-8]
@@ -21,8 +21,12 @@ def populate_bd_with_excel_file():
 
                 excel_data = df.iterrows()
                 
+                list_user_database_new = []
+                
+                print('CREANDO o ACTUALIZANDO DATABASE')
                 for index, row in excel_data:
-                    print(index, row)
+                    # print(index, row)
+                    list_user_database_new.append(row['usuario'])
                     # break
                     rol_facultad = ['','estudiante', 'profesor guia', 'profesor de año', 'vicedecana/o']
                     rol_universidad = ['','estudiante', 'profesor', 'vicedecana/o']
@@ -76,12 +80,19 @@ def populate_bd_with_excel_file():
 
                 # Profile.objects.bulk_create(profiles_to_create)
 
-                print('Datos Cargados')
+                diferencia = [elemento for elemento in list_user_database_new if elemento not in list_user_database_old]
+                if diferencia > 0:
+                    for element in diferencia:
+                        user_obj = User.objects.get(username = element)
+                        if not user_object.is_superuser:
+                            user_obj.delete()
+                            
+                print('DATOS ACTUALIZADOS')
 
             except FileNotFoundError as e:
                 print('ERROR: ', e)
                 
             except Exception as e:
                 print(e)
-    except:
-        pass
+        except:
+            pass

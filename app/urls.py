@@ -17,6 +17,9 @@ urlpatterns = [
     path('delete_activity/<int:pk>', views.DeleteActivityView.as_view(), name='delete_activity'),
     #
     
+    # Activity And Student
+    path('add_activities_and_student/<int:pk>', views.AddActivityAndStudentView.as_view(), name='add_activities_and_student'),
+    
     # ...Roles
     
     path('roles/<int:id_rol>', views.list_roles, name='list_roles'),

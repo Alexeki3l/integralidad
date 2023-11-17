@@ -6,6 +6,7 @@ from django.urls import reverse, reverse_lazy
 # Create your models here.
 
 
+
 class Aspecto(models.Model):
     name = models.CharField(max_length=1500)
     
@@ -132,6 +133,12 @@ class ActivityAndStudent(models.Model):
         (4, 'Cuarto'),
     )
     
+    TYPE_ACTIVIDAD_PID = (
+        (1, 'Ferias'),
+        (2, 'Despliegues'),
+        (3, 'Otras Actividades de la Produccion'),
+    )
+    
     
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -178,13 +185,27 @@ class ActivityAndStudent(models.Model):
     nivel_autor = models.IntegerField(choices=TYPE_AUTOR, null=True, blank=True, help_text="Esto es de 'Publicaciones logradas como autor o coautor'")
     nivel_publicacion = models.IntegerField(choices=TYPE_NIVEL_PUBLICACION, null=True, blank=True, help_text="Esto es de 'Publicaciones logradas como autor o coautor'")
     
+    # ---------------------- Academico --------------------------
+    where_pid = models.CharField(max_length=100, null=True, blank=True, help_text="Area donde has realizado la PID")
+    rol = models.CharField(max_length=100, null=True, blank=True, help_text="Area donde has realizado la PID")
+    actividades_pid = models.IntegerField(choices=TYPE_ACTIVIDAD_PID, null=True, blank=True)
+    
+    grupo_edu_amor = models.BooleanField(null=True, blank=True)
+    
+    with_arrastres = models.BooleanField(null=True, blank=True)
+    with_mundiales = models.BooleanField(null=True, blank=True)
+    with_repitencias = models.BooleanField(null=True, blank=True)
+    
+    other_reconocimiento = models.CharField(max_length=255, null=True,blank=True)
+    
+    
     # ------------------------------------------------------
     
     create_at = models.DateTimeField(auto_now=True)
     update_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f'{self.description} {self.profile.user.first_name}'
+        return f'{self.activity.name} -- {self.profile.user.first_name} -- {self.year}'
 
 class Evento(models.Model):
     TYPE_NIVEL = (
@@ -245,3 +266,11 @@ class Group(models.Model):
     
     create_at = models.DateTimeField(auto_now=True)
     update_at = models.DateTimeField(auto_now_add=True)
+    
+    
+class Asignatura(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    actividades = models.ManyToManyField(ActivityAndStudent, blank=True)
+    
+    def __str__(self):
+        return self.name

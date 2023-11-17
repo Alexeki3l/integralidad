@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="row justify-content-between my-3">
+    <h5 class="col-sm-4 mx-2">Añadir Actividad</h5>
+    {% comment %} <button class="col-sm-1 btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="mdi mdi-plus"></i></button>  {% endcomment %}
+    {% comment %} <a href="{% url "add_activities" %}" class="col-sm-1 btn btn-secondary mx-3"><i class="mdi mdi-plus"></i></a> {% endcomment %}
+</div>
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        {% comment %} <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="">Producto</a></li>
+                        <li class="breadcrumb-item active">Add Producto</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Add Producto</h4>
+            </div>
+        </div> {% endcomment %}
+    </div>  
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">   
+    <!-- end page title --> 
+                    <form method= "POST" action="" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                            {% if '11' in request.path %}
+                                {{form.errors}}
+                                <h5>Actividad: {{object_name}}</h5>
+                                {{form.is_ayudante.label_tag}}  {{form.is_ayudante}}  
+                                {{form.year.label_tag }}{{form.year }}  
+                                <label>Asignaturas:</label>
+                                <select>
+                                    {% for asig in asignaturas %} <option value="">{{asig.name}}</option> {% endfor %}
+                                </select>
+                                
+                                {{form.evaluacion.label_tag}}  {{form.evaluacion}} 
+                            {% endif %}
+                        <div >                           
+                          
+                          <div class="my-3">
+                            <!-- <button class="btn btn-danger">Cancelar</button> -->
+                            <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
+                            <button class="btn btn-success">Añadir</button>
+                          </div>
+                        </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

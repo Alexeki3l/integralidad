@@ -39,23 +39,40 @@
                     <a class="nav-link" aria-current="page" href="#">Home</a>
                   </li> -->
                   <li class="nav-item">
-                    <a class="nav-link {% if request.path|slice:':1' == ' ' %}active {% endif %}" href="{% url "list_activities" %}">Actividades</a>
+                    <a class="nav-link {% if request.path|slice:':1' == '' %}active {% endif %}" href="{% url "list_activities" %}">Actividades</a>
                   </li>
-                  <li class="nav-item dropdown-center">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Roles
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{% url "list_roles" 3 %}">Profesores Año</a></li>
-                      <li><a class="dropdown-item" href="{% url "list_roles" 2 %}">Profesores Guia</a></li>
-                      <li><a class="dropdown-item" href="{% url "list_roles" 1 %}">Estudiantes</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url "list_roles" 0 %}">Todos</a></li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                  </li>
+                  {% if request.user.profile.rol_fac != 1 %}
+                    <li class="nav-item dropdown-center">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Roles
+                      </a>
+                      <ul class="dropdown-menu">
+                        {% if request.user.profile.rol_fac == 4 %}
+                          <li><a class="dropdown-item" href="{% url "list_roles" 3 %}">Profesores Año</a></li>
+                          <li><a class="dropdown-item" href="{% url "list_roles" 2 %}">Profesores Guia</a></li>
+                          <li><a class="dropdown-item" href="{% url "list_roles" 1 %}">Estudiantes</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url "list_roles" 0 %}">Todos</a></li>
+                        
+                          {% elif request.user.profile.rol_fac == 3 %}
+                          <li><a class="dropdown-item" href="{% url "list_roles" 2 %}">Profesores Guia</a></li>
+                          <li><a class="dropdown-item" href="{% url "list_roles" 1 %}">Estudiantes</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url "list_roles" 0 %}">Todos</a></li>
+                        
+                          {% elif request.user.profile.rol_fac == 2 %}
+                          <li><a class="dropdown-item" href="{% url "list_roles" 1 %}">Estudiantes</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="{% url "list_roles" 0 %}">Todos</a></li>
+                        {% endif %}
+                      </ul>
+                    </li>
+                  {% endif %}
+                  {% if request.user.profile.rol_fac == 1 %}
+                    <li class="nav-item">
+                      <a class="nav-link disabled" aria-disabled="true">Caracterizacion</a>
+                    </li>
+                  {% endif %}
                 </ul>
                 <!-- <form class="d-flex mx-3" role="search">
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

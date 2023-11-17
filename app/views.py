@@ -1,12 +1,12 @@
 from typing import Any
 from django.shortcuts import render, redirect
-from .models import Activity, Aspecto
+from .models import Activity, Aspecto, ActivityAndStudent, Asignatura
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.db.models import Q
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import AddActivityView, EditActivityView, AddProfileView, EditProfileView
+from .forms import AddActivityView, EditActivityView, AddProfileView, EditProfileView, EditActivityAndStudentView, AddActivityAndStudentView
 
 from django.urls import reverse, reverse_lazy
 from .custom_html_response import return_list_activities_html, return_content_full_table_html,\
@@ -287,15 +287,23 @@ class DetailsActivityView(DetailView):
     
     
 # Editar Actividades
-class EditActivityView(UpdateView):
+class EditActivityView(CreateView):
     model = Activity
-    form_class = EditActivityView
+    form_class = EditActivityAndStudentView
     template_name='activity/edit_activity.html'
     
     # def form_valid(self, form):
     #     form.instance.updated = timezone.now()
     #     form.instance.autor = self.request.user
     #     return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs: Any):
+        context =  super().get_context_data(**kwargs)
+        print(context)
+        pk = int(self.request.path.split('/')[-1])
+        context['object_name'] = Activity.objects.get(id = pk)
+        
+        return context
 
 
 # Eliminar Actividades
@@ -307,26 +315,85 @@ class DeleteActivityView(LoginRequiredMixin, DeleteView):
     
 # ----------------------- (FIN) CRUD de Actividad ----------------------------
 
+# ----------------------CRUD de ActividadAndStudent ----------------------------
+class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
+    model = ActivityAndStudent
+    form_class = AddActivityAndStudentView
+    template_name = 'activity_and_student/add_activity_and_student.html'
+    
+    def dispatch(self, request, *args, **kwargs):
+        
+        if request.method == 'POST':
+            print(request.POST) 
+            pk_activity = int(self.request.path.split('/')[-1])
+            pk_profile = int(self.request.user.profile.id)
+            if 'true' in request.POST['is_ayudante']:
+                is_ayudante = True
+            else:
+                is_ayudante = False
+            obj = ActivityAndStudent.objects.create(activity_id = pk_activity, 
+                                    profile_id = pk_profile, 
+                                    evaluacion = request.POST['evaluacion'],
+                                    is_ayudante = is_ayudante,
+                                    year = request.POST['year']
+                                    )
+            # obj.save()
+            
+        return super().dispatch(request, *args, **kwargs)
+    
+
+    def get_context_data(self, **kwargs: Any):
+        context =  super().get_context_data(**kwargs)
+        pk = int(self.request.path.split('/')[-1])
+        print(context)
+        context['object_name'] = Activity.objects.get(id = pk).name
+        context['asignaturas'] = Asignatura.objects.all()
+        return context
+
+
 # ----------------------------- ROLES -------------------------------
 def list_roles(request, id_rol):
-    profiles = Profile.objects.all()
-    rol = 'Todos'
-    if id_rol == 1:
-        profiles = profiles.filter(rol_fac = 1)
-        rol = 'Estudiantes'
-    if id_rol == 2:
-        profiles = profiles.filter(rol_fac = 2)
-        rol = 'Profesores Guias'
-    if id_rol == 3:
-        profiles = profiles.filter(rol_fac = 3)
-        rol = 'Profesores de Año'
-    
-    obj = profiles[0]
-    print(obj.get_rol_fac_display())
-
-    if str(obj.grupo) == 'nan':
-        flag = True
-    else:
+    if request.user.profile.rol_fac == 4:
+        profiles = Profile.objects.all().exclude(rol_fac = request.user.profile.rol_fac)
+        rol = 'Todos'
+        if id_rol == 1:
+            profiles = profiles.filter(rol_fac = 1)
+            rol = 'Estudiantes'
+        if id_rol == 2:
+            profiles = profiles.filter(rol_fac = 2)
+            rol = 'Profesores Guias'
+        if id_rol == 3:
+            profiles = profiles.filter(rol_fac = 3)
+            rol = 'Profesores de Año'
+            
+    elif request.user.profile.rol_fac == 3:
+        profiles = Profile.objects.all().filter(academy_year = request.user.profile.academy_year).exclude(id = request.user.profile.id)
+        rol = 'Todos'
+        if id_rol == 1:
+            profiles = profiles.filter(rol_fac = 1)
+            rol = 'Estudiantes'
+        if id_rol == 2:
+            profiles = profiles.filter(rol_fac = 2)
+            rol = 'Profesores Guias'
+            
+    elif request.user.profile.rol_fac == 2:
+        profiles = Profile.objects.all().filter(academy_year = request.user.profile.academy_year, grupo =request.user.profile.grupo).exclude(id = request.user.profile.id)
+        rol = 'Todos'
+        if id_rol == 1:
+            profiles = profiles.filter(rol_fac = 1)
+            rol = 'Estudiantes'
+        
+    try:
+        obj = profiles[0]
+    except IndexError:
+        obj = ""
+    # print(obj.get_rol_fac_display())
+    try:
+        if str(obj.grupo) == 'nan':
+            flag = True
+        else:
+            flag = False
+    except AttributeError:
         flag = False
     
     context = {

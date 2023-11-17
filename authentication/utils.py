@@ -92,7 +92,7 @@ def populate_bd_with_excel_file():
             except FileNotFoundError as e:
                 print('ERROR: ', e)
                 
-            except Exception as e:
-                print(e)
+            # except Exception as e:
+            #     print(e)
         except:
             pass

@@ -24,8 +24,19 @@
         <!-- end page title --> 
                         <form action="{% url 'edit_activity' activity.pk %}" method= "POST">
                             {% csrf_token %}
-                            {{form.as_p}} 
-                          
+                            <p>{{object_name}}</p>
+                            {{form.as_p}}
+                            {% comment %} <div class="fieldWrapper">
+                                {{ form.name.errors }}
+                                {{ form.name.label_tag }}
+                                {{ form.name }}
+                                
+                            </div>
+                            <div class="fieldWrapper">
+                                {{ form.aspecto.errors }}
+                                {{ form.aspecto.label_tag }}
+                                {{ form.aspecto }}
+                            </div> {% endcomment %}
                             <div class="my-3">
                                 <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
                                 <button class="btn btn-success">Editar</button>

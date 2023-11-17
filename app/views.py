@@ -332,7 +332,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
             else:
                 is_ayudante = False
             obj = ActivityAndStudent.objects.create(activity_id = pk_activity, 
-                                    profile_id = pk_profile, 
+                                    profile_id = pk_profile,
                                     evaluacion = request.POST['evaluacion'],
                                     is_ayudante = is_ayudante,
                                     year = request.POST['year']

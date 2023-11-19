@@ -1,6 +1,7 @@
 # from matplotlib import widgets
 # from blog.models import Post
-from .models import Activity, ActivityAndStudent
+from typing import Any
+from .models import Activity, ActivityAndStudent, Asignatura
 from authentication.models import Profile
 
 from . import forms
@@ -8,10 +9,12 @@ from django import forms
 
 
 class AddActivityAndStudentView(forms.ModelForm):
+    
+    # asignaturas = forms.ModelChoiceField(Asignatura.objects.all())
     class Meta:
         model  = ActivityAndStudent
-        # fields = ('name','is_open','aspecto',)
-        fields = ('__all__')
+        fields = ('is_ayudante','year','evaluacion','asignaturas_ayudante','grupo_edu_amor',)
+        # fields = ('__all__')
         # widgets={
         #     'description':forms.CharField(attrs={'class':'form-control'}),
         #     'month':forms.IntegerField(attrs={'class':'form-control'}),
@@ -25,6 +28,11 @@ class AddActivityAndStudentView(forms.ModelForm):
         #     # 'description':forms.Textarea(attrs={'class':'form-control'}),
         #     # 'instock':forms.BooleanField(attrs={'class':'form-control'}),
         # }
+    # def save(self, commit=True):
+    #     instance = super().save(commit)
+    #     # set Car reverse foreign key from the Person model
+    #     instance.asignaturas_set.add(self.cleaned_data['asignaturas'])
+    #     return instance
 
 
 class AddActivityView(forms.ModelForm):

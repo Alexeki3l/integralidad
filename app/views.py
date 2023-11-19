@@ -9,12 +9,12 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .forms import AddActivityView, EditActivityView, AddProfileView, EditProfileView, EditActivityAndStudentView, AddActivityAndStudentView
 
 from django.urls import reverse, reverse_lazy
-from .custom_html_response import return_list_activities_html, return_content_full_table_html,\
-delete_key_values_in_cookies
 
-from .custom_method import order_list_by_group
+from django.contrib import messages
 
 from authentication.models import Profile
+
+from app.metodos_personalizados.message import *
 
 import math
 
@@ -324,30 +324,88 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
     def dispatch(self, request, *args, **kwargs):
         
         if request.method == 'POST':
-            print(request.POST) 
             pk_activity = int(self.request.path.split('/')[-1])
-            pk_profile = int(self.request.user.profile.id)
-            if 'true' in request.POST['is_ayudante']:
-                is_ayudante = True
-            else:
-                is_ayudante = False
-            obj = ActivityAndStudent.objects.create(activity_id = pk_activity, 
-                                    profile_id = pk_profile,
-                                    evaluacion = request.POST['evaluacion'],
-                                    is_ayudante = is_ayudante,
-                                    year = request.POST['year']
-                                    )
-            # obj.save()
             
+            ### ACADEMICO ###
+            # ALUMNO AYUDANTE
+            if 11 == pk_activity:
+                
+                year_student = int(self.request.user.profile.academy_year)
+                pk_profile = int(self.request.user.profile.id)
+                
+                defaults = dict(request.POST).copy()
+                del defaults['csrfmiddlewaretoken']
+
+                defaults['year'] = year_student
+                try:
+                    defaults['evaluacion'] = int(defaults['evaluacion'][0])
+                except:
+                    messages.error(request, ERROR_GENERAL)
+                    return redirect('add_activities_and_student', pk = pk_activity)
+                    
+                
+                try:
+                    print(defaults)
+                    if 'on' in defaults['is_ayudante']:
+                        defaults['is_ayudante'] = True
+                    else:
+                        defaults['is_ayudante'] = False
+                except:
+                    pass
+                
+                try:
+                    if 'on' in defaults['grupo_edu_amor']:
+                        defaults['grupo_edu_amor'] = True
+                    else:
+                        defaults['grupo_edu_amor'] = False
+                except:
+                    messages.error(request, ERROR_GENERAL)
+                    return redirect('add_activities_and_student', pk = pk_activity)
+                
+                try:
+                    ids_asignaturas = defaults['asignaturas_ayudante']
+                except:
+                    messages.error(request, ERROR_GENERAL)
+                    return redirect('add_activities_and_student', pk = pk_activity)
+                
+                #Si detectamos mas de 2 asignaturas enviamos un mensaje de error al template
+                try:
+                    pos_2 = ids_asignaturas[2]
+                    if pos_2:
+                        messages.error(request, ERROR_GENERAL)
+                        return redirect('add_activities_and_student', pk = pk_activity)
+                except IndexError:
+                    pass
+                
+                try:
+                    defaults['is_ayudante']
+                except:
+                    messages.error(request, ERROR_GENERAL)
+                    return redirect('add_activities_and_student', pk = pk_activity)
+                
+                del defaults['asignaturas_ayudante']
+                
+                objeto, creado = ActivityAndStudent.objects.update_or_create(
+                                activity_id = pk_activity,
+                                profile_id = pk_profile,
+                                defaults=defaults
+                            )
+                if creado or not creado:
+                    for id_asignatura in ids_asignaturas:
+                        asignatura = Asignatura.objects.get(id=id_asignatura)
+                        objeto.asignaturas_ayudante.add(asignatura)
+                
         return super().dispatch(request, *args, **kwargs)
     
 
     def get_context_data(self, **kwargs: Any):
         context =  super().get_context_data(**kwargs)
         pk = int(self.request.path.split('/')[-1])
-        print(context)
+        
+        context['pk_activity'] = str(self.request.path).split('/')[-1]
         context['object_name'] = Activity.objects.get(id = pk).name
         context['asignaturas'] = Asignatura.objects.all()
+        context['evaluaciones'] = ActivityAndStudent.TYPE_EVALUACION
         return context
 
 
@@ -387,7 +445,7 @@ def list_roles(request, id_rol):
         obj = profiles[0]
     except IndexError:
         obj = ""
-    # print(obj.get_rol_fac_display())
+        
     try:
         if str(obj.grupo) == 'nan':
             flag = True

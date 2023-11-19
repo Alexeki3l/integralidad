@@ -5,7 +5,12 @@ from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 # Create your models here.
 
-
+class Asignatura(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    # student = models.ForeignKey(ActivityAndStudent, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
 
 class Aspecto(models.Model):
     name = models.CharField(max_length=1500)
@@ -140,14 +145,14 @@ class ActivityAndStudent(models.Model):
     )
     
     
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    is_valid = models.BooleanField(default=True, null=True, blank=True)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, null=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    is_valid = models.BooleanField(default=True)
     year = models.IntegerField(null=True, blank=True)
     
     # ---------------- Politico Ideologico ------------------
-    es_feu = models.BooleanField(default=False, null=True, blank=True)
-    es_ujc = models.BooleanField(default=False, null=True, blank=True)
+    es_feu = models.BooleanField(default=False)
+    es_ujc = models.BooleanField(default=False)
     nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
     cargo_feu =  models.IntegerField(choices=TYPE_NIVEL_CARGO_FEU, null=True, blank=True)
     evaluacion = models.IntegerField(choices=TYPE_EVALUACION, null=True, blank=True)
@@ -157,30 +162,34 @@ class ActivityAndStudent(models.Model):
     
     descripcion = models.CharField(max_length=255, blank=True, null=True)
     
-    distincion_marzo = models.BooleanField(null=True, blank=True, 
+    distincion_marzo = models.BooleanField(default=False,
                                     help_text="Este se refiere a la distincion 13 de Marzo")
     
-    distincion_fututo_maestro = models.BooleanField(null=True, blank=True, 
+    distincion_fututo_maestro = models.BooleanField(default=False,
                                     help_text="Este se refiere a la distincion del Futuro Maestro")
     
-    distincion_joven = models.BooleanField(null=True, blank=True, 
+    distincion_joven = models.BooleanField(default=False,
                                     help_text="Este campo se refiere a la distinsion Joven 20 Aniversario de la FEU")
-    is_ayudante = models.BooleanField(null=True, blank=True, 
+    is_ayudante = models.BooleanField(default=False,
                                     help_text="Este campo se refiere a que si el alumno fue 'alumno ayudante'")
+    
+    # asignatura_ayudante = models.CharField(max_length=100, null=True, blank=True)
+    
+    asignaturas_ayudante = models.ManyToManyField(Asignatura)
     
     # ------------------------------------------------------
     
     # ----------------- Investigativa son 4 ----------------------
     # Aqui hay una relacion de con la clase Eventos
-    has_roles = models.BooleanField(null=True, blank=True)
+    has_roles = models.BooleanField(default=False,)
     roles = models.IntegerField(choices=TYPE_ROLES, null=True, blank=True)
     nivel_alcanzado = models.IntegerField(choices=TYPE_NIVEL_ALCANZADO, null=True, blank=True)
     
-    has_investigacion = models.BooleanField(null=True, blank=True, help_text="Si pertence o no a una linea de investigacion")
+    has_investigacion = models.BooleanField(default=False, help_text="Si pertence o no a una linea de investigacion")
     participacion = models.IntegerField(choices=TYPE_PARTICIPACION, null=True, blank=True)
     nivel_evento = models.IntegerField(choices=TYPE_NIVEL_EVENTO, null=True, blank=True, help_text="Esto es de 'Pertenece a una linea de investigacion'")
     
-    has_publicacion = models.BooleanField(null=True, blank=True)
+    has_publicacion = models.BooleanField(default=False)
     nombre_publicacion = models.CharField(max_length=100, null=True, blank=True)
     nivel_autor = models.IntegerField(choices=TYPE_AUTOR, null=True, blank=True, help_text="Esto es de 'Publicaciones logradas como autor o coautor'")
     nivel_publicacion = models.IntegerField(choices=TYPE_NIVEL_PUBLICACION, null=True, blank=True, help_text="Esto es de 'Publicaciones logradas como autor o coautor'")
@@ -190,11 +199,11 @@ class ActivityAndStudent(models.Model):
     rol = models.CharField(max_length=100, null=True, blank=True, help_text="Area donde has realizado la PID")
     actividades_pid = models.IntegerField(choices=TYPE_ACTIVIDAD_PID, null=True, blank=True)
     
-    grupo_edu_amor = models.BooleanField(null=True, blank=True)
+    grupo_edu_amor = models.BooleanField(default=False)
     
-    with_arrastres = models.BooleanField(null=True, blank=True)
-    with_mundiales = models.BooleanField(null=True, blank=True)
-    with_repitencias = models.BooleanField(null=True, blank=True)
+    with_arrastres = models.BooleanField(default=False)
+    with_mundiales = models.BooleanField(default=False)
+    with_repitencias = models.BooleanField(default=False)
     
     other_reconocimiento = models.CharField(max_length=255, null=True,blank=True)
     
@@ -206,6 +215,9 @@ class ActivityAndStudent(models.Model):
     
     def __str__(self):
         return f'{self.activity.name} -- {self.profile.user.first_name} -- {self.year}'
+    
+    def get_absolute_url(self):
+        return reverse('list_activities')
 
 class Evento(models.Model):
     TYPE_NIVEL = (
@@ -268,9 +280,3 @@ class Group(models.Model):
     update_at = models.DateTimeField(auto_now_add=True)
     
     
-class Asignatura(models.Model):
-    name = models.CharField(max_length=100, null=True, blank=True)
-    actividades = models.ManyToManyField(ActivityAndStudent, blank=True)
-    
-    def __str__(self):
-        return self.name

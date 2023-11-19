@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="row justify-content-between my-3">
+    <h5 class="col-sm-4 mx-2">Añadir Actividad</h5>
+    {% if messages %}
+        <ul class="alert alert-danger mx-4 w-75">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% comment %} <button class="col-sm-1 btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="mdi mdi-plus"></i></button>  {% endcomment %}
+    {% comment %} <a href="{% url "add_activities" %}" class="col-sm-1 btn btn-secondary mx-3"><i class="mdi mdi-plus"></i></a> {% endcomment %}
+</div>
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        {% comment %} <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="">Producto</a></li>
+                        <li class="breadcrumb-item active">Add Producto</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Add Producto</h4>
+            </div>
+        </div> {% endcomment %}
+    </div>  
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">   
+    <!-- end page title --> 
+                    <form method= "POST" action="" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                            {% if '11' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                {% comment %} <label for="id_is_ayudante">Is ayudante:</label>
+                                <input type="checkbox" name="is_ayudante" id="id_is_ayudante"> {% endcomment %}
+                                <div class="row">
+                                    <div class="col form-check">
+                                        <label class="form-check-label" for="id_is_ayudante">
+                                            Alumno Ayudante ?
+                                        </label>
+                                        <input class="form-check-input" name="is_ayudante" type="checkbox"  id="id_is_ayudante">
+                                    </div>
+
+                                    <div class="col form-check">
+                                        <label class="form-check-label" for="id_grupo_edu_amor">
+                                            Pertenece al Grupo Educando por Amor ?
+                                        </label>
+                                        <input class="form-check-input" name="grupo_edu_amor" type="checkbox" id="id_grupo_edu_amor">
+                                    </div>
+                                    
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                                        <select class="form-select" name="asignaturas_ayudante" id="id_asignaturas_ayudante" multiple>
+                                            {% comment %} <option selected>Seleccione las asignaturas</option> {% endcomment %}
+                                            {% for asignatura in asignaturas %}
+                                                <option value="{{asignatura.id}}">{{asignatura.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col">
+                                    <label for="id_evaluacion">Evaluación:</label>
+                                        <select class="form-select" name="evaluacion" id="id_evaluacion">
+                                            <option value="" selected="">---------</option>
+                                            {% for evaluacion in evaluaciones %}
+                                                <option value="{{evaluacion.0}}">{{evaluacion.1}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        <div >                           
+                          
+                          <div class="my-3">
+                            <!-- <button class="btn btn-danger">Cancelar</button> -->
+                            <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
+                            <button class="btn btn-success">Añadir</button>
+                          </div>
+                        </div>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

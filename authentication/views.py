@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from django.shortcuts import render, redirect
@@ -30,7 +30,15 @@ def login_view(request):
     return render(request, 'login.html')
 
 
+def logout_view(request):
+    logout(request)
+    # Redirige a la página que desees después del logout
+    return redirect('login')  # Reemplaza 'nombre_de_la_ruta' con la ruta a la que deseas redirigir
+
+
+
 def update_data(request):
-    response = HttpResponse('<h4>CARGAR LOS DATOS CON HTMX</h4><p>Actualizaremos los datos de usuarios</p>')
+    # response = HttpResponse('<h4>CARGAR LOS DATOS CON HTMX</h4><p>Actualizaremos los datos de usuarios</p>')
     populate_bd_with_excel_file()
-    return response
+    # return response
+    return redirect('login')

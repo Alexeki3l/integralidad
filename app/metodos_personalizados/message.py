@@ -1,0 +1,1 @@
+ERROR_GENERAL = 'Todos los campos son obligatorios.'

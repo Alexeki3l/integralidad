@@ -1,15 +1,26 @@
 from django.test import TestCase
-from .models import Activity
+from .models import Activity, Aspecto
 
 class PostModelTest(TestCase):
-    def test_create_post(self):
-        # Crear un objeto Post
-        post = Activity.objects.create(description="1ro de Mayo")
-
-        # Obtener el objeto Post de la base de datos
-        saved_post = Activity.objects.get(id=post.id)
+    def test_create_activity_better_case(self):
+        # Crear un objeto Post para el mejor de los casos
+        aspecto = Aspecto.objects.create(name = 'Investigativa')
+        activity = Activity.objects.create(description="1ro de Mayo", 
+                                           weight=2.0,
+                                           aspecto = aspecto)
 
         # Comprobar que los campos del objeto son correctos
-        self.assertEqual(saved_post.description, "1ro de Mayo")
-        # self.assertEqual(saved_post.content, "Contenido de prueba")
+        self.assertEqual(activity.description, "1ro de Mayo")
+        
+        
+        
+    def test_create_activity_worst_case(self):
+        # Crear un objeto Post para el mejor de los casos
+        aspecto = Aspecto.objects.create(name = 'Investigativa')
+        activity = Activity.objects.create(description="1ro de Mayo", 
+                                           weight=2.0,
+                                           aspecto = aspecto)
+
+        # Comprobar que los campos del objeto no son correctos
+        self.assertNotEqual(activity.description, "1ro de Junio")
 

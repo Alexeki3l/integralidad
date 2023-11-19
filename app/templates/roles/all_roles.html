@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css"> {% endcomment %}
+<div class="row justify-content-between my-3">
+    <h5 class="col-sm-4 mx-2">Rol: {{rol}}</h5>
+    {% comment %} <button class="col-sm-1 btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="mdi mdi-plus"></i></button>  {% endcomment %}
+    {% comment %} <a href="{% url "add_activities" %}" class="col-sm-1 btn btn-success mx-3"><i class="mdi mdi-plus"></i></a> {% endcomment %}
+    </div>
+    <div class="border p-3 rounded shadow-lg">
+        <table id="example" class="table table-striped " style="width:100%">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Rol Universitario</th>
+                    {% if flag %}
+                        <th>Año</th>
+                    {% else %}
+                        <th>Grupo</th>
+                    {% endif %}
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for profile in profiles %}
+                <tr>
+                    <td>{{profile.user.first_name}} {{profile.user.last_name}}</td>
+                    <td>{{profile.user}}</td>
+                    <td>{{profile.user.email}}</td>
+                    <td>{{profile.get_rol_universitario_display}}</td>
+                    {% if flag %}
+                        <td>{{profile.academy_year}}</td>
+                    {% else %}
+                        <td>{{profile.grupo}}</td>
+                    {% endif %}
+                    <td class="table-action">
+                        <a href="{% url "details_rol" profile.pk %}" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
+                        <a href="{% url "edit_rol" profile.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
+                        {% comment %} <a href="#" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a> {% endcomment %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        new DataTable('#example', {
+            paging: false,
+            scrollCollapse: true,
+            scrollY: '200px'
+        });
+    </script>
+    <script src="{% static 'app/data_table/js/jquery-3.7.0.js' %}"></script>
+    <script src="{% static 'app/data_table/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'app/data_table/js/dataTables.bootstrap5.min.js' %}"></script>
+
+{% endblock content %}

@@ -3,6 +3,8 @@ from django.db import models
 from app.models import ActivityAndStudent
 from authentication.models import Profile
 
+from django.urls import reverse
+
 # Create your models here.
 class Multimedia(models.Model):
     # id          = models.AutoField(primary_key=True, unique=False, )
@@ -26,6 +28,9 @@ class Multimedia(models.Model):
     def image_url(self):
         if self.file and hasattr(self.file, 'url'):
             return self.file.url
+        
+    def get_absolute_url(self):
+        return reverse('list_activities')
 
     def save(self, *args, **kwargs):
         # no_photo_profile = '/media/profile/sin-foto.png'

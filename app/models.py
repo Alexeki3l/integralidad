@@ -144,6 +144,10 @@ class ActivityAndStudent(models.Model):
         (3, 'Otras Actividades de la Produccion'),
     )
     
+    # TYPE_ORGANIZACION = (
+    #     (1, 'FEU'),
+    #     (2, 'UJC'),
+    # )
     
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
@@ -151,8 +155,9 @@ class ActivityAndStudent(models.Model):
     year = models.IntegerField(null=True, blank=True)
     
     # ---------------- Politico Ideologico ------------------
-    es_feu = models.BooleanField(default=False)
-    es_ujc = models.BooleanField(default=False)
+    # organizacion = models.IntegerField(choices=TYPE_ORGANIZACION, null=True, blank=True)
+    is_feu = models.BooleanField(default=False)
+    is_ujc = models.BooleanField(default=False)
     nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
     cargo_feu =  models.IntegerField(choices=TYPE_NIVEL_CARGO_FEU, null=True, blank=True)
     evaluacion = models.IntegerField(choices=TYPE_EVALUACION, null=True, blank=True)
@@ -180,9 +185,48 @@ class ActivityAndStudent(models.Model):
     # ------------------------------------------------------
     
     # ----------------- Investigativa son 4 ----------------------
+    # Esto es el tema de los Eventos
+    TYPE_NIVEL = (
+        (1, 'Facultad'),
+        (2, 'Universidad'),
+        (3, 'Provincial'),
+        (4, 'Nacional'),
+        (5, 'Internacional'),
+        
+    )
+    TYPE_RESULT = (
+        (1, 'Relevante'),
+        (2, 'Destacado'),
+        (3, 'Mencion'),
+        (4, 'Participacion'),
+    )
+    TYPE_JORNADA_ICI = (
+        (1, 'Copa de Ingeniera de Software'),
+        (2, 'Copa de Base de Datos'),
+        (3, 'Copa Pascal'),
+        (4, 'Mi web por Cuba'),
+        (5, 'Olimpiada de Matematica'),
+    )
+    TYPE_NOMBRE_EVENTO = (
+        (1, 'Forum de Historia'),
+        (2, 'Seminario Juvenil MArtiano'),
+        (3, 'Olimpiada de Idiomas'),
+        (4, 'Jornada de Ingeniero en Ciencias Informaticas'),
+        (5, 'Jornada Cientifica Estudiantil'),
+        (6, 'Peña Tecnologica'),
+    )
+    # nombre = models.CharField(max_length=255, null=True, blank=True)
+    is_evento = models.BooleanField(default=False)
+    nombre_evento = models.IntegerField(choices=TYPE_NOMBRE_EVENTO, null=True, blank=True)
+    nombre_sub_evento = models.IntegerField(choices=TYPE_JORNADA_ICI, null=True, blank=True)
+    es_colateral = models.BooleanField(default=False)
+    nombre_evento_colateral = models.CharField(max_length=255, null=True, blank=True)
+    nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
+    result = models.IntegerField(choices=TYPE_RESULT, null=True, blank=True)
+    
     # Aqui hay una relacion de con la clase Eventos
     has_roles = models.BooleanField(default=False,)
-    roles = models.IntegerField(choices=TYPE_ROLES, null=True, blank=True)
+    roles = models.CharField(max_length=255, choices=TYPE_ROLES, null=True, blank=True)
     nivel_alcanzado = models.IntegerField(choices=TYPE_NIVEL_ALCANZADO, null=True, blank=True)
     
     has_investigacion = models.BooleanField(default=False, help_text="Si pertence o no a una linea de investigacion")
@@ -204,8 +248,9 @@ class ActivityAndStudent(models.Model):
     with_arrastres = models.BooleanField(default=False)
     with_mundiales = models.BooleanField(default=False)
     with_repitencias = models.BooleanField(default=False)
+    cantidad_repitencias = models.IntegerField(default=0,null=True, blank=True)
     
-    other_reconocimiento = models.CharField(max_length=255, null=True,blank=True)
+    other_reconocimiento = models.TextField(max_length=255, null=True,blank=True)
     
     
     # ------------------------------------------------------
@@ -219,28 +264,43 @@ class ActivityAndStudent(models.Model):
     def get_absolute_url(self):
         return reverse('list_activities')
 
-class Evento(models.Model):
-    TYPE_NIVEL = (
-        (1, 'Facultad'),
-        (2, 'Universidad'),
-        (3, 'Provincial'),
-        (4, 'Nacional'),
-        (5, 'Internacional'),
+# class Evento(models.Model):
+#     TYPE_NIVEL = (
+#         (1, 'Facultad'),
+#         (2, 'Universidad'),
+#         (3, 'Provincial'),
+#         (4, 'Nacional'),
+#         (5, 'Internacional'),
         
-    )
-    TYPE_RESULT = (
-        (1, '1er Lugar'),
-        (2, '2do Lugar'),
-        (3, '3er Lugar'),
-    )
-    nombre = models.CharField(max_length=255, null=True, blank=True)
-    nombre_evento = models.CharField(max_length=255, null=True, blank=True, 
-                                    help_text="Este campo almacena el nombre de ese evento colateral en que participa")
-    es_colateral = models.BooleanField(default=False, blank=True, null=True)
-    nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
-    result = models.IntegerField(choices=TYPE_RESULT, null=True, blank=True)
+#     )
+#     TYPE_RESULT = (
+#         (1, '1er Lugar'),
+#         (2, '2do Lugar'),
+#         (3, '3er Lugar'),
+#     )
+#     TYPE_JORNADA_ICI = (
+#         (1, 'Copa de Ingeniera de Software'),
+#         (2, 'Copa de Base de Datos'),
+#         (3, 'Copa Pascal'),
+#         (4, 'Mi web por Cuba'),
+#         (5, 'Olimpiada de Matematica'),
+#     )
+#     TYPE_NOMBRE_EVENTO = (
+#         (1, 'Forum de Historia'),
+#         (2, 'Seminario Juvenil MArtiano'),
+#         (3, 'Olimpiada de Idiomas'),
+#         (4, 'Jornada de Ingeniro en Ciencias Informaticas'),
+#         (5, 'Jornada Cientifica Estudiantil'),
+#         (6, 'Peña Tecnologica'),
+#     )
+#     # nombre = models.CharField(max_length=255, null=True, blank=True)
+#     nombre_evento = models.IntegerField(choices=TYPE_NOMBRE_EVENTO, null=True, blank=True)
+#     nombre_sub_evento = models.IntegerField(choices=TYPE_JORNADA_ICI, null=True, blank=True)
+#     es_colateral = models.BooleanField(default=False, blank=True, null=True)
+#     nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
+#     result = models.IntegerField(choices=TYPE_RESULT, null=True, blank=True)
     
-    actividades = models.ForeignKey(ActivityAndStudent, on_delete=models.CASCADE, null=True, blank=True)
+#     actividades = models.ForeignKey(ActivityAndStudent, on_delete=models.CASCADE, null=True, blank=True)
 
 class Caracterizacion(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

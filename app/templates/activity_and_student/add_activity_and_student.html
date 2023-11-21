@@ -39,6 +39,7 @@
                         {% csrf_token %}
                             {% if '11' == pk_activity %}
                                 <h5>Actividad: {{object_name}}</h5>
+                                <hr>
                                 {% comment %} <label for="id_is_ayudante">Is ayudante:</label>
                                 <input type="checkbox" name="is_ayudante" id="id_is_ayudante"> {% endcomment %}
                                 <div class="row">
@@ -46,37 +47,374 @@
                                         <label class="form-check-label" for="id_is_ayudante">
                                             Alumno Ayudante ?
                                         </label>
-                                        <input class="form-check-input" name="is_ayudante" type="checkbox"  id="id_is_ayudante">
+                                        {{form.is_ayudante}}
                                     </div>
 
                                     <div class="col form-check">
                                         <label class="form-check-label" for="id_grupo_edu_amor">
                                             Pertenece al Grupo Educando por Amor ?
                                         </label>
-                                        <input class="form-check-input" name="grupo_edu_amor" type="checkbox" id="id_grupo_edu_amor">
+                                        {{form.grupo_edu_amor}}
                                     </div>
                                     
                                     <div class="col">
                                         <label for="id_asignaturas_ayudante">Asignaturas:</label>
-                                        <select class="form-select" name="asignaturas_ayudante" id="id_asignaturas_ayudante" multiple>
-                                            {% comment %} <option selected>Seleccione las asignaturas</option> {% endcomment %}
-                                            {% for asignatura in asignaturas %}
-                                                <option value="{{asignatura.id}}">{{asignatura.name}}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{form.asignaturas_ayudante}}
                                     </div>
                                     
                                     <div class="col">
                                     <label for="id_evaluacion">Evaluación:</label>
-                                        <select class="form-select" name="evaluacion" id="id_evaluacion">
-                                            <option value="" selected="">---------</option>
-                                            {% for evaluacion in evaluaciones %}
-                                                <option value="{{evaluacion.0}}">{{evaluacion.1}}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{form.evaluacion}}
                                     </div>
                                 </div>
+                            <hr>
                             {% endif %}
+                            {% if '10' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Donde has Realizado la PID?
+                                        </label>
+                                        {{form.where_pid}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label >
+                                            Rol
+                                        </label>
+                                        {{form.rol}}
+                                    </div>
+                                    
+                                    <div class="col">
+                                    <label for="id_evaluacion">Evaluación:</label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                    <div class="col">
+                                    <label for="id_evaluacion">Actividades:</label>
+                                        {{form.actividades_pid}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '12' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Arrastres?
+                                        </label>
+                                        {{form.with_arrastres}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                                        {{form.asignaturas_ayudante}}
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '4' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Tienes roles certificados?
+                                        </label>
+                                        {{form.has_roles}}
+                                    </div>
+
+                                    <div class="col">
+                                    <label for="id_evaluacion">Marque los Roles:</label>
+                                        {{form.roles}}
+                                    </div>
+
+                                    <div class="col">
+                                    <label for="id_evaluacion">Marque el Nivel Alcanzado:</label>
+                                        {{form.nivel_alcanzado}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '13' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Mundiales?
+                                        </label>
+                                        {{form.with_mundiales}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                                        {{form.asignaturas_ayudante}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '14' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Repitencias?
+                                        </label>
+                                        {{form.with_repitencias}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Cantidad:</label>
+                                        {{form.cantidad_repitencias}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '15' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Escriba algun otro reconocimiento:
+                                        </label>
+                                        {{form.other_reconocimiento}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% comment %} AQUI COMIENZAN LOS ASPECTOS INVESTIGATIVOS {% endcomment %}
+                            {% if '6' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Tienes publicaciones como Autor o Coautor?:
+                                        </label>
+                                        {{form.has_publicacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nombre de la publlicacion:
+                                        </label>
+                                        {{form.nombre_publicacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Que nivel tienes como Co/Autor?:
+                                        </label>
+                                        {{form.nivel_autor}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nivel Alcanzado con la publicaciones:
+                                        </label>
+                                        {{form.nivel_publicacion}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '5' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Perteneces a una linea de investigacion?:
+                                        </label>
+                                        {{form.has_investigacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Participacion en:
+                                        </label>
+                                        {{form.participacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Eventos:
+                                        </label>
+                                        {{form.nivel_evento}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '3' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Participacion en un evento?:
+                                        </label>
+                                        {{form.is_evento}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Marque los eventos:
+                                        </label>
+                                        {{form.nombre_evento}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Especifique los eventos de la Jornada de Ing. Ciencias Informatica:
+                                        </label>
+                                        {{form.nombre_sub_evento}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label >
+                                            Tienes Eventos Colateral:
+                                        </label>
+                                        {{form.es_colateral}}
+                                    </div>
+                                    <div class="col-4">
+                                        <label >
+                                            Escribe el nombre del evento:
+                                        </label>
+                                        {{form.nombre_evento_colateral}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nivel del Evento:               
+                                        </label>
+                                        {{form.nivel}}
+                                    </div>
+                                    <div class="col-3">
+                                        <label >
+                                            Resultados alcanzados:
+                                        </label>
+                                        {{form.result}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '7' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Perteneces a la FEU?:
+                                        </label>
+                                        {{form.is_feu}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nivel:
+                                        </label>
+                                        {{form.nivel}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Cargo Ocupado en la FEU:
+                                        </label>
+                                        {{form.cargo_feu}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Perteneces a la UJC?:
+                                        </label>
+                                        {{form.is_ujc}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Comite de base:
+                                        </label>
+                                        {{form.comite_base}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Cargo Ocupado en la UJC::
+                                        </label>
+                                        {{form.cargo_ujc}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '8' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Escriba los actos, matutinos, veladas y etc. que halla participado:
+                                        </label>
+                                        {{form.descripcion}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '9' == pk_activity %}
+                                <h5>Actividad: {{object_name}}</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Distincion 13 de Marzo:
+                                        </label>
+                                        {{form.distincion_marzo}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Distincion futuro maestro:
+                                        </label>
+                                        {{form.distincion_fututo_maestro}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Distincion Joven Maestro:
+                                        </label>
+                                        {{form.distincion_joven}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Eres Alumno Ayudante:
+                                        </label>
+                                        {{form.is_ayudante}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {{form.file}}
                         <div >                           
                           
                           <div class="my-3">

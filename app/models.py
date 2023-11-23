@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 # Create your models here.
 
+
 class Asignatura(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     # student = models.ForeignKey(ActivityAndStudent, on_delete=models.CASCADE, null=True, blank=True)
@@ -252,8 +253,180 @@ class ActivityAndStudent(models.Model):
     
     other_reconocimiento = models.TextField(max_length=255, null=True,blank=True)
     
-    
     # ------------------------------------------------------
+    
+    # ---------------------- Extension --------------------------
+    is_miembro = models.BooleanField(default=False)
+    nombre_catedra = models.CharField(max_length=255, null=True, blank=True)
+    actividad_participado = models.CharField(max_length=1000, null=True, blank=True)
+    
+    # Actividades Culturales
+    if_participacion_actos_matutinos = models.BooleanField(default=False)
+    # ------------
+    TYPE_NIVEL_ARTISTA_AFICIONADO = (
+        (1, 'Facultad'),
+        (2, 'Provincial'),
+        (3, 'Nacional'),
+    )
+    TYPE_PREMIO_ARTISTA_AFICIONADO = (
+        (1, 'Oro'),
+        (2, 'Plata'),
+        (3, 'Bronce'),
+        (4, 'Mencion'),
+    )
+    if_participacion_festivales = models.BooleanField(default=False)
+    manifestacion_festivales = models.CharField(max_length=255, null=True, blank=True)
+    nivel_artista_aficionado = models.IntegerField(choices=TYPE_NIVEL_ARTISTA_AFICIONADO, null=True, blank=True)
+    premio_artista_aficionado = models.IntegerField(choices=TYPE_PREMIO_ARTISTA_AFICIONADO, null=True, blank=True)
+    # ------------
+    nombre_actividad_facultad = models.CharField(max_length=255, null=True, blank=True)
+    manifestacion_actividad_facultad = models.CharField(max_length=255, null=True, blank=True)
+    # ------------
+    # Trabajo Socialmente Util
+    lugar_dnd_realizo = models.CharField(max_length=255, null=True, blank=True)
+    # ------------
+    # Actividades Deportivas
+    # *Juegos Mella
+    TYPE_DEPORTE = (
+        (1, 'Ajedrez'),
+        (2, 'Atletismo'),
+        (3, 'Carrera de Orientacion'),
+        (4, 'Baloncesto'),
+        (5, 'Balonmano'),
+        (6, 'Boxeo'),
+        (7, 'Futbol Sala'),
+        (8, 'Futbol 11'),
+        (9, 'Natacion'),
+        (10, 'Tenis'),
+        (11, 'Pelota'),
+        (12, 'Softball'),
+        (13, 'Voleyball'),
+        (14, 'Voleyball Playa'),
+        (15, 'Yudo'),
+        (16, 'Karate'),
+        (17, 'Taewondo'),
+        (18, 'Taewondo'),
+        (19, 'Cubalon'),
+        (20, 'Maraton'),
+        (21, 'DOTA'),
+    )
+    TYPE_RESULTADO_DEPORTE = (
+        (1, 'Oro'),
+        (2, 'Plata'),
+        (3, 'Bronce'),
+        (4, 'Participacion'),
+    )
+    TYPE_LUGAR = (
+        (1, 'Universidad'),
+        (2, 'Juegos Provinciales Giraldillos'),
+        (3, 'Juegos Nacionales'),
+    )
+    if_jjmm = models.BooleanField(default=False)
+    deporte = models.CharField(choices=TYPE_DEPORTE, null=True, blank=True, max_length=255)
+    resultado_deporte = models.IntegerField(choices=TYPE_RESULTADO_DEPORTE, null=True, blank=True)
+    lugar = models.IntegerField(choices=TYPE_LUGAR, null=True, blank=True)
+    
+    # Copas y Mundiales
+    if_copas_mundialess = models.BooleanField(default=False)
+    nombre_evento_copas_mundiales = models.CharField(max_length=255, null=True, blank=True)
+    resultado_copas_mundiales = models.CharField(choices=TYPE_RESULTADO_DEPORTE, null=True, blank=True, max_length=255)
+    lugar_copas_mundiales = models.CharField(max_length=255, null=True, blank=True)
+    
+    # *Eventos del Proyecto
+    TYPE_EVENTO_MARABANA = (
+        (1, 'MaraCuba'),
+        (2, 'MaraHabana'),
+        (3, 'Cacahual'),
+        (4, 'Maratón por el Día Olímpico'),
+        (5, 'Maratón Terry Fox'),
+        (6, 'Maratón 10 de Octubre'),
+    )
+    
+    TYPE_EVALUACION_CUARTELERIA = (
+        (1, 'Excelente'),
+        (2, 'Bien'),
+        (3, 'Regular'),
+        (4, 'Mal'),
+    )
+    if_marabana = models.BooleanField(default=False)
+    nombre_evento_marabana = models.IntegerField(choices=TYPE_EVENTO_MARABANA, null=True, blank=True)
+    resultado_evento_marabana = models.IntegerField(choices=TYPE_RESULTADO_DEPORTE, null=True, blank=True)
+    
+    # ------------
+    # Evaluacion en la residencia
+    # *Cuarteleria
+    cuartelerias = models.JSONField(null=True, blank=True)
+    evaluacion_cuarteleria = models.CharField(choices=TYPE_EVALUACION_CUARTELERIA, null=True, blank=True, max_length=255)
+    
+    # *Responsabilidad
+    TYPE_RESPONSABILIDAD = (
+        (1, 'Jefe de Edificio'),
+        (2, 'Jefe de Apartamento'),
+        (3, 'Ninguna'),
+    )
+    responsabilidad = models.IntegerField(choices=TYPE_RESPONSABILIDAD, null=True, blank=True)
+    # evaluacion
+    # *Acta o sennalamiento en la residencia
+    if_senalamiento_residencia = models.BooleanField(default=False)
+    # hay un campo motivo que puede ser descripcion\
+    
+    # ------------
+    # Guardia Estudiantil
+    total_ausencias = models.IntegerField(null=True, blank=True)
+    total_ausencias_justificadas = models.IntegerField(null=True, blank=True)
+    total_ausencias_injustificadas = models.IntegerField(null=True, blank=True)
+    total_recuperadas = models.IntegerField(null=True, blank=True)
+    
+    # *Acta o senalamiento por incumplimiento en la guardia estudiantil
+    if_senalamiento_guardia_estudiantil = models.BooleanField(default=False)
+    cantidad_senalamiento_guardia_estudiantil = models.IntegerField(null=True, blank=True)
+    
+    # ------------
+    # Participacion en actividades de organizacion y limpieza de apartamento y áreas comunes 
+    if_actividades_limpieza_areas_comunes = models.BooleanField(default=False)
+    nombre_actividades_limpieza_areas_comunes = models.CharField(max_length=255, null= True, blank=True)
+    mes = models.CharField(max_length=255, null= True, blank=True)
+    resultado_actividades_limpieza_areas_comunes = models.CharField(max_length=255, null= True, blank=True)
+    # poner la evidencia
+    
+    # *Participacion en mi BK+Bonita
+    if_bk_mas_bonita = models.BooleanField(default=False)
+    # reconocimiento se escribiran en el campo:other_reconocimiento
+    # poner la evidencia
+    
+    # ------------
+    # Reconocimiento en esta Etapa
+    # nombre del reconocimiento se escribiran en el campo:other_reconocimiento
+    reconocimiento_otorgado_por = models.CharField(max_length=255, null= True, blank=True)
+    # poner la evidencia
+    
+    # ------------
+    # Sanciones durante el curso
+    sanciones_o_medida = models.CharField(max_length=1000, null=True, blank=True)
+    motivo_sancion     = models.CharField(max_length=1000, null=True, blank=True)
+    
+    # ------------
+    # Senalamiento durante el curso
+    senalamiento_curso = models.CharField(max_length=1000, null=True, blank=True)
+    
+    # ------------
+    # Distinciones Otorgadas
+    nombre_distincion = models.CharField(max_length=255, null=True, blank=True)
+    organismo_otorga_distincion = models.CharField(max_length=255, null=True, blank=True)
+    
+    # ------------
+    # Misiones en la que haya participado
+    PROCESO = (
+        (1,'Cumplido'),
+        (2,'En Cumplimiento'),
+    )
+    nombre_mision = models.CharField(max_length=255, null=True, blank=True)
+    funsion_desempenada = models.CharField(max_length=255, null=True, blank=True)
+    proceso = models.IntegerField(choices=PROCESO, null=True, blank=True)
+
+    # ------------------------------------------------------
+    
+    
     
     create_at = models.DateTimeField(auto_now=True)
     update_at = models.DateTimeField(auto_now_add=True)
@@ -263,44 +436,6 @@ class ActivityAndStudent(models.Model):
     
     def get_absolute_url(self):
         return reverse('list_activities')
-
-# class Evento(models.Model):
-#     TYPE_NIVEL = (
-#         (1, 'Facultad'),
-#         (2, 'Universidad'),
-#         (3, 'Provincial'),
-#         (4, 'Nacional'),
-#         (5, 'Internacional'),
-        
-#     )
-#     TYPE_RESULT = (
-#         (1, '1er Lugar'),
-#         (2, '2do Lugar'),
-#         (3, '3er Lugar'),
-#     )
-#     TYPE_JORNADA_ICI = (
-#         (1, 'Copa de Ingeniera de Software'),
-#         (2, 'Copa de Base de Datos'),
-#         (3, 'Copa Pascal'),
-#         (4, 'Mi web por Cuba'),
-#         (5, 'Olimpiada de Matematica'),
-#     )
-#     TYPE_NOMBRE_EVENTO = (
-#         (1, 'Forum de Historia'),
-#         (2, 'Seminario Juvenil MArtiano'),
-#         (3, 'Olimpiada de Idiomas'),
-#         (4, 'Jornada de Ingeniro en Ciencias Informaticas'),
-#         (5, 'Jornada Cientifica Estudiantil'),
-#         (6, 'Peña Tecnologica'),
-#     )
-#     # nombre = models.CharField(max_length=255, null=True, blank=True)
-#     nombre_evento = models.IntegerField(choices=TYPE_NOMBRE_EVENTO, null=True, blank=True)
-#     nombre_sub_evento = models.IntegerField(choices=TYPE_JORNADA_ICI, null=True, blank=True)
-#     es_colateral = models.BooleanField(default=False, blank=True, null=True)
-#     nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
-#     result = models.IntegerField(choices=TYPE_RESULT, null=True, blank=True)
-    
-#     actividades = models.ForeignKey(ActivityAndStudent, on_delete=models.CASCADE, null=True, blank=True)
 
 class Caracterizacion(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -9,4 +9,6 @@ admin.site.register(Activity, ActivityAdmin)
 admin.site.register(Aspecto)
 admin.site.register(ActivityAndStudent)
 admin.site.register(Asignatura)
+
+
 # Register your models here.

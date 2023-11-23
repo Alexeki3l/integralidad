@@ -12,3 +12,13 @@ ERROR_DESCRIPCION ="Debes especificar las actividades que hallas participado. Le
 
 
 ERROR_RECONOCIMIENTO_LOGRADO = "Debes tener al menos una opcion marcado. Recuerda la evaluacion"
+
+ERROR_FALTAN_EVALUACIONES = "Faltan evaluaciones. Vuelva a llenar los campos y verifique antes de enviar los datos."
+
+ERROR_RESPONSABILIDAD_EVALUACION = "Si no has tenido responsabilidad en la residencia no deberias tener ninguna EVALUACION."
+ERROR_SENALAMIENTO_RESIDENCIA = "Si tienes un señalamiento debes escribir por que lo tienes."
+
+ERROR_SENALAMIENTO_GUARDIA = "Si tienes un señalamiento en la guardia debes poner la cantidad"
+
+
+

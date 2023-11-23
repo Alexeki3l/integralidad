@@ -37,14 +37,15 @@ class Multimedia(models.Model):
         # no_photo_store = '/media/store/sin-photo.jpg'
         # no_photo_product = '/media/store/sin-photo.jpg'
         if not self.created:
-            print("CREATE")
+            print("MULTIMEDIA CREADA")
             self.file.field.upload_to='evidencia'
             # self.file = no_photo_store
             self.name = self.file.url.split("/")[-1].split(".")[-2]
-            return super().save(self,*args,**kwargs)
+            # return super().save(self,*args,**kwargs)
+            return super(Multimedia,self).save(force_insert=True)
 
         else:
-            print("UPDATED")
+            print("MULTIMEDIA UPDATED")
             self.file.field.upload_to='evidencia'
             self.name = self.file.url.split("/")[-1].split(".")[-2]
             return super(Multimedia,self).save(force_update=True)

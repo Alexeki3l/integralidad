@@ -20,12 +20,23 @@ def crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults
                 
     for element in objeto.multimedia_set.all():
         element.delete()
-                
+    print(request.FILES)
     form = MultimediaForm(dict_aux, request.FILES)
     if form.is_valid():
-        form.save()
+        # form.save()
+        for archivo in request.FILES.getlist('file'):
+            Multimedia.objects.create(file=archivo, actividades= objeto)
         is_create_image = True
     else:
         pass
     
     return objeto, creado, is_create_image  
+
+
+def if_cadena_empty(cadena):
+    """Metodo auxiliar que devuelve True en caso que la cadena no sea vacia"""
+    if len(cadena) == 0:
+        return False
+    
+    else:
+        return True

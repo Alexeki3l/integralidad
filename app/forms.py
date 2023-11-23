@@ -3,21 +3,49 @@
 from typing import Any
 from .models import Activity, ActivityAndStudent, Asignatura
 from authentication.models import Profile
+from multimedia.models import Multimedia
 
 from . import forms
 from django import forms
 
+class MultimediaForm(forms.ModelForm):
+    class Meta:
+        model = Multimedia
+        fields = ['actividades','file'] 
+        
+# class EventoForm(forms.ModelForm):
+#     class Meta:
+#         model = Evento
+#         fields = ('nombre_evento', 'nombre_sub_evento', 'es_colateral', 'nivel', 'result', 'actividades',)
 
 class AddActivityAndStudentView(forms.ModelForm):
-    
-    # asignaturas = forms.ModelChoiceField(Asignatura.objects.all())
+    file = forms.FileField(label='Selecciona un archivo')
     class Meta:
         model  = ActivityAndStudent
-        fields = ('is_ayudante','year','evaluacion','asignaturas_ayudante','grupo_edu_amor',)
-        # fields = ('__all__')
-        # widgets={
-        #     'description':forms.CharField(attrs={'class':'form-control'}),
-        #     'month':forms.IntegerField(attrs={'class':'form-control'}),
+        # fields = ('is_ayudante','year','evaluacion','asignaturas_ayudante','grupo_edu_amor','file',)
+        fields = ('__all__')
+        widgets={
+            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
+            'where_pid': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_catedra': forms.TextInput(attrs={'class': 'form-control'}),
+            'actividad_participado': forms.TextInput(attrs={'class': 'form-control'}),
+            'rol': forms.TextInput(attrs={'class': 'form-control'}),
+            'comite_base': forms.Textarea(attrs={'class': 'form-control'}),
+            'roles':forms.SelectMultiple(attrs={'class':'form-control'}),
+            'evaluacion':forms.Select(attrs={'class':'form-control'}),
+            'nivel_alcanzado':forms.Select(attrs={'class':'form-control'}),
+            'evaluacion_cuarteleria':forms.Select(attrs={'class':'form-control'}),
+            'asignaturas_ayudante':forms.SelectMultiple(attrs={'class':'form-control'}),
+            'nombre_evento':forms.SelectMultiple(attrs={'class':'form-control'}),
+            'actividades_pid':forms.Select(attrs={'class':'form-control'}),
+            'nivel':forms.Select(attrs={'class':'form-control'}),
+            'cargo_feu':forms.Select(attrs={'class':'form-control'}),
+            'cargo_ujc':forms.Select(attrs={'class':'form-control'}),
+            'is_ayudante':forms.CheckboxInput(attrs={'class':'form-check-input'}),
+            # 'if_senalamiento_residencia':forms.CheckboxInput(attrs={'class':'form-check-input'}),
+            'grupo_edu_amor':forms.CheckboxInput(attrs={'class':'form-check-input'}),
+            'other_reconocimiento':forms.Textarea(attrs={'class':'form-control'}),
+            'motivo_sancion':forms.Textarea(attrs={'class':'form-control'}),
         #     'weight':forms.FloatField(attrs={'class':'form-control'}),
         #     'is_open':forms.BooleanField(attrs={'class':'form-control'}),
         #     'aspecto':forms.SelectMultiple(attrs={'class':'form-control'}),
@@ -27,7 +55,7 @@ class AddActivityAndStudentView(forms.ModelForm):
         #     # 'image2':forms.ImageField(attrs={'class':'form-control'}),
         #     # 'description':forms.Textarea(attrs={'class':'form-control'}),
         #     # 'instock':forms.BooleanField(attrs={'class':'form-control'}),
-        # }
+        }
     # def save(self, commit=True):
     #     instance = super().save(commit)
     #     # set Car reverse foreign key from the Person model

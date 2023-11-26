@@ -218,16 +218,16 @@ class ActivityAndStudent(models.Model):
     )
     # nombre = models.CharField(max_length=255, null=True, blank=True)
     is_evento = models.BooleanField(default=False)
-    nombre_evento = models.IntegerField(choices=TYPE_NOMBRE_EVENTO, null=True, blank=True)
-    nombre_sub_evento = models.IntegerField(choices=TYPE_JORNADA_ICI, null=True, blank=True)
+    nombre_evento = models.CharField(choices=TYPE_NOMBRE_EVENTO, null=True, blank=True, max_length=255)
+    nombre_sub_evento = models.CharField(choices=TYPE_JORNADA_ICI, null=True, blank=True, max_length=255)
     es_colateral = models.BooleanField(default=False)
     nombre_evento_colateral = models.CharField(max_length=255, null=True, blank=True)
-    nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
-    result = models.IntegerField(choices=TYPE_RESULT, null=True, blank=True)
+    nivel =  models.CharField(choices=TYPE_NIVEL, null=True, blank=True, max_length=255)
+    result = models.CharField(choices=TYPE_RESULT, null=True, blank=True, max_length=255)
     
     # Aqui hay una relacion de con la clase Eventos
     has_roles = models.BooleanField(default=False,)
-    roles = models.CharField(max_length=255, choices=TYPE_ROLES, null=True, blank=True)
+    roles = models.IntegerField(choices=TYPE_ROLES, null=True, blank=True)
     nivel_alcanzado = models.IntegerField(choices=TYPE_NIVEL_ALCANZADO, null=True, blank=True)
     
     has_investigacion = models.BooleanField(default=False, help_text="Si pertence o no a una linea de investigacion")
@@ -261,7 +261,7 @@ class ActivityAndStudent(models.Model):
     actividad_participado = models.CharField(max_length=1000, null=True, blank=True)
     
     # Actividades Culturales
-    if_participacion_actos_matutinos = models.BooleanField(default=False)
+    actividades_participacion_actos_matutinos = models.CharField(max_length=1000, null=True, blank=True)
     # ------------
     TYPE_NIVEL_ARTISTA_AFICIONADO = (
         (1, 'Facultad'),
@@ -323,7 +323,7 @@ class ActivityAndStudent(models.Model):
     )
     if_jjmm = models.BooleanField(default=False)
     deporte = models.CharField(choices=TYPE_DEPORTE, null=True, blank=True, max_length=255)
-    resultado_deporte = models.IntegerField(choices=TYPE_RESULTADO_DEPORTE, null=True, blank=True)
+    resultado_deporte = models.CharField(choices=TYPE_RESULTADO_DEPORTE, null=True, blank=True, max_length=255)
     lugar = models.IntegerField(choices=TYPE_LUGAR, null=True, blank=True)
     
     # Copas y Mundiales
@@ -432,7 +432,7 @@ class ActivityAndStudent(models.Model):
     update_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f'{self.activity.name} -- {self.profile.user.first_name} -- {self.year}'
+        return f'{self.activity.name} -- {self.profile.user.first_name} -- {self.year} -- {self.activity.id}'
     
     def get_absolute_url(self):
         return reverse('list_activities')

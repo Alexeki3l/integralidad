@@ -1,4 +1,5 @@
 from typing import Any
+from django.db import models
 from django.shortcuts import render, redirect
 from ..models import Activity, Aspecto, ActivityAndStudent, Asignatura
 from django.http import HttpResponse, HttpRequest, JsonResponse
@@ -11,7 +12,7 @@ AddActivityAndStudentView, MultimediaForm
 
 from django.urls import reverse, reverse_lazy
 
-from app.utils import crear_objeto_activity_and_student, if_cadena_empty
+from app.utils import crear_objeto_activity_and_student, if_cadena_empty, generar_parrafo
 
 from django.contrib import messages
 
@@ -130,30 +131,37 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 del defaults['asignaturas_ayudante']
                 
-                objeto, creado = ActivityAndStudent.objects.update_or_create(
-                                activity_id = pk_activity,
-                                profile_id = pk_profile,
-                                defaults=defaults
-                            )
-                if creado:
+                # objeto, creado = ActivityAndStudent.objects.update_or_create(
+                #                 activity_id = pk_activity,
+                #                 profile_id = pk_profile,
+                #                 defaults=defaults
+                #             )
+                # if creado:
                     
-                    objeto.asignaturas_ayudante.clear()
+                #     objeto.asignaturas_ayudante.clear()
                     
-                    for id_asignatura in ids_asignaturas:
-                        asignatura = Asignatura.objects.get(id=id_asignatura)
-                        objeto.asignaturas_ayudante.add(asignatura)
+                #     for id_asignatura in ids_asignaturas:
+                #         asignatura = Asignatura.objects.get(id=id_asignatura)
+                #         objeto.asignaturas_ayudante.add(asignatura)
                         
-                dict_aux = request.POST.copy()
-                dict_aux['actividades'] = objeto.id
+                # dict_aux = request.POST.copy()
+                # dict_aux['actividades'] = objeto.id
                 
-                for element in objeto.multimedia_set.all():
-                    element.delete()
+                # for element in objeto.multimedia_set.all():
+                #     element.delete()
+                # print(request.FILES['file'])
+                # form = MultimediaForm(dict_aux, request.FILES)
+                # if form.is_valid():
+                #     form.save()
+                # else:
+                #     print('error')
+                objeto, creado, is_create_image  = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
                 
-                form = MultimediaForm(dict_aux, request.FILES)
-                if form.is_valid():
-                    form.save()
-                else:
-                    print('error')
+                objeto.asignaturas_ayudante.clear()
+                    
+                for id_asignatura in ids_asignaturas:
+                    asignatura = Asignatura.objects.get(id=id_asignatura)
+                    objeto.asignaturas_ayudante.add(asignatura)
 
                 return redirect('list_activities')
             
@@ -413,8 +421,9 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 else:
                     defaults['nivel'] = 0
                     defaults['result'] = 0
-                
-                objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
+    
+                objeto, creado, is_create_image = crear_objeto_activity_and_student(
+                    request, pk_activity, pk_profile, defaults)
                 
                 return redirect('list_activities')
                 
@@ -697,14 +706,26 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 except:
                     defaults['if_marabana'] = False
                     
-                defaults['deporte'] = defaults['deporte'][0]
-                defaults['resultado_deporte'] = defaults['resultado_deporte'][0]
+                list_deporte = defaults['deporte']
+                list_resultado_deporte = defaults['resultado_deporte']
+                # defaults['resultado_deporte'] = defaults['resultado_deporte'][0]
+                
+                if (len(list_deporte) != len(list_resultado_deporte)) or \
+                    len(list_deporte) == 0 and len(list_resultado_deporte) == 0:
+                    messages.error(request, ERROR_DEPORTE_RESULTADO)
+                    return redirect('add_activities_and_student', pk = pk_activity)
+                    
+                
+                defaults['deporte'] = str(defaults['deporte'])
+                defaults['resultado_deporte'] = str(defaults['resultado_deporte'])
+                
                 defaults['lugar'] = defaults['lugar'][0]
                 
                 defaults['nombre_evento_marabana'] = defaults['nombre_evento_marabana'][0]
                 
                 defaults['nombre_evento_copas_mundiales'] = defaults['nombre_evento_copas_mundiales'][0]
                 defaults['lugar_copas_mundiales'] = defaults['lugar_copas_mundiales'][0]
+                
                 
                 
                 condicion_1 = defaults['if_jjmm'] and (defaults['deporte']!='') and (defaults['resultado_deporte']!='') and (defaults['lugar']!='')
@@ -719,8 +740,8 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     except:
                         defaults['nombre_evento_marabana'] = 0
                     
-                    defaults['deporte'] = int(defaults['deporte'])
-                    defaults['resultado_deporte'] = int(defaults['resultado_deporte'])
+                    # defaults['deporte'] = int(defaults['deporte'])
+                    # defaults['resultado_deporte'] = int(defaults['resultado_deporte'])
                     defaults['lugar'] = int(defaults['lugar'])
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
@@ -930,7 +951,64 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
         context['meses'] = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Septiembre","Octubre","Noviembre","Diciembre"]
         return context
     
-# class EventoView(LoginRequiredMixin, CreateView):
-#     model = Evento
-#     form_class = EventoForm
-#     template_name = 'activity_and_student/testing.html'
+def list_activity_and_student_for_profesor(request, pk_student):
+    if request.user.profile.rol_fac != 1:
+        data = {}
+        list_annos = ["", 'Primer Año', 'Segundo Año', 'Tercer Año', 'Cuarto Año']
+        
+        for pos, anno in enumerate(list_annos):
+            if pos != 0:
+                try:
+                    profile = Profile.objects.get(id = pk_student, academy_year = pos)
+                except:
+                    data[anno] ={}
+                    continue
+                dict_aux = {}
+                for aspecto in Aspecto.objects.all():
+                    list_activitys_relationed_with_student = profile.activity_set.filter(aspecto = aspecto)
+                    name = '_'.join(aspecto.name.split())
+                    dict_aux[f'{name}'] = list_activitys_relationed_with_student
+                data[anno] = dict_aux
+            else:
+                pass
+        # print('DATA RESPONSE: ', data)
+        context = {
+            'primer_anno':data['Primer Año'],
+            'segundo_anno':data['Segundo Año'],
+            'tercer_anno':data['Tercer Año'],
+            'cuarto_anno':data['Cuarto Año'],
+            'pk_student':pk_student,
+        }
+        print(data['Cuarto Año'])
+        return render(request, 'activity_and_student/list_activity_and_student_for_profesor.html', context=context)
+    else:
+        return redirect('list_activities')
+    
+class DetailsActivityAndStudentForProfessorView(DetailView):
+    model = ActivityAndStudent
+    template_name = 'activity_and_student/details_activity_and_student_for_profesor.html'
+    context_object_name = 'activity_and_student'
+    
+    def get_object(self, queryset=None):
+        pk_activity = self.kwargs.get('pk_activity')
+        pk_student = self.kwargs.get('pk_student')
+        act_and_student = ActivityAndStudent.objects.get(activity_id=pk_activity, profile_id=pk_student)
+        print(act_and_student.get_roles_display())
+        return act_and_student
+    
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        obj = kwargs['object']
+        context["pk_activity"] = str(obj.activity.id)
+        return context
+    
+    
+def caracterizacion(request):
+    
+    list_actividades = ActivityAndStudent.objects.filter(profile_id = request.user.profile, year = 4)
+    parrafo_cuarto_anno = generar_parrafo(list_actividades)
+    context={
+        'parrafo_cuarto_anno':parrafo_cuarto_anno,
+    }
+    return render(request, 'activity_and_student/caracterizacion.html')
+    

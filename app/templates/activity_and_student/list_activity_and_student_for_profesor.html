@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row my-3">
+    <div class="col-2">
+      <div id="list-example" class="list-group">
+        <a class="list-group-item list-group-item-action" href="#list-item-1">Primer Año</a>
+        <a class="list-group-item list-group-item-action" href="#list-item-2">Segundo Año</a>
+        <a class="list-group-item list-group-item-action" href="#list-item-3">Tercero Año</a>
+        <a class="list-group-item list-group-item-action" href="#list-item-4">Cuarto Año</a>
+      </div>
+    </div>
+    <div class="col-10 ">
+      <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example h-75" tabindex="0">
+        <h4 id="list-item-1">Primer Año</h4>
+        {% if primer_anno %}
+            {% for key, list in primer_anno.items %}
+              <div class="accordion my-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{key}}1" aria-expanded="true" aria-controls="{{key}}1">
+                      {{key}}
+                    </button>
+                  </h2>
+                  <div id="{{key}}1" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <ul class="list-group">
+                      {% for activity in list %}
+                          <a href="{% url "details_activity_and_student_for_profesor" pk_student activity.pk %}" class="list-group-item list-group-item-primary my-1">{{activity}}</a>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no tiene ninguna actividad en este año.
+            </div>
+          {% endif %}
+        <h4 id="list-item-2">Segundo Año</h4>
+        {% if segundo_anno %}
+            {% for key, list in segundo_anno.items %}
+              <div class="accordion my-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{key}}2" aria-expanded="true" aria-controls="{{key}}2">
+                      {{key}}
+                    </button>
+                  </h2>
+                  <div id="{{key}}2" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <ul class="list-group">
+                      {% for activity in list %}
+                          <a href="{% url "details_activity_and_student_for_profesor" pk_student activity.pk %}" class="list-group-item list-group-item-primary my-1">{{activity}}</a>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no tiene ninguna actividad en este año.
+            </div>
+          {% endif %}
+        <h4 id="list-item-3">Tercer Año</h4>
+        {% if tercer_anno %}
+            {% for key, list in tercer_anno.items %}
+              <div class="accordion my-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{key}}3" aria-expanded="true" aria-controls="{{key}}3">
+                      {{key}}
+                    </button>
+                  </h2>
+                  <div id="{{key}}3" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <ul class="list-group">
+                      {% for activity in list %}
+                          <a href="{% url "details_activity_and_student_for_profesor" pk_student activity.pk %}" class="list-group-item list-group-item-primary my-1">{{activity}}</a>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no tiene ninguna actividad en este año.
+            </div>
+          {% endif %}
+        <h4 id="list-item-4">Cuarto Año</h4>
+          {% if cuarto_anno %}
+            {% for key, list in cuarto_anno.items %}
+              <div class="accordion my-3" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{key}}4" aria-expanded="true" aria-controls="{{key}}4">
+                      {{key}}
+                    </button>
+                  </h2>
+                  <div id="{{key}}4" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <ul class="list-group">
+                      {% for activity in list %}
+                          <a href="{% url "details_activity_and_student_for_profesor" pk_student activity.pk %}" class="list-group-item list-group-item-primary my-1">{{activity}}</a>
+                      {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+              {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no tiene ninguna actividad en este año.
+            </div>
+          {% endif %}
+      </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}
+

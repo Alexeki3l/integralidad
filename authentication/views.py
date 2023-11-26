@@ -38,7 +38,7 @@ def logout_view(request):
 
 
 def update_data(request):
-    # response = HttpResponse('<h4>CARGAR LOS DATOS CON HTMX</h4><p>Actualizaremos los datos de usuarios</p>')
+    # response = HttpResponse('<div class="modal-dialog modal-dialog-centered">...</div>')
     populate_bd_with_excel_file()
     # return response
     return redirect('login')

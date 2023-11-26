@@ -20,11 +20,18 @@ from app.metodos_personalizados.message import *
 import math
 
 def list_activities(request):
-    activities = Activity.objects.all().order_by('-id')
-    context = {
+    if request.user.profile.rol_fac == 1:
+        activities = Activity.objects.all().order_by('-id')
+        
+        # activities_and_student_filter = ActivityAndStudent.objects.filter(profile = request.user.profile).values_list('activity', flat=True)
+        # activities = activities.exclude(id__in = [activities_and_student_filter])
+        # print(activities)
+        context = {
         'activities':activities
-    }
-    return render(request, 'activity/activities.html', context=context)
+        }
+        return render(request, 'activity/activities.html', context=context)
+    else:
+        return redirect('list_roles', 1)
 
 # -------------- CRUD de Actividad ------------------------------------------
 # Crear Actividades

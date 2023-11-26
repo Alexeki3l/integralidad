@@ -1,7 +1,8 @@
 from django.urls import path
 from app.views.actividades import list_activities, DetailsActivityView, EditActivityView, DeleteActivityView, AddActivityView
 from app.views.profile import list_roles, DetailsProfileView, EditProfileView
-from app.views.activity_and_student import AddActivityAndStudentView
+from app.views.activity_and_student import AddActivityAndStudentView, list_activity_and_student_for_profesor\
+    ,DetailsActivityAndStudentForProfessorView, caracterizacion
 
 
 # from ..authentication.views import update_data
@@ -22,6 +23,11 @@ urlpatterns = [
     
     # Activity And Student
     path('add_activities_and_student/<int:pk>', AddActivityAndStudentView.as_view(), name='add_activities_and_student'),
+    path('list_activity_and_student_for_profesor/<int:pk_student>', list_activity_and_student_for_profesor, name='list_activity_and_student_for_profesor'),
+    path('details_activity_and_student_for_profesor/<int:pk_student>/<int:pk_activity>', DetailsActivityAndStudentForProfessorView.as_view(), name='details_activity_and_student_for_profesor'),
+    
+    # Caracterizacion
+    path('caracterizacion', caracterizacion, name='caracterizacion_pk_student'),
     
     # ...Roles
     

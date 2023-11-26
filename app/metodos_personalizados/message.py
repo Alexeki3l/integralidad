@@ -20,5 +20,9 @@ ERROR_SENALAMIENTO_RESIDENCIA = "Si tienes un señalamiento debes escribir por q
 
 ERROR_SENALAMIENTO_GUARDIA = "Si tienes un señalamiento en la guardia debes poner la cantidad"
 
+ERROR_DEPORTE_RESULTADO = "Todos los deportes escritos deben tener resultados."
+
+ERROR_EVIDENCIAS = "Las evidencias deben ser imagenes con el formato. jpg', 'jpeg', 'png', 'peng."
+
 
 

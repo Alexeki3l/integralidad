@@ -1,12 +1,22 @@
 from multimedia.models import Multimedia
 from .forms import MultimediaForm
-
+from .metodos_personalizados.message import *
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from .models import ActivityAndStudent
 
 
 def crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults):
     """Crea un objeto de tipo ActivityAndStudent y crea la imagen para este objeto"""
     is_create_image = False
+    name_file = request.FILES['file']
+    print(name_file)
+    formato_file = str(name_file).split('.')[-1] 
+    
+    if formato_file not in ['jpg', 'jpeg', 'png', 'peng']:
+        messages.error(request, ERROR_EVIDENCIAS)
+        return redirect('add_activities_and_student', pk = pk_activity)
+    
     objeto, creado = ActivityAndStudent.objects.update_or_create(
                                 activity_id = pk_activity,
                                 profile_id = pk_profile,
@@ -40,3 +50,14 @@ def if_cadena_empty(cadena):
     
     else:
         return True
+    
+def generar_parrafo(list_actividades):
+    cadena_investigativa = ""
+    for obj in list_actividades:
+        cadena = ""
+        if obj.activity.id == 3:
+            if obj.is_evento:
+                obj.TYPE_NOMBRE_EVENTO
+                # nombre_evento = get_nombre_evento_display()
+                cadena += f'He participado vario(s) en evento(s) y competencia(s). Tales como, {nombre_evento} a nivel de {nivel_evento}'
+                

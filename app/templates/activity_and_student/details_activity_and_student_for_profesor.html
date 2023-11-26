@@ -1,0 +1,891 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="my-3">
+        {% if '11' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        {% comment %} <label for="id_is_ayudante">Is ayudante:</label>
+        <input type="checkbox" name="is_ayudante" id="id_is_ayudante"> {% endcomment %}
+        <div class="row">
+            <div class="col activity_and_student-check">
+                <label class="activity_and_student-check-label" for="id_is_ayudante">
+                    Alumno Ayudante ?
+                </label>
+                {{activity_and_student.is_ayudante}}
+            </div>
+
+            <div class="col activity_and_student-check">
+                <label class="activity_and_student-check-label" for="id_grupo_edu_amor">
+                    Pertenece al Grupo Educando por Amor ?
+                </label>
+                {{activity_and_student.grupo_edu_amor}}
+            </div>
+            
+            <div class="col">
+                <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                {{activity_and_student.asignaturas_ayudante}}
+            </div>
+            
+            <div class="col">
+            <label for="id_evaluacion">Evaluación:</label>
+                {{activity_and_student.evaluacion}}
+            </div>
+        </div>
+    <hr>
+    {% endif %}
+    {% if '10' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Donde has Realizado la PID?
+                </label>
+                {{activity_and_student.where_pid}}
+            </div>
+
+            <div class="col">
+                <label >
+                    Rol
+                </label>
+                {{activity_and_student.rol}}
+            </div>
+            
+            <div class="col">
+            <label for="id_evaluacion">Evaluación:</label>
+                {{activity_and_student.evaluacion}}
+            </div>
+            <div class="col">
+            <label for="id_evaluacion">Actividades:</label>
+                {{activity_and_student.actividades_pid}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    {% if '12' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Arrastres?
+                </label>
+                {{activity_and_student.with_arrastres}}
+            </div>
+
+            <div class="col">
+                <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                {{activity_and_student.asignaturas_ayudante}}
+            </div>
+            
+            
+        </div>
+        <hr>
+    {% endif %}
+    {% if '4' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Tienes roles certificados?
+                </label>
+                {% if activity_and_student.has_roles %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
+            </div>
+
+            <div class="col">
+            <label for="id_evaluacion">Marque los Roles:</label>
+                {{activity_and_student.get_roles_display}}
+            </div>
+
+            <div class="col">
+            <label for="id_evaluacion">Marque el Nivel Alcanzado:</label>
+                {{activity_and_student.get_nivel_alcanzado_display}}
+            </div>
+            
+        </div>
+        <hr>
+    {% endif %}
+    {% if '13' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Mundiales?
+                </label>
+                {{activity_and_student.with_mundiales}}
+            </div>
+
+            <div class="col">
+                <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                {{activity_and_student.asignaturas_ayudante}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    {% if '14' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Repitencias?
+                </label>
+                {{activity_and_student.with_repitencias}}
+            </div>
+
+            <div class="col">
+                <label for="id_asignaturas_ayudante">Cantidad:</label>
+                {{activity_and_student.cantidad_repitencias}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    {% if '15' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Escriba algun otro reconocimiento:
+                </label>
+                {{activity_and_student.other_reconocimiento}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    {% comment %} AQUI COMIENZAN LOS ASPECTOS INVESTIGATIVOS {% endcomment %}
+    {% if '6' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Tienes publicaciones como Autor o Coautor?:
+                </label>
+                {{activity_and_student.has_publicacion}}
+            </div>
+            <div class="col">
+                <label >
+                    Nombre de la publlicacion:
+                </label>
+                {{activity_and_student.nombre_publicacion}}
+            </div>
+            <div class="col">
+                <label >
+                    Que nivel tienes como Co/Autor?:
+                </label>
+                {{activity_and_student.nivel_autor}}
+            </div>
+            <div class="col">
+                <label >
+                    Nivel Alcanzado con la publicaciones:
+                </label>
+                {{activity_and_student.nivel_publicacion}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    {% if '5' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Perteneces a una linea de investigacion?:
+                </label>
+                {{activity_and_student.has_investigacion}}
+            </div>
+            <div class="col">
+                <label >
+                    Participacion en:
+                </label>
+                {{activity_and_student.participacion}}
+            </div>
+            <div class="col">
+                <label >
+                    Eventos:
+                </label>
+                {{activity_and_student.nivel_evento}}
+            </div>
+            
+        </div>
+        <hr>
+    {% endif %}
+    {% if '3' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Participacion en un evento?:
+                </label>
+                {{activity_and_student.is_evento}}
+            </div>
+            <div class="col">
+                <label >
+                    Marque los eventos:
+                </label>
+                {{activity_and_student.nombre_evento}}
+            </div>
+            <div class="col">
+                <label >
+                    Especifique los eventos de la Jornada de Ing. Ciencias Inactivity_and_studentatica:
+                </label>
+                {{activity_and_student.nombre_sub_evento}}
+            </div>
+        </div>
+        <div class="row my-5">
+            <div class="col">
+                <label >
+                    Nivel del Evento:               
+                </label>
+                {{activity_and_student.nivel}}
+            </div>
+            <div class="col">
+                <label >
+                    Lugar Alcanzado:               
+                </label>
+                {{activity_and_student.result}}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-3">
+                <label >
+                    Tienes Eventos Colateral:
+                </label>
+                {{activity_and_student.es_colateral}}
+            </div>
+            <div class="col-4">
+                <label >
+                    Escribe el nombre del evento:
+                </label>
+                {{activity_and_student.nombre_evento_colateral}}
+            </div>
+            
+            <div class="col-3">
+                <label >
+                    Resultados alcanzados:
+                </label>
+                {{activity_and_student.result}}
+            </div>
+            
+        </div>
+        <hr>
+    {% endif %}
+    {% if '7' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Perteneces a la FEU?:
+                </label>
+                {{activity_and_student.is_feu}}
+            </div>
+            <div class="col">
+                <label >
+                    Nivel:
+                </label>
+                {{activity_and_student.nivel}}
+            </div>
+            <div class="col">
+                <label >
+                    Cargo Ocupado en la FEU:
+                </label>
+                {{activity_and_student.cargo_feu}}
+            </div>
+            <div class="col">
+                <label >
+                    Evaluacion:
+                </label>
+                {{activity_and_student.evaluacion}}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Perteneces a la UJC?:
+                </label>
+                {{activity_and_student.is_ujc}}
+            </div>
+            <div class="col">
+                <label >
+                    Comite de base:
+                </label>
+                {{activity_and_student.comite_base}}
+            </div>
+            <div class="col">
+                <label >
+                    Cargo Ocupado en la UJC::
+                </label>
+                {{activity_and_student.cargo_ujc}}
+            </div>
+            <div class="col">
+                <label >
+                    Evaluacion:
+                </label>
+                {{activity_and_student.evaluacion}}
+            </div>
+            
+        </div>
+        <hr>
+    {% endif %}
+    {% if '8' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Escriba los actos, matutinos, veladas y etc. que halla participado:
+                </label>
+                {{activity_and_student.descripcion}}
+            </div>
+            
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '9' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <label >
+                    Distincion 13 de Marzo:
+                </label>
+                {{activity_and_student.distincion_marzo}}
+            </div>
+            <div class="col">
+                <label >
+                    Distincion futuro maestro:
+                </label>
+                {{activity_and_student.distincion_fututo_maestro}}
+            </div>
+            <div class="col">
+                <label >
+                    Distincion Joven Maestro:
+                </label>
+                {{activity_and_student.distincion_joven}}
+            </div>
+            <div class="col">
+                <label >
+                    Eres Alumno Ayudante:
+                </label>
+                {{activity_and_student.is_ayudante}}
+            </div>
+            <div class="col">
+                <label >
+                    Evaluacion:
+                </label>
+                {{activity_and_student.evaluacion}}
+            </div>
+            
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '17' == pk_activity %}
+    <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+    <hr>
+    <label >
+        Escriba las actividades en la residencia, trabajos voluntarios, etc que halla partiicipado:
+    </label>
+        {{activity_and_student.descripcion}}
+    <hr>
+    {% endif %}
+
+    {% if '18' == pk_activity %}
+    <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+    <hr>
+    <div class="row">
+        <div class="col-3">
+            <label >
+                Eres Miembro?:
+            </label>
+            {{activity_and_student.is_miembro}}
+        </div>
+        <div class="col-3">
+            <label >
+                Nombre de la Cátedra:
+            </label>
+            {{activity_and_student.nombre_catedra}}
+        </div>
+        <div class="col">
+            <label >
+                Actividades en las que has participado:
+            </label>
+            {{activity_and_student.actividad_participado}}
+        </div>
+        
+    </div>
+    <hr>
+    {% endif %}
+
+    {% if '19' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <label >
+                    Participacion en actos y matutinos:
+                </label>
+                {{activity_and_student.actividades_participacion_actos_matutinos}}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <label >
+                    Participacion en el Festival de Artistas Aficionados:
+                </label>
+                {{activity_and_student.if_participacion_festivales}}
+            </div>
+            <div class="col-6">
+                <label >
+                    Manifestacion:
+                </label>
+                {{activity_and_student.manifestacion_festivales}}
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-6">
+                <label >
+                    Nivel del Evento:
+                </label>
+                {{activity_and_student.nivel_artista_aficionado}}
+            </div>
+            <div class="col-6">
+                <label >
+                    Premio:
+                </label>
+                {{activity_and_student.premio_artista_aficionado}}
+            </div>
+        </div>
+        <hr>
+        <div class="row my-3">
+            <h5>Participacion como artistita en actividades de la facultad</h5>
+            <div class="col-6">
+                <label >
+                    Nombre de la Actividad:
+                </label>
+                {{activity_and_student.nombre_actividad_facultad}}
+            </div>
+            <div class="col-6">
+                <label >
+                    Manifestacion:
+                </label>
+                {{activity_and_student.manifestacion_actividad_facultad}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    
+    {% if '20' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        <div class="row">
+            <div class="col-6">
+                <label >
+                    Lugar donde se realizo:
+                </label>
+                {{activity_and_student.lugar_dnd_realizo}}
+            </div>
+            <div class="col-6">
+                <label >
+                    Evaluacion:
+                </label>
+                {{activity_and_student.evaluacion}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '21' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+            <h5>Juegos Mellas</h5>
+            <div class="col-3">
+                <label >
+                    Participacion en los Juegos Mella:
+                </label>
+                {{activity_and_student.if_jjmm}}
+            </div>
+            <div id="loc" class="row"style="display:flex;justify-content:space-around;align-items:center;flex-direction:row">
+                <div id="otro" style="display:flex;justify-content:flex-start;align-items:center;flex-flow:row wrap">
+                <div id="este"style="display:flex; justify-content:center;align-items:flex-start;flex-flow:column wrap; margin-right:1rem">
+                    <div id="inputs-container" class="col-12" style="display:flex; justify-content:center;align-items:flex-start;flex-flow:column wrap">
+                        <label>Deporte</label>
+                        {% comment %} <input type="text" pattern="^[A-Z][a-z]*$" title="Se espera que el nombre sean letras y comiencen con mayúscula" class="otroqwe" name="deporte" placeholder="Escribe un deporte"> {% endcomment %}
+                        {{activity_and_student.deporte}}
+                    </div>
+                    {% comment %} <div class="col-3">
+                    <label >
+                        Resultados:
+                    </label>
+                    {{activity_and_student.resultado_deporte}}
+                </div> {% endcomment %}
+                <div class="col-3" id="id-input">
+                    <label>
+                        Resultados:
+                    </label>
+                    <select name="resultado_deporte" id="id_resultado_deporte" fdprocessedid="6sk1en" style="margin-bottom:1rem;width:12rem" class="activity_and_student-control">
+                    <option value="0" hidden selected >Selecciona una Opción</option>
+                    <option value="1">Oro</option>
+                    <option value="2">Plata</option>
+                    <option value="3">Bronce</option>
+                    <option value="4">Participacion</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        </div>
+        <hr>
+                
+                {% comment %} <div class="col-3">
+                    <label >
+                        Deporte:
+                    </label>
+                    {{activity_and_student.deporte}}
+                </div> {% endcomment %}
+                
+                <div class="col-3">
+                    <label >
+                        Lugar:
+                    </label>
+                    {{activity_and_student.lugar}}
+                </div>
+            </div>
+        <hr>
+        <h5>Copas y Mundiales</h5>
+            <div class="row">
+                <div class="col-3">
+                    <label >
+                        Participacion en Copas y/o Mundialitos:
+                    </label>
+                    {{activity_and_student.if_copas_mundialess}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Nombre del Evento:
+                    </label>
+                    {{activity_and_student.nombre_evento_copas_mundiales}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Resultados:
+                    </label>
+                    {{activity_and_student.resultado_copas_mundiales}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Lugar:
+                    </label>
+                    {{activity_and_student.lugar_copas_mundiales}}
+                </div>
+            </div>
+        <hr>
+        <h5>Evento del Proyecto Marabana</h5>
+            <div class="row">
+                <div class="col-3">
+                    <label >
+                        Participacion en el Proyecto Marabana:
+                    </label>
+                    {{activity_and_student.if_marabana}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Nombre del Evento:
+                    </label>
+                    {{activity_and_student.nombre_evento_marabana}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Resultados:
+                    </label>
+                    {{activity_and_student.resultado_copas_mundiales}}
+                </div>
+                
+            </div>
+        <hr>
+    {% endif %}
+
+    {% if '22' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+        
+        <div class="row">
+            <div class="col-4 border">
+                <label>
+                    Cuartelerias:
+                </label>
+                {% for mes in meses %}
+                    <div class="row my-2">
+                        <div class="col-6">
+                            <label >
+                                {{mes}}:
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            {{activity_and_student.evaluacion_cuarteleria}}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col-4 border">
+                <label>
+                    Responsabilidad:
+                </label>
+                    {{activity_and_student.responsabilidad}}
+                
+                <div class="row my-3">
+                <label>
+                    Evaluacion:
+                </label>
+                    {{activity_and_student.evaluacion_cuarteleria}}
+                </div>
+            </div>
+            <div class="col-4 border">
+                <div class="row">
+                    <label>
+                        Acta en la residencia:{{activity_and_student.if_senalamiento_residencia}}
+                    </label>
+                        {% comment %} {{activity_and_student.if_senalamiento_residencia}} {% endcomment %}
+                </div>
+                <label class='my-4'>
+                    Motivo:
+                </label>
+                    {{activity_and_student.descripcion}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '23' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr>
+            {% comment %} <h5>Juegos Mellas</h5> {% endcomment %}
+            <div class="row">
+                <div class="col-3">
+                    <label >
+                        Total de Ausencias:
+                    </label>
+                    {{activity_and_student.total_ausencias}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Ausencias Justificadas:
+                    </label>
+                    {{activity_and_student.total_ausencias_justificadas}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Ausencias Injustificadas:
+                    </label>
+                    {{activity_and_student.total_ausencias_injustificadas}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Guardias Recuperadas:
+                    </label>
+                    {{activity_and_student.total_recuperadas}}
+                </div>
+            </div>
+        <hr class='my-3'>
+            <div class="row">
+                <div class="col-6">
+                    <label >
+                        Acta o senalamiento por incumplimientos en la guardia estudiantil:
+                    </label>
+                    {{activity_and_student.if_senalamiento_guardia_estudiantil}}
+                </div>
+                <div class="col-6">
+                    <label >
+                        Cantidad:
+                    </label>
+                    {{activity_and_student.cantidad_senalamiento_guardia_estudiantil}}
+                </div>
+                
+            </div>
+        <hr>
+    {% endif %}
+
+    {% if '24' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5>
+        <hr class='my-3'>
+            <div class="row">
+                <div class="col-3">
+                    <label >
+                        Participacion en actividades de organizacion y limpieza de apartamento y áreas comunes:
+                    </label>
+                    {{activity_and_student.if_actividades_limpieza_areas_comunes}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Nombre de la Actividad:
+                    </label>
+                    {{activity_and_student.nombre_actividades_limpieza_areas_comunes}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Mes:
+                    </label>
+                    {{activity_and_student.mes}}
+                </div>
+                <div class="col-3">
+                    <label >
+                        Resultados:
+                    </label>
+                    {{activity_and_student.resultado_actividades_limpieza_areas_comunes}}
+                </div>
+                
+            </div>
+        <hr>
+        <div class="row">
+            <div class="col-3">
+                <label >
+                    Participacion en mi BK + Bonita:
+                </label>
+                {{activity_and_student.if_bk_mas_bonita}}
+            </div>
+            <div class="col-7">
+                <label >
+                    Reconocimiento:
+                </label>
+                {{activity_and_student.other_reconocimiento}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '25' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5> 
+        <hr>
+        <div class="row">
+            <div class="col-8">
+                <label >
+                    Nombres de los reconocimiento:
+                </label>
+                {{activity_and_student.other_reconocimiento}}
+            </div>
+            <div class="col-4">
+                <label >
+                    Otorgado por:
+                </label>
+                {{activity_and_student.reconocimiento_otorgado_por}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '26' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5> 
+        <hr>
+        <div class="row">
+            <div class="col-4">
+                <label >
+                    Registrar Sanciones o medida disciplinaria:
+                </label>
+                {{activity_and_student.sanciones_o_medida}}
+            </div>
+            <div class="col-8">
+                <label >
+                    Motivos de la sancion o medida disciplinaria:
+                </label>
+                {{activity_and_student.motivo_sancion}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '27' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5> 
+        <hr>
+        <div class="row">
+            <div class="col-12">
+                <label >
+                    Registrar Señalamiento:
+                </label>
+                {{activity_and_student.senalamiento_curso}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '28' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5> 
+        <hr>
+        <div class="row">
+            <div class="col-4">
+                <label >
+                    Nombre de la distincion:
+                </label>
+                {{activity_and_student.nombre_distincion}}
+            </div>
+            <div class="col-8">
+                <label >
+                    Organismo que la otorga:
+                </label>
+                {{activity_and_student.organismo_otorga_distincion}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+
+    {% if '29' == pk_activity %}
+        <h5>Actividad: {{activity_and_student.activity.name}}</h5> 
+        <hr>
+        <div class="row">
+            <div class="col-4">
+                <label >
+                    Nombre de la misión:
+                </label>
+                {{activity_and_student.nombre_mision}}
+            </div>
+            <div class="col-4">
+                <label >
+                    Función desempeñada:
+                </label>
+                {{activity_and_student.funsion_desempenada}}
+            </div>
+            <div class="col-4">
+                <label >
+                    Proceso:
+                </label>
+                {{activity_and_student.proceso}}
+            </div>
+        </div>
+        <hr>
+    {% endif %}
+    <div class="input-group mb-3">
+        <label class="mx-3">
+            Evidencia:
+        </label>
+        {% for media in activity_and_student.multimedia_set.all %}
+            <img src="{{media.file.url}}">
+        {% endfor %}
+    </div>
+    <hr>
+    <form method= "POST" action="">
+        {% csrf_token %}
+        <label class="form-check-label" for="id_is_valid">
+            Validar actividad:
+        </label>
+        <input type="checkbox" class="form-check-input" name="is_valid" id="id_is_valid" checked="">
+        <div class="my-3">
+            <!-- <button class="btn btn-danger">Cancelar</button> -->
+            <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
+            <button class="btn btn-success">Añadir</button>
+          </div>
+    </form>
+
+    </div>
+{% endblock content %}

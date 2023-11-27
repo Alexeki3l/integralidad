@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row my-3">
+    <div class="col-2">
+      <div id="list-example" class="list-group">
+        <a class="list-group-item list-group-item-action" href="#list-item-1">Primer Año</a>
+        <a class="list-group-item list-group-item-action" href="#list-item-2">Segundo Año</a>
+        <a class="list-group-item list-group-item-action" href="#list-item-3">Tercero Año</a>
+        <a class="list-group-item list-group-item-action" href="#list-item-4">Cuarto Año</a>
+        {% comment %} {% if request.user.profile.academy_year == 4 %}
+        <a class="list-group-item list-group-item-action" href="#list-item-5">Evaluación Integral</a>
+        {% endif %} {% endcomment %}
+      </div>
+    </div>
+    <div class="col-10 ">
+      <div data-bs-spy="scroll" data-bs-target="#list-example" data-bs-smooth-scroll="true" class="scrollspy-example h-75" tabindex="0">
+        <h4 id="list-item-1">Primer Año</h4>
+        {% if parrafo_primer_anno %}
+            {% for key, value in parrafo_cuarto_anno.items %}
+              <h5>{{key}}</h5>
+              <p>{{value}}</p>
+            {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no ha participado en ninguna actividad este año. La caracterizacion no se le puede generar
+            </div>
+          {% endif %}
+        <hr>
+        <h4 id="list-item-2">Segundo Año</h4>
+        {% if parrafo_segundo_anno %}
+            {% for key, value in parrafo_cuarto_anno.items %}
+              <h5>{{key}}</h5>
+              <p>{{value}}</p>
+            {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no ha participado en ninguna actividad este año. La caracterizacion no se le puede generar
+            </div>
+          {% endif %}
+        <hr>
+        <h4 id="list-item-3">Tercer Año</h4>
+        {% if parrafo_tercer_anno %}
+            {% for key, value in parrafo_cuarto_anno.items %}
+              <h5>{{key}}</h5>
+              <p>{{value}}</p>
+            {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no ha participado en ninguna actividad este año. La caracterizacion no se le puede generar
+            </div>
+          {% endif %}
+          <hr>
+        <h4 id="list-item-4">Cuarto Año</h4>
+          {% if parrafo_cuarto_anno %}
+            {% for key, value in parrafo_cuarto_anno.items %}
+              <h5>{{key}}</h5>
+              <p>{{value}}</p>
+            {% endfor %}
+          {% else %}
+            <div class="alert alert-warning" role="alert">
+              El Estudiante no ha participado en ninguna actividad este año. La caracterizacion no se le puede generar
+            </div>
+          {% endif %}
+          {% comment %} {% if request.user.profile.academy_year == 4 %}
+          <hr>
+        
+        <h4 id="list-item-5">Evaluacion Integral</h4>
+          {% if parrafo_integral %}
+              {% for key, value in parrafo_integral.items %}
+                <h5>{{key}}</h5>
+                <p>{{value|safe}}</p>
+              {% endfor %}
+      
+            {% endif %}
+        {% endif %} {% endcomment %}
+      </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}

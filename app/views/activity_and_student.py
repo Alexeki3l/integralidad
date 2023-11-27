@@ -382,16 +382,15 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     messages.error(request, ERROR_GENERAL)
                     return redirect('add_activities_and_student', pk = pk_activity)
                 try:
-                    defaults['nombre_evento'] =int(defaults['nombre_evento'][0])
-                    if defaults['is_evento'] and defaults['nombre_evento']== 4:
+                    # defaults['nombre_evento'] =int(defaults['nombre_evento'])
+                    if defaults['is_evento'] and  '4' in defaults['nombre_evento']:
                         if defaults['nombre_sub_evento'][0] == '':
                             messages.error(request, ERROR_NOMBRE_SUB_EVENTO)
                             return redirect('add_activities_and_student', pk = pk_activity)
                         else:
-                            defaults['nombre_sub_evento'] = int(defaults['nombre_sub_evento'][0])
+                            defaults['nombre_sub_evento'] = defaults['nombre_sub_evento']
                     else:
-                        if defaults['nombre_sub_evento'][0] == '':
-                            defaults['nombre_sub_evento'] = 0  
+                        pass
                 except:
                     messages.error(request, ERROR_NOMBRE_EVENTO)
                     return redirect('add_activities_and_student', pk = pk_activity)
@@ -415,12 +414,13 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                         messages.error(request, ERROR_RESULTADO_EVENTO_COLATERAL)
                         return redirect('add_activities_and_student', pk = pk_activity)
                     
-                    defaults['nivel'] = int(defaults['nivel'][0])
-                    defaults['result'] = int(defaults['result'][0])
+                    defaults['nivel'] = defaults['nivel']
+                    defaults['result'] = defaults['result']
+                    defaults['nombre_evento_colateral'] = defaults['nombre_evento_colateral'][0]
                     
                 else:
-                    defaults['nivel'] = 0
-                    defaults['result'] = 0
+                    defaults['nombre_evento_colateral'] = defaults['nombre_evento_colateral'][0]
+                    
     
                 objeto, creado, is_create_image = crear_objeto_activity_and_student(
                     request, pk_activity, pk_profile, defaults)
@@ -487,15 +487,14 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 except:
                     defaults['is_ujc'] = False
                     
-                if defaults['is_feu']:
-                    defaults['evaluacion'] = defaults['evaluacion'][0]
+                defaults['evaluacion'] = ",".join(defaults['evaluacion'])
                 
                 if not defaults['is_feu'] and defaults['is_ujc']:
                     defaults['evaluacion'] = defaults['evaluacion'][1]
                 
-                if defaults['is_feu'] and defaults['is_ujc']:
-                    messages.error(request, ERROR_ORGANIZACIONES)
-                    return redirect('add_activities_and_student', pk = pk_activity)
+                # if defaults['is_feu'] and defaults['is_ujc']:
+                #     messages.error(request, ERROR_ORGANIZACIONES)
+                #     return redirect('add_activities_and_student', pk = pk_activity)
                 
                 if not defaults['is_feu'] and not defaults['is_ujc']:
                     messages.error(request, ERROR_GENERAL)
@@ -508,7 +507,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     
                     defaults['nivel'] = int(defaults['nivel'][0])
                     defaults['cargo_feu'] = int(defaults['cargo_feu'][0])
-                    defaults['evaluacion'] = int(defaults['evaluacion'])
+                    defaults['evaluacion'] = defaults['evaluacion']
                     
                     defaults['cargo_ujc'] = 0
                     
@@ -521,7 +520,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     
                     defaults['comite_base'] = defaults['comite_base'][0]
                     defaults['cargo_ujc'] = int(defaults['cargo_ujc'][0])
-                    defaults['evaluacion'] = int(defaults['evaluacion'])
+                    defaults['evaluacion'] = defaults['evaluacion']
                     
                     defaults['nivel'] = 0
                     defaults['cargo_feu'] = 0
@@ -529,6 +528,21 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
                     return redirect('list_activities')
+                
+                elif (defaults['is_ujc'] and (defaults['comite_base'][0] !='' ) and (defaults['cargo_ujc'][0] !='' ) and (defaults['evaluacion'] !='' )) and \
+                    (defaults['is_feu'] and (defaults['nivel'][0] !='' ) and (defaults['cargo_feu'][0] !='' ) and (defaults['evaluacion'] !='' )):
+                        
+                        defaults['nivel'] = int(defaults['nivel'][0])
+                        defaults['cargo_feu'] = int(defaults['cargo_feu'][0])
+                        # defaults['evaluacion'] = int(defaults['evaluacion'])
+                        
+                        defaults['comite_base'] = defaults['comite_base'][0]
+                        defaults['cargo_ujc'] = int(defaults['cargo_ujc'][0])
+                        # defaults['evaluacion'] = int(defaults['evaluacion'])
+                        
+                        objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
+
+                        return redirect('list_activities')
                 
                 else:
                     messages.error(request, ERROR_ORGANIZACIONES)
@@ -1001,14 +1015,5 @@ class DetailsActivityAndStudentForProfessorView(DetailView):
         obj = kwargs['object']
         context["pk_activity"] = str(obj.activity.id)
         return context
-    
-    
-def caracterizacion(request):
-    
-    list_actividades = ActivityAndStudent.objects.filter(profile_id = request.user.profile, year = 4)
-    parrafo_cuarto_anno = generar_parrafo(list_actividades)
-    context={
-        'parrafo_cuarto_anno':parrafo_cuarto_anno,
-    }
-    return render(request, 'activity_and_student/caracterizacion.html')
+
     

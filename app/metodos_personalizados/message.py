@@ -7,7 +7,7 @@ ERROR_NOMBRE_EVENTO_COLATERAL = "Debes escribir el nombre del evento colateral"
 ERROR_NIVEL_EVENTO_COLATERAL = "Debes escribir el nivel alcanzado en evento colateral"
 ERROR_RESULTADO_EVENTO_COLATERAL = "Debes escribir el nivel alcanzado en evento colateral"
 
-ERROR_ORGANIZACIONES = "Solo puedes marcar una organizacion. Y llenar los campos pertenecientes a ellas"
+ERROR_ORGANIZACIONES = "Si marcas una organizacion debes de llenar los campos pertenecientes a ellas"
 ERROR_DESCRIPCION ="Debes especificar las actividades que hallas participado. Le aconsejamos que escriba sus reconocimientos separados por punto(.)"
 
 

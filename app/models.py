@@ -161,7 +161,7 @@ class ActivityAndStudent(models.Model):
     is_ujc = models.BooleanField(default=False)
     nivel =  models.IntegerField(choices=TYPE_NIVEL, null=True, blank=True)
     cargo_feu =  models.IntegerField(choices=TYPE_NIVEL_CARGO_FEU, null=True, blank=True)
-    evaluacion = models.IntegerField(choices=TYPE_EVALUACION, null=True, blank=True)
+    evaluacion = models.CharField(choices=TYPE_EVALUACION, null=True, blank=True, max_length=255)
     
     comite_base = models.CharField(max_length=50, null=True, blank=True)
     cargo_ujc = models.IntegerField(choices=TYPE_NIVEL_CARGO_UJC, null=True, blank=True)
@@ -210,7 +210,7 @@ class ActivityAndStudent(models.Model):
     )
     TYPE_NOMBRE_EVENTO = (
         (1, 'Forum de Historia'),
-        (2, 'Seminario Juvenil MArtiano'),
+        (2, 'Seminario Juvenil Martiano'),
         (3, 'Olimpiada de Idiomas'),
         (4, 'Jornada de Ingeniero en Ciencias Informaticas'),
         (5, 'Jornada Cientifica Estudiantil'),
@@ -227,7 +227,7 @@ class ActivityAndStudent(models.Model):
     
     # Aqui hay una relacion de con la clase Eventos
     has_roles = models.BooleanField(default=False,)
-    roles = models.IntegerField(choices=TYPE_ROLES, null=True, blank=True)
+    roles = models.CharField(choices=TYPE_ROLES, null=True, blank=True, max_length=255)
     nivel_alcanzado = models.IntegerField(choices=TYPE_NIVEL_ALCANZADO, null=True, blank=True)
     
     has_investigacion = models.BooleanField(default=False, help_text="Si pertence o no a una linea de investigacion")

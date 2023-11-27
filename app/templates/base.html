@@ -8,7 +8,7 @@
     
     <link href="{% static 'app/assets_2/css/vendor/dataTables.bootstrap5.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'app/assets_2/css/vendor/responsive.bootstrap5.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'app/assets_2/css/vendor/buttons.bootstrap5.cs' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'app/assets_2/css/vendor/buttons.bootstrap5.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'app/assets_2/css/vendor/select.bootstrap5.css' %}" rel="stylesheet" type="text/css">
 
     <link href="{% static 'app/assets_2/css/icons.min.css' %}" rel="stylesheet" type="text/css">
@@ -71,9 +71,15 @@
                     </li>
                   {% endif %}
                   {% if request.user.profile.rol_fac == 1 %}
-                    <li class="nav-item">
-                      <a class="nav-link" aria-disabled="true" href="{% url "caracterizacion_pk_student" %}">Caracterizacion</a>
-                    </li>
+                  <li class="nav-item dropdown-center">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Caracterizacion
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url "caracterizacion_pk_student" %}">Por Año</a></li>
+                        <li><a class="dropdown-item" href="{% url "evaluacion_integral" %}">Evaluacion Integral</a></li>
+                    </ul>
+                  </li>
                   {% endif %}
                 </ul>
                 <!-- <form class="d-flex mx-3" role="search">

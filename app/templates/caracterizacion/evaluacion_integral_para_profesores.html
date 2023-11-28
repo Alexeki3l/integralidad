@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+  <div class="col-10">
+  </div>
+  <div class="col-2 my-3">
+    <a href="{% url "exportar_pdf_student" profile.pk %}" id="boton-exportar" class="btn btn-success">Exportar a PDF</a>
+  </div>
+</div>
+<hr class="my-auto">
+<div class="my-3">
+  <div class="row">
+    <div class="col-3">
+    </div>
+    <div class="col-2 border-end">
+      
+        <img src="{% static 'app/assets_2/images/tesis/logo_uci.png' %}" alt="Logo" width="150" height="100"  class="d-inline-block align-text-top">
+      
+    </div>
+    <div class="col-5">
+      <h3>SISTEMA DE GESTION DEL PROCESO DE INTEGRALIDAD</h3>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  <div class="my-3" id="contenido-a-exportar">
+    <div class="row">
+      <div class="col-10">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Carrera</th>
+              <th scope="col">Curso</th>
+              <th scope="col">Facultad</th>
+              <th scope="col">Grupo</th>
+              <th scope="col">Año Academico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{profile.carrera}}</td>
+              <td>2022-2023</td>
+              <td>Facultad 2</td>
+              <td>{{profile.grupo}}</td>
+              {% if profile.academy_year == 4 %}
+                <td>Cuarto Año</td>
+              {% elif profile.academy_year == 3 %}
+                <td>Tercer Año</td>
+              {% elif profile.academy_year == 2 %}
+                <td>Segundo Año</td>
+              {% elif profile.academy_year == 1 %}
+                <td>Primer Año</td>
+              {% endif %}
+              
+            </tr>
+          </tbody>
+        </table>
+        <p class="mx-2">DATOS PERSONALES</p>
+        <table class="table my-0 table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Nombre y Apellido</th>
+              <th scope="col">Carnet Identidad</th>
+              <th scope="col">Provincia</th>
+              <th scope="col">Municipio</th>
+              <th scope="col">Militante</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{profile.user.first_name}} {{profile.user.last_name}}</td>
+              <td>{{profile.ci}}</td>
+              <td>{{profile.provincia}}</td>
+              <td>{{profile.municipio}}</td>
+              <td>No</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="col-2">
+        <img src="{{profile.image_url}}" alt="">
+      </div>
+    </div>
+  </div>
+  <h6 id="list-item-5">SINTESIS DE LA TRAYECTORIA ESTUDIANTIL</h6>
+  <hr>
+            {% if parrafo_integral %}
+                {% for key, value in parrafo_integral.items %}
+                  <h5>{{key}}</h5>
+                  <p>{{value|safe}}</p>
+                {% endfor %}
+        
+              {% endif %}
+</div>
+
+{% endblock content %}

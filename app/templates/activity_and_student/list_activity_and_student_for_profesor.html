@@ -9,6 +9,9 @@
         <a class="list-group-item list-group-item-action" href="#list-item-2">Segundo Año</a>
         <a class="list-group-item list-group-item-action" href="#list-item-3">Tercero Año</a>
         <a class="list-group-item list-group-item-action" href="#list-item-4">Cuarto Año</a>
+        {% if request.user.profile.rol_fac != 1 %}
+          <a class="list-group-item list-group-item-action" href="{% url "evaluacion_integral_student" pk_student %}">Evaluacion Integral</a>
+        {% endif %}
       </div>
     </div>
     <div class="col-10 ">

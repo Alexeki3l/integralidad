@@ -4,7 +4,7 @@ from app.views.profile import list_roles, DetailsProfileView, EditProfileView
 from app.views.activity_and_student import AddActivityAndStudentView, list_activity_and_student_for_profesor\
     ,DetailsActivityAndStudentForProfessorView
     
-from app.views.caracterizacion import caracterizacion
+from app.views.caracterizacion import caracterizacion, evaluacion_integral_student, exportar_pdf_student
 
 
 # from ..authentication.views import update_data
@@ -32,6 +32,9 @@ urlpatterns = [
     path('caracterizacion', caracterizacion, name='caracterizacion_pk_student'),
     path('caracterizacion/evaluacion_integral', caracterizacion, name='evaluacion_integral'),
     path('caracterizacion/exportar_pdf', caracterizacion, name='exportar_pdf'),
+    
+    path('caracterizacion/evaluacion_integral_student/<int:pk_student>', evaluacion_integral_student, name='evaluacion_integral_student'),
+    path('caracterizacion/exportar_pdf_student/<int:pk_student>', exportar_pdf_student, name='exportar_pdf_student'),
     
     # ...Roles
     

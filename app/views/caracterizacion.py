@@ -12,7 +12,7 @@ AddActivityAndStudentView, MultimediaForm
 
 from django.urls import reverse, reverse_lazy
 
-from app.utils import crear_objeto_activity_and_student, if_cadena_empty, generar_parrafo, exportar_pdf
+from app.utils import crear_objeto_activity_and_student, if_cadena_empty, generar_parrafo, exportar_pdf, return_dict_integrality
 
 from django.contrib import messages
 
@@ -27,45 +27,18 @@ import math
 def caracterizacion(request):
     perfil = request.user.profile
     
-    parrafo_primer_anno = generar_parrafo(perfil, 1)
-    parrafo_segundo_anno = generar_parrafo(perfil, 2)
-    parrafo_tercer_anno = generar_parrafo(perfil, 3)
-    parrafo_cuarto_anno = generar_parrafo(perfil, 4)
-    
-    if request.user.profile.academy_year == 4:
-        dict_integral = {}
-        for aspecto in Aspecto.objects.all():
-            cadena_inv = ""
-            try:
-                cadena_inv += f"""<h5>Periodo de Primer Año</h5><p>{parrafo_primer_anno[f'{aspecto.name}']}</p>"""
-            except:
-                cadena_inv += ""
-            try:
-                cadena_inv += f"""<h5 class='text-mute'>Periodo de Segundo Año</h5><p>{parrafo_segundo_anno[f'{aspecto.name}']}</p>"""
-            except:
-                cadena_inv += ""
-            try:
-                cadena_inv += f"""<h5>Periodo de Tercer Año</h5><p>{parrafo_tercer_anno[f'{aspecto.name}']}</p>"""
-            except:
-                cadena_inv += ""
-            try:
-                cadena_inv += f"""<strong class='text-mute'>Periodo de Cuarto Año</strong><p>{parrafo_cuarto_anno[f'{aspecto.name}']}</p>"""
-            except:
-                cadena_inv += ""
-            if cadena_inv != "":
-                dict_integral[f'{aspecto.name}'] = cadena_inv
-            else:
-                continue
+    dict_integral, dict_integral_pdf, list_parrafo = return_dict_integrality(request, perfil)
     
     print(request.path)
     if request.path == "/caracterizacion":
         context={
-            'parrafo_primer_anno':parrafo_primer_anno,
-            'parrafo_segundo_anno':parrafo_segundo_anno,
-            'parrafo_tercer_anno':parrafo_tercer_anno,
-            'parrafo_cuarto_anno':parrafo_cuarto_anno,
+            'parrafo_primer_anno':list_parrafo[0],
+            'parrafo_segundo_anno':list_parrafo[1],
+            'parrafo_tercer_anno':list_parrafo[2],
+            'parrafo_cuarto_anno':list_parrafo[3],
         }
         return render(request, 'caracterizacion/caracterizacion.html', context)
+    
     elif request.path == "/caracterizacion/exportar_pdf":
         context={
             'parrafo_integral':dict_integral,
@@ -75,7 +48,7 @@ def caracterizacion(request):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="{name_pdf}.pdf"'
         
-        exportar_pdf(dict_integral, perfil, response, request)
+        exportar_pdf(dict_integral_pdf, perfil, response, request)
         
         return response
     else:
@@ -85,3 +58,33 @@ def caracterizacion(request):
         }
         return render(request, 'caracterizacion/evaluacion_integral.html', context)
     
+
+def evaluacion_integral_student(request, pk_student):
+    
+    perfil = Profile.objects.get(id = pk_student)
+    
+    dict_integral, _, _ = return_dict_integrality(request, perfil)
+    
+    context={
+            'parrafo_integral':dict_integral,
+            'profile':perfil,
+        }
+    return render(request, 'caracterizacion/evaluacion_integral_para_profesores.html', context)
+
+def exportar_pdf_student(request, pk_student):
+    
+    perfil = Profile.objects.get(id = pk_student)
+    
+    dict_integral, dict_integral_pdf, _ = return_dict_integrality(request, perfil)
+    
+    context={
+            'parrafo_integral':dict_integral,
+            'profile':perfil,
+        }
+    name_pdf = f'evaluacion_integral_{perfil.user.first_name.lower()}'
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{name_pdf}.pdf"'
+        
+    exportar_pdf(dict_integral_pdf, perfil, response, request)
+        
+    return response

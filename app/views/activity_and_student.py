@@ -21,6 +21,9 @@ from multimedia.models import Multimedia
 
 from app.metodos_personalizados.message import *
 
+from django.views.generic.list import MultipleObjectMixin
+from django.shortcuts import get_object_or_404
+
 import math
 
 # ----------------------CRUD de ActividadAndStudent ----------------------------
@@ -50,34 +53,14 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 year_student = int(self.request.user.profile.academy_year)
                 defaults['year'] = year_student
                 
-                try:
-                    if defaults['where_pid'][0] and defaults['rol'][0] and defaults['evaluacion'] and defaults['actividades_pid']:
-                        objeto, creado = ActivityAndStudent.objects.update_or_create(
-                                activity_id = pk_activity,
-                                profile_id = pk_profile,
-                                defaults=defaults
-                            )
-                        if creado:
-                            pass
-                        print(objeto, objeto.id)
-                        dict_aux = request.POST.copy()
-                        dict_aux['actividades'] = objeto.id
-                            
-                        for element in objeto.multimedia_set.all():
-                            element.delete()
-                        try:
-                            form = MultimediaForm(dict_aux, request.FILES)
-                            if form.is_valid():
-                                form.save()
-                            
-                            return redirect('list_activities')
-                        except Exception as e:
-                            print(e)
-                            
-                except Exception as e:
-                    print(e)
+                
+                if defaults['where_pid'][0] and defaults['rol'][0] and defaults['evaluacion'] and defaults['actividades_pid']:
+                    objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
+                    return redirect('list_activities')
+                else:
                     messages.error(request, ERROR_GENERAL)
                     return redirect('add_activities_and_student', pk = pk_activity)
+                
             
             # Alumno Ayudante
             elif 11 == pk_activity:
@@ -131,30 +114,6 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 del defaults['asignaturas_ayudante']
                 
-                # objeto, creado = ActivityAndStudent.objects.update_or_create(
-                #                 activity_id = pk_activity,
-                #                 profile_id = pk_profile,
-                #                 defaults=defaults
-                #             )
-                # if creado:
-                    
-                #     objeto.asignaturas_ayudante.clear()
-                    
-                #     for id_asignatura in ids_asignaturas:
-                #         asignatura = Asignatura.objects.get(id=id_asignatura)
-                #         objeto.asignaturas_ayudante.add(asignatura)
-                        
-                # dict_aux = request.POST.copy()
-                # dict_aux['actividades'] = objeto.id
-                
-                # for element in objeto.multimedia_set.all():
-                #     element.delete()
-                # print(request.FILES['file'])
-                # form = MultimediaForm(dict_aux, request.FILES)
-                # if form.is_valid():
-                #     form.save()
-                # else:
-                #     print('error')
                 objeto, creado, is_create_image  = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
                 
                 objeto.asignaturas_ayudante.clear()
@@ -192,30 +151,14 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 del defaults['asignaturas_ayudante']
                 
-                objeto, creado = ActivityAndStudent.objects.update_or_create(
-                                activity_id = pk_activity,
-                                profile_id = pk_profile,
-                                defaults=defaults
-                            )
+                objeto, creado, _ = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
+                                
                 objeto.asignaturas_ayudante.clear()
                     
                 for id_asignatura in ids_asignaturas:
                     asignatura = Asignatura.objects.get(id=id_asignatura)
                     objeto.asignaturas_ayudante.add(asignatura)
                 
-                #Añadir la imagen
-                dict_aux = request.POST.copy()
-                dict_aux['actividades'] = objeto.id
-                
-                for element in objeto.multimedia_set.all():
-                    element.delete()
-                
-                form = MultimediaForm(dict_aux, request.FILES)
-                if form.is_valid():
-                    form.save()
-                else:
-                    print('error')
-
                 return redirect('list_activities')
                 
             # Mundiales
@@ -245,32 +188,15 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 del defaults['asignaturas_ayudante']
                 
-                objeto, creado = ActivityAndStudent.objects.update_or_create(
-                                activity_id = pk_activity,
-                                profile_id = pk_profile,
-                                defaults=defaults
-                            )
+                objeto, creado, _ = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
+                
                 objeto.asignaturas_ayudante.clear()
                     
                 for id_asignatura in ids_asignaturas:
                     asignatura = Asignatura.objects.get(id=id_asignatura)
                     objeto.asignaturas_ayudante.add(asignatura)
                 
-                #Añadir la imagen
-                dict_aux = request.POST.copy()
-                dict_aux['actividades'] = objeto.id
-                
-                for element in objeto.multimedia_set.all():
-                    element.delete()
-                
-                form = MultimediaForm(dict_aux, request.FILES)
-                if form.is_valid():
-                    form.save()
-                else:
-                    print('error')
-
                 return redirect('list_activities')
-                # other_reconocimiento
             
             # Repitencias
             elif 14 == pk_activity:
@@ -292,24 +218,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     messages.error(request, ERROR_GENERAL)
                     return redirect('add_activities_and_student', pk = pk_activity)
                 
-                objeto, creado = ActivityAndStudent.objects.update_or_create(
-                                activity_id = pk_activity,
-                                profile_id = pk_profile,
-                                defaults=defaults
-                            )
-                
-                #Añadir la imagen
-                dict_aux = request.POST.copy()
-                dict_aux['actividades'] = objeto.id
-                
-                for element in objeto.multimedia_set.all():
-                    element.delete()
-                
-                form = MultimediaForm(dict_aux, request.FILES)
-                if form.is_valid():
-                    form.save()
-                else:
-                    print('error')
+                objeto, creado, _ = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
                 return redirect('list_activities')
         
@@ -321,24 +230,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     messages.error(request, ERROR_OTHER_RECONOCIMIENTO)
                     return redirect('add_activities_and_student', pk = pk_activity)
                 
-                objeto, creado = ActivityAndStudent.objects.update_or_create(
-                                activity_id = pk_activity,
-                                profile_id = pk_profile,
-                                defaults=defaults
-                            )
-                
-                #Añadir la imagen
-                dict_aux = request.POST.copy()
-                dict_aux['actividades'] = objeto.id
-                
-                for element in objeto.multimedia_set.all():
-                    element.delete()
-                
-                form = MultimediaForm(dict_aux, request.FILES)
-                if form.is_valid():
-                    form.save()
-                else:
-                    print('error')
+                objeto, creado, _ = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
                 return redirect('list_activities')
                 
@@ -998,22 +890,40 @@ def list_activity_and_student_for_profesor(request, pk_student):
     else:
         return redirect('list_activities')
     
+
 class DetailsActivityAndStudentForProfessorView(DetailView):
     model = ActivityAndStudent
     template_name = 'activity_and_student/details_activity_and_student_for_profesor.html'
     context_object_name = 'activity_and_student'
     
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            self.pk_student = self.kwargs.get('pk_student')
+            self.pk_activity = self.kwargs.get('pk_activity')
+        
+            perfil = Profile.objects.get(id = self.pk_student)
+            try:
+                act_and_student_obj = ActivityAndStudent.objects.get(
+                    activity_id = self.pk_activity ,
+                    profile = self.pk_student,
+                    year = perfil.academy_year
+                    
+                )
+            except:
+                pass
+            self.kwargs['pk'] = act_and_student_obj.pk
+            return super().dispatch(request, *args, **kwargs)
+
     def get_object(self, queryset=None):
-        pk_activity = self.kwargs.get('pk_activity')
-        pk_student = self.kwargs.get('pk_student')
-        act_and_student = ActivityAndStudent.objects.get(activity_id=pk_activity, profile_id=pk_student)
-        print(act_and_student.get_roles_display())
-        return act_and_student
-    
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        # Aquí defines cómo obtener el objeto basado en las dos claves primarias
+        # En este ejemplo, estamos utilizando get_object_or_404
+        return get_object_or_404(self.model, activity_id = self.pk_activity, profile = self.pk_student)
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = kwargs['object']
-        context["pk_activity"] = str(obj.activity.id)
+        context["pk_activity"] = str(self.pk_activity)
         return context
+    
+
 
     

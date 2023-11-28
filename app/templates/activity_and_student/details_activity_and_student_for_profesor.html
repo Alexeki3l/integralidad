@@ -870,7 +870,7 @@
             Evidencia:
         </label>
         {% for media in activity_and_student.multimedia_set.all %}
-            <img src="{{media.file.url}}">
+            <img src="{{media.file.url}}" width='150'>
         {% endfor %}
     </div>
     <hr>

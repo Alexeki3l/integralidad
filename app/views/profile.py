@@ -23,7 +23,7 @@ def list_roles(request, id_rol):
             rol = 'Estudiantes'
         if id_rol == 2:
             profiles = profiles.filter(rol_fac = 2)
-            rol = 'Profesores Guias'
+            rol = 'Profesores Guías'
         if id_rol == 3:
             profiles = profiles.filter(rol_fac = 3)
             rol = 'Profesores de Año'

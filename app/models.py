@@ -145,10 +145,6 @@ class ActivityAndStudent(models.Model):
         (3, 'Otras Actividades de la Produccion'),
     )
     
-    # TYPE_ORGANIZACION = (
-    #     (1, 'FEU'),
-    #     (2, 'UJC'),
-    # )
     
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
@@ -274,6 +270,7 @@ class ActivityAndStudent(models.Model):
         (3, 'Bronce'),
         (4, 'Mencion'),
     )
+    
     if_participacion_festivales = models.BooleanField(default=False)
     manifestacion_festivales = models.CharField(max_length=255, null=True, blank=True)
     nivel_artista_aficionado = models.IntegerField(choices=TYPE_NIVEL_ARTISTA_AFICIONADO, null=True, blank=True)
@@ -321,6 +318,7 @@ class ActivityAndStudent(models.Model):
         (2, 'Juegos Provinciales Giraldillos'),
         (3, 'Juegos Nacionales'),
     )
+    
     if_jjmm = models.BooleanField(default=False)
     deporte = models.CharField(choices=TYPE_DEPORTE, null=True, blank=True, max_length=255)
     resultado_deporte = models.CharField(choices=TYPE_RESULTADO_DEPORTE, null=True, blank=True, max_length=255)

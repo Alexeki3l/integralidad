@@ -5,13 +5,14 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css"> {% endcomment %}
 <div class="row justify-content-between my-3">
     <h5 class="col-sm-4 mx-2">Actividades</h5>
+    
     {% comment %} <button class="col-sm-1 btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="mdi mdi-plus"></i></button>  {% endcomment %}
     {% if not request.user.profile.rol_fac %}
         <a href="{% url "add_activities" %}" class="col-sm-1 btn btn-success mx-3"><i class="mdi mdi-plus"></i></a>
     {% endif %}
     
     </div>
-    <div class="border p-3 rounded shadow-lg">
+        <div class="border p-3 rounded shadow-lg">
         <table id="example" class="table table-striped " style="width:100%">
             <thead>
                 <tr>
@@ -33,12 +34,24 @@
                         <td>No</td>
                     {% endif %}
                     <td class="table-action">
-                        <a href="{% url "details_activity" actividad.pk %}" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
                         
-                        {% if request.user.profile.rol_fac != 1 %}
-                            <a href="{% url "edit_activity" actividad.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
+                        
+                        {% if request.user.profile not in actividad.profiles.all %}
+                            <a href="{% url "add_activities_and_student" actividad.pk %}" class="action-icon text-success"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Llenar formulario de Actividad."> <i class="mdi mdi-plus"></i></a>
+
                         {% else %}
-                            <a href="{% url "add_activities_and_student" actividad.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
+                            <a href="{% url "details_activity" actividad.pk %}" class="action-icon text-success"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Ver detalles."> <i class="mdi mdi-eye"></i></a>
+                            
+                            <a href="{% url "activity_and_student_update" actividad.pk %}" class="action-icon text-primary"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Editar Actividad."> <i class="mdi mdi-pencil"></i></a>
                         {% endif %}
                             {% if request.user.profile.rol_fac != 1 %}
                             <a href="{% url "delete_activity" actividad.pk %}" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a>

@@ -38,16 +38,28 @@
                         <td>{{profile.grupo}}</td>
                     {% endif %}
                     <td class="table-action">
-                        <a href="{% url "details_rol" profile.pk %}" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
-                        <a href="{% url "edit_rol" profile.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a>
+                        {% comment %} <a href="{% url "details_rol" profile.pk %}" class="action-icon text-success"> <i class="mdi mdi-eye"></i></a>
+                        <a href="{% url "edit_rol" profile.pk %}" class="action-icon text-primary"> <i class="mdi mdi-pencil"></i></a> {% endcomment %}
                         {% if profile.rol_fac == 1 %}
-                            <a href="{% url "list_activity_and_student_for_profesor" profile.pk %}" class="action-icon text-" 
+                            <a href="{% url "list_activity_and_student_for_profesor" profile.pk %}" class="action-icon text-success" 
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Listado de actividades."
+                            data-bs-title="Listado de actividades realizadas."
                             > <i class="mdi mdi-playlist-check"></i></a>
-                        {% elif profile.rol_fac == 2 %}
-                            
+
+                        {% elif profile.rol_fac == 3 %} 
+                            <a href="{% url "list_roles_by_rol" profile.pk %}" class="action-icon text-success" 
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Listado de profesores guías."
+                            > <i class="mdi mdi-playlist-check"></i></a>
+
+                        {% elif profile.rol_fac == 2 %} 
+                            <a href="{% url "list_roles_by_rol" profile.pk %}" class="action-icon text-success" 
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            data-bs-custom-class="custom-tooltip"
+                            data-bs-title="Listado de sus estudiantes."
+                            > <i class="mdi mdi-playlist-check"></i></a>
                         {% endif %}
                         {% comment %} <a href="#" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a> {% endcomment %}
                     </td>

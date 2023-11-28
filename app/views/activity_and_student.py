@@ -542,11 +542,6 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
             
             # Actividades Culturales
             elif pk_activity == 19: 
-                try:
-                    if 'on' in defaults['if_participacion_actos_matutinos']:
-                        defaults['if_participacion_actos_matutinos'] = True
-                except:
-                    defaults['if_participacion_actos_matutinos'] = False
                     
                 try:
                     if 'on' in defaults['if_participacion_festivales']:
@@ -557,6 +552,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 defaults['manifestacion_festivales'] = defaults['manifestacion_festivales'][0]
                 defaults['nivel_artista_aficionado'] = defaults['nivel_artista_aficionado'][0]
                 defaults['premio_artista_aficionado'] = defaults['premio_artista_aficionado'][0]
+                defaults['actividades_participacion_actos_matutinos'] = defaults['actividades_participacion_actos_matutinos'][0]
                 
                 defaults['nombre_actividad_facultad'] = defaults['nombre_actividad_facultad'][0]
                 defaults['manifestacion_actividad_facultad'] = defaults['manifestacion_actividad_facultad'][0]
@@ -926,4 +922,54 @@ class DetailsActivityAndStudentForProfessorView(DetailView):
     
 
 
+class ActivityAndStudentUpdateView(UpdateView):
+    model = ActivityAndStudent
+    form_class = EditActivityAndStudentView
+    template_name = 'activity_and_student/activity_and_student_update.html'  # Nombre del template HTML
+    success_url = reverse_lazy('list_activities') 
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            print('GET',self.kwargs)
+            self.pk_student = self.request.user.profile.id
+            self.pk_activity = self.kwargs.get('pk_activity_int')
+        
+            perfil = Profile.objects.get(id = self.pk_student)
+            try:
+                act_and_student_obj = ActivityAndStudent.objects.get(
+                    activity_id = self.pk_activity ,
+                    profile = self.pk_student,
+                    year = perfil.academy_year
+                    
+                )
+                self.kwargs['pk'] = act_and_student_obj.pk
+            except ActivityAndStudent.DoesNotExist as e:
+                print(e)
+                raise Http404("ActivityAndStudent does not exist")
+            
+        if request.method == 'POST':
+            print('POST',self.kwargs)
+            self.pk_student = self.request.user.profile.id
+            self.pk_activity = self.kwargs.get('pk_activity_int')
+        
+            perfil = Profile.objects.get(id = self.pk_student)
+            try:
+                act_and_student_obj = ActivityAndStudent.objects.update(
+                    activity_id = self.pk_activity ,
+                    profile = self.pk_student,
+                    year = perfil.academy_year
+                    
+                )
+                self.kwargs['pk'] = act_and_student_obj
+            except ActivityAndStudent.DoesNotExist as e:
+                print(e)
+                raise Http404("ActivityAndStudent does not exist")
+            
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["pk_activity"] = self.request.path.split('/')[-1]
+        context["pk_activity_int"] = int(self.request.path.split('/')[-1])
+        return context
     

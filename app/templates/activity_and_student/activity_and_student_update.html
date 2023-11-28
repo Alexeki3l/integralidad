@@ -1,0 +1,909 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="my-3">
+        <form method= "POST" action='{% url "activity_and_student_update" pk_activity_int %}'>
+            {% csrf_token %}
+            <h5>Actividad: {{object.activity.name}}</h5>
+                            {% if '11' == pk_activity %}
+                                <hr>
+                                {% comment %} <label for="id_is_ayudante">Is ayudante:</label>
+                                <input type="checkbox" name="is_ayudante" id="id_is_ayudante"> {% endcomment %}
+                                <div class="row">
+                                    <div class="col form-check">
+                                        <label class="form-check-label" for="id_is_ayudante">
+                                            Alumno Ayudante ?
+                                        </label>
+                                        {{form.is_ayudante}}
+                                    </div>
+
+                                    <div class="col form-check">
+                                        <label class="form-check-label" for="id_grupo_edu_amor">
+                                            Pertenece al Grupo Educando por Amor ?
+                                        </label>
+                                        {{form.grupo_edu_amor}}
+                                    </div>
+                                    
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                                        {{form.asignaturas_ayudante}}
+                                    </div>
+                                    
+                                    <div class="col">
+                                    <label for="id_evaluacion">Evaluación:</label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                </div>
+                            <hr>
+                            {% endif %}
+                            {% if '10' == pk_activity %}
+                               
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Donde has Realizado la PID?
+                                        </label>
+                                        {{form.where_pid}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label >
+                                            Rol
+                                        </label>
+                                        {{form.rol}}
+                                    </div>
+                                    
+                                    <div class="col">
+                                    <label for="id_evaluacion">Evaluación:</label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                    <div class="col">
+                                    <label for="id_evaluacion">Actividades:</label>
+                                        {{form.actividades_pid}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '12' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Arrastres?
+                                        </label>
+                                        {{form.with_arrastres}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                                        {{form.asignaturas_ayudante}}
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '4' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Tienes roles certificados?
+                                        </label>
+                                        {{form.has_roles}}
+                                    </div>
+
+                                    <div class="col">
+                                    <label for="id_evaluacion">Marque los Roles:</label>
+                                        {{form.roles}}
+                                    </div>
+
+                                    <div class="col">
+                                    <label for="id_evaluacion">Marque el Nivel Alcanzado:</label>
+                                        {{form.nivel_alcanzado}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '13' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Mundiales?
+                                        </label>
+                                        {{form.with_mundiales}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Asignaturas:</label>
+                                        {{form.asignaturas_ayudante}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '14' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Repitencias?
+                                        </label>
+                                        {{form.with_repitencias}}
+                                    </div>
+
+                                    <div class="col">
+                                        <label for="id_asignaturas_ayudante">Cantidad:</label>
+                                        {{form.cantidad_repitencias}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '15' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Escriba algun otro reconocimiento:
+                                        </label>
+                                        {{form.other_reconocimiento}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% comment %} AQUI COMIENZAN LOS ASPECTOS INVESTIGATIVOS {% endcomment %}
+                            {% if '6' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Tienes publicaciones como Autor o Coautor?:
+                                        </label>
+                                        {{form.has_publicacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nombre de la publlicacion:
+                                        </label>
+                                        {{form.nombre_publicacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Que nivel tienes como Co/Autor?:
+                                        </label>
+                                        {{form.nivel_autor}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nivel Alcanzado con la publicaciones:
+                                        </label>
+                                        {{form.nivel_publicacion}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '5' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Perteneces a una linea de investigacion?:
+                                        </label>
+                                        {{form.has_investigacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Participacion en:
+                                        </label>
+                                        {{form.participacion}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Eventos:
+                                        </label>
+                                        {{form.nivel_evento}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '3' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Participacion en un evento?:
+                                        </label>
+                                        {{form.is_evento}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Marque los eventos:
+                                        </label>
+                                        {{form.nombre_evento}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Especifique los eventos de la Jornada de Ing. Ciencias Informatica:
+                                        </label>
+                                        {{form.nombre_sub_evento}}
+                                    </div>
+                                </div>
+                                <div class="row my-5">
+                                    <div class="col">
+                                        <label >
+                                            Nivel del Evento:               
+                                        </label>
+                                        {{form.nivel}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Lugar Alcanzado:               
+                                        </label>
+                                        {{form.result}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label >
+                                            Tienes Eventos Colateral:
+                                        </label>
+                                        {{form.es_colateral}}
+                                    </div>
+                                    <div class="col-4">
+                                        <label >
+                                            Escribe el nombre del evento:
+                                        </label>
+                                        {{form.nombre_evento_colateral}}
+                                    </div>
+                                    
+                                    <div class="col-3">
+                                        <label >
+                                            Resultados alcanzados:
+                                        </label>
+                                        {{form.result}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '7' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Perteneces a la FEU?:
+                                        </label>
+                                        {{form.is_feu}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Nivel:
+                                        </label>
+                                        {{form.nivel}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Cargo Ocupado en la FEU:
+                                        </label>
+                                        {{form.cargo_feu}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Perteneces a la UJC?:
+                                        </label>
+                                        {{form.is_ujc}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Comite de base:
+                                        </label>
+                                        {{form.comite_base}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Cargo Ocupado en la UJC::
+                                        </label>
+                                        {{form.cargo_ujc}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% if '8' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Escriba los actos, matutinos, veladas y etc. que halla participado:
+                                        </label>
+                                        {{form.descripcion}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '9' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <label >
+                                            Distincion 13 de Marzo:
+                                        </label>
+                                        {{form.distincion_marzo}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Distincion futuro maestro:
+                                        </label>
+                                        {{form.distincion_fututo_maestro}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Distincion Joven Maestro:
+                                        </label>
+                                        {{form.distincion_joven}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Eres Alumno Ayudante:
+                                        </label>
+                                        {{form.is_ayudante}}
+                                    </div>
+                                    <div class="col">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                    
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '17' == pk_activity %}
+                            
+                            <hr>
+                            <label >
+                                Escriba las actividades en la residencia, trabajos voluntarios, etc que halla partiicipado:
+                            </label>
+                                {{form.descripcion}}
+                            <hr>
+                            {% endif %}
+
+                            {% if '18' == pk_activity %}
+                            
+                            <hr>
+                            <div class="row">
+                                <div class="col-3">
+                                    <label >
+                                        Eres Miembro?:
+                                    </label>
+                                    {{form.is_miembro}}
+                                </div>
+                                <div class="col-3">
+                                    <label >
+                                        Nombre de la Cátedra:
+                                    </label>
+                                    {{form.nombre_catedra}}
+                                </div>
+                                <div class="col">
+                                    <label >
+                                        Actividades en las que has participado:
+                                    </label>
+                                    {{form.actividad_participado}}
+                                </div>
+                                
+                            </div>
+                            <hr>
+                            {% endif %}
+
+                            {% if '19' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label >
+                                            Participacion en actos y matutinos:
+                                        </label>
+                                        {{form.actividades_participacion_actos_matutinos}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label >
+                                            Participacion en el Festival de Artistas Aficionados:
+                                        </label>
+                                        {{form.if_participacion_festivales}}
+                                    </div>
+                                    <div class="col-6">
+                                        <label >
+                                            Manifestacion:
+                                        </label>
+                                        {{form.manifestacion_festivales}}
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col-6">
+                                        <label >
+                                            Nivel del Evento:
+                                        </label>
+                                        {{form.nivel_artista_aficionado}}
+                                    </div>
+                                    <div class="col-6">
+                                        <label >
+                                            Premio:
+                                        </label>
+                                        {{form.premio_artista_aficionado}}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row my-3">
+                                    <h5>Participacion como artistita en actividades de la facultad</h5>
+                                    <div class="col-6">
+                                        <label >
+                                            Nombre de la Actividad:
+                                        </label>
+                                        {{form.nombre_actividad_facultad}}
+                                    </div>
+                                    <div class="col-6">
+                                        <label >
+                                            Manifestacion:
+                                        </label>
+                                        {{form.manifestacion_actividad_facultad}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            
+                            {% if '20' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label >
+                                            Lugar donde se realizo:
+                                        </label>
+                                        {{form.lugar_dnd_realizo}}
+                                    </div>
+                                    <div class="col-6">
+                                        <label >
+                                            Evaluacion:
+                                        </label>
+                                        {{form.evaluacion}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '21' == pk_activity %}
+                                
+                                <hr>
+                                    <h5>Juegos Mellas</h5>
+                                    <div class="col-3">
+                                        <label >
+                                            Participacion en los Juegos Mella:
+                                        </label>
+                                        {{form.if_jjmm}}
+                                    </div>
+                                    <div id="loc" class="row"style="display:flex;justify-content:space-around;align-items:center;flex-direction:row">
+                                        <div id="otro" style="display:flex;justify-content:flex-start;align-items:center;flex-flow:row wrap">
+                                        <div id="este"style="display:flex; justify-content:center;align-items:flex-start;flex-flow:column wrap; margin-right:1rem">
+                                            <div id="inputs-container" class="col-12" style="display:flex; justify-content:center;align-items:flex-start;flex-flow:column wrap">
+                                                <label>Deporte</label>
+                                                {% comment %} <input type="text" pattern="^[A-Z][a-z]*$" title="Se espera que el nombre sean letras y comiencen con mayúscula" class="otroqwe" name="deporte" placeholder="Escribe un deporte"> {% endcomment %}
+                                                {{form.deporte}}
+                                            </div>
+                                            {% comment %} <div class="col-3">
+                                            <label >
+                                                Resultados:
+                                            </label>
+                                            {{form.resultado_deporte}}
+                                        </div> {% endcomment %}
+                                        <div class="col-3" id="id-input">
+                                            <label>
+                                                Resultados:
+                                            </label>
+                                            <select name="resultado_deporte" id="id_resultado_deporte" fdprocessedid="6sk1en" style="margin-bottom:1rem;width:12rem" class="form-control">
+                                            <option value="0" hidden selected >Selecciona una Opción</option>
+                                            <option value="1">Oro</option>
+                                            <option value="2">Plata</option>
+                                            <option value="3">Bronce</option>
+                                            <option value="4">Participacion</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <hr>
+                                <button type="button" onclick="addInput()" style="width:15rem; margin:1rem 25rem" class="btn btn-primary">Añadir Elemento</button>
+                                        <script>function addInput() {
+                                            let container = document.querySelector("#otro");
+                                            let div = document.getElementById("este").cloneNode(true);
+                                            {% comment %} div.querySelector("input").value="" {% endcomment %}
+                                            container.appendChild(div);
+                                            select.name = "resultado_deporte";
+                                            container.appendChild(div); 
+                                        }
+                                        </script>
+                                        
+                                        {% comment %} <div class="col-3">
+                                            <label >
+                                                Deporte:
+                                            </label>
+                                            {{form.deporte}}
+                                        </div> {% endcomment %}
+                                        
+                                        <div class="col-3">
+                                            <label >
+                                                Lugar:
+                                            </label>
+                                            {{form.lugar}}
+                                        </div>
+                                    </div>
+                                <hr>
+                                <h5>Copas y Mundiales</h5>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label >
+                                                Participacion en Copas y/o Mundialitos:
+                                            </label>
+                                            {{form.if_copas_mundialess}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Nombre del Evento:
+                                            </label>
+                                            {{form.nombre_evento_copas_mundiales}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Resultados:
+                                            </label>
+                                            {{form.resultado_copas_mundiales}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Lugar:
+                                            </label>
+                                            {{form.lugar_copas_mundiales}}
+                                        </div>
+                                    </div>
+                                <hr>
+                                <h5>Evento del Proyecto Marabana</h5>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label >
+                                                Participacion en el Proyecto Marabana:
+                                            </label>
+                                            {{form.if_marabana}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Nombre del Evento:
+                                            </label>
+                                            {{form.nombre_evento_marabana}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Resultados:
+                                            </label>
+                                            {{form.resultado_copas_mundiales}}
+                                        </div>
+                                        
+                                    </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '22' == pk_activity %}
+                                
+                                <hr>
+                                
+                                <div class="row">
+                                    <div class="col-4 border">
+                                        <label>
+                                            Cuartelerias:
+                                        </label>
+                                        {% for mes in meses %}
+                                            <div class="row my-2">
+                                                <div class="col-6">
+                                                    <label >
+                                                        {{mes}}:
+                                                    </label>
+                                                </div>
+                                                <div class="col-6">
+                                                    {{form.evaluacion_cuarteleria}}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-4 border">
+                                        <label>
+                                            Responsabilidad:
+                                        </label>
+                                            {{form.responsabilidad}}
+                                        
+                                        <div class="row my-3">
+                                        <label>
+                                            Evaluacion:
+                                        </label>
+                                            {{form.evaluacion_cuarteleria}}
+                                        </div>
+                                    </div>
+                                    <div class="col-4 border">
+                                        <div class="row">
+                                            <label>
+                                                Acta en la residencia:{{form.if_senalamiento_residencia}}
+                                            </label>
+                                                {% comment %} {{form.if_senalamiento_residencia}} {% endcomment %}
+                                        </div>
+                                        <label class='my-4'>
+                                            Motivo:
+                                        </label>
+                                            {{form.descripcion}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '23' == pk_activity %}
+                                
+                                <hr>
+                                    {% comment %} <h5>Juegos Mellas</h5> {% endcomment %}
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label >
+                                                Total de Ausencias:
+                                            </label>
+                                            {{form.total_ausencias}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Ausencias Justificadas:
+                                            </label>
+                                            {{form.total_ausencias_justificadas}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Ausencias Injustificadas:
+                                            </label>
+                                            {{form.total_ausencias_injustificadas}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Guardias Recuperadas:
+                                            </label>
+                                            {{form.total_recuperadas}}
+                                        </div>
+                                    </div>
+                                <hr class='my-3'>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label >
+                                                Acta o senalamiento por incumplimientos en la guardia estudiantil:
+                                            </label>
+                                            {{form.if_senalamiento_guardia_estudiantil}}
+                                        </div>
+                                        <div class="col-6">
+                                            <label >
+                                                Cantidad:
+                                            </label>
+                                            {{form.cantidad_senalamiento_guardia_estudiantil}}
+                                        </div>
+                                        
+                                    </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '24' == pk_activity %}
+                                
+                                <hr class='my-3'>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label >
+                                                Participacion en actividades de organizacion y limpieza de apartamento y áreas comunes:
+                                            </label>
+                                            {{form.if_actividades_limpieza_areas_comunes}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Nombre de la Actividad:
+                                            </label>
+                                            {{form.nombre_actividades_limpieza_areas_comunes}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Mes:
+                                            </label>
+                                            {{form.mes}}
+                                        </div>
+                                        <div class="col-3">
+                                            <label >
+                                                Resultados:
+                                            </label>
+                                            {{form.resultado_actividades_limpieza_areas_comunes}}
+                                        </div>
+                                        
+                                    </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <label >
+                                            Participacion en mi BK + Bonita:
+                                        </label>
+                                        {{form.if_bk_mas_bonita}}
+                                    </div>
+                                    <div class="col-7">
+                                        <label >
+                                            Reconocimiento:
+                                        </label>
+                                        {{form.other_reconocimiento}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '25' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <label >
+                                            Nombres de los reconocimiento:
+                                        </label>
+                                        {{form.other_reconocimiento}}
+                                    </div>
+                                    <div class="col-4">
+                                        <label >
+                                            Otorgado por:
+                                        </label>
+                                        {{form.reconocimiento_otorgado_por}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '26' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label >
+                                            Registrar Sanciones o medida disciplinaria:
+                                        </label>
+                                        {{form.sanciones_o_medida}}
+                                    </div>
+                                    <div class="col-8">
+                                        <label >
+                                            Motivos de la sancion o medida disciplinaria:
+                                        </label>
+                                        {{form.motivo_sancion}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '27' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label >
+                                            Registrar Señalamiento:
+                                        </label>
+                                        {{form.senalamiento_curso}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '28' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label >
+                                            Nombre de la distincion:
+                                        </label>
+                                        {{form.nombre_distincion}}
+                                    </div>
+                                    <div class="col-8">
+                                        <label >
+                                            Organismo que la otorga:
+                                        </label>
+                                        {{form.organismo_otorga_distincion}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+
+                            {% if '29' == pk_activity %}
+                                
+                                <hr>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label >
+                                            Nombre de la misión:
+                                        </label>
+                                        {{form.nombre_mision}}
+                                    </div>
+                                    <div class="col-4">
+                                        <label >
+                                            Función desempeñada:
+                                        </label>
+                                        {{form.funsion_desempenada}}
+                                    </div>
+                                    <div class="col-4">
+                                        <label >
+                                            Proceso:
+                                        </label>
+                                        {{form.proceso}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                            {% comment %} <div class="input-group mb-3">
+                                <label class="mx-3">
+                                    Evidencia:
+                                </label>
+                                <input type="file" name="file" class="form-control" required="" id="id_file" placeholder="Seleccione un archivo"  multiple>
+                                <label class="input-group-text" for="id_file">Evidencia</label>
+                            </div> {% endcomment %}
+                            {% comment %} <script>
+                                document.getElementById('id_file').addEventListener('change', function() {
+                                    var fileInput = this;
+                                    var filePath = fileInput.value;
+                                    var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                                    
+                                    if (!allowedExtensions.exec(filePath)) {
+                                        alert('Por favor, selecciona una imagen (JPEG, JPG, PNG o GIF).');
+                                        fileInput.value = '';
+                                        return false;
+                                    }
+                                });
+                            </script> {% endcomment %}
+                            {% comment %} {{form.file}} {% endcomment %}
+                            {% comment %} <input type="file" name="file" class="form-control" required="" id="id_file" multiple> {% endcomment %}
+                        <div >                           
+                          
+                          {% comment %} <div class="my-3">
+                            <!-- <button class="btn btn-danger">Cancelar</button> -->
+                            <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
+                            <button type="submit" class="btn btn-success">Guardar cambios</button>
+                          </div> {% endcomment %}
+                        <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
+                        <button type="submit" class="btn btn-success">Guardar cambios</button>
+        </form>
+
+{% endblock content %}

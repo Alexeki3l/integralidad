@@ -65,7 +65,6 @@
                           {% elif request.user.profile.rol_fac == 2 %}
                           <li><a class="dropdown-item" href="{% url "list_roles" 1 %}">Estudiantes</a></li>
                           <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="{% url "list_roles" 0 %}">Todos</a></li>
                         {% endif %}
                       </ul>
                     </li>

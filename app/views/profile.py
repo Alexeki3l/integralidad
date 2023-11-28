@@ -65,10 +65,38 @@ def list_roles(request, id_rol):
     }
     return render(request, 'roles/all_roles.html', context=context)
 
-# class AddProfileView(LoginRequiredMixin, CreateView):
-#     model = Profile
-#     form_class = AddProfileView
-#     template_name = 'roles/add_profile.html'
+def list_roles_by_rol(request, id_profile):
+    
+    profile = Profile.objects.get(id = id_profile)
+    
+    if profile.rol_fac == 3:
+        profiles = Profile.objects.all().filter(academy_year = profile.academy_year, rol_fac = 2)
+        rol = 'Profesores Guías'
+        
+            
+    elif profile.rol_fac == 2:
+        profiles = Profile.objects.all().filter(academy_year = profile.academy_year, rol_fac = 1)
+        rol = 'Estudiantes'
+        
+    try:
+        obj = profiles[0]
+    except IndexError:
+        obj = ""
+        
+    try:
+        if str(obj.grupo) == 'nan':
+            flag = True
+        else:
+            flag = False
+    except AttributeError:
+        flag = False
+    
+    context = {
+        'profiles':profiles,
+        'rol':rol,
+        'flag':flag
+    }
+    return render(request, 'roles/all_roles.html', context=context)
 
 # Detalle Profile
 class DetailsProfileView(DetailView):

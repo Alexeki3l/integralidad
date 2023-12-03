@@ -12,24 +12,36 @@
                 <label class="activity_and_student-check-label" for="id_is_ayudante">
                     Alumno Ayudante ?
                 </label>
-                {{activity_and_student.is_ayudante}}
+                {% if activity_and_student.is_ayudante %}
+                    SI
+                {% else %}
+                    NO
+                {% endif %}
+                
             </div>
 
             <div class="col activity_and_student-check">
                 <label class="activity_and_student-check-label" for="id_grupo_edu_amor">
                     Pertenece al Grupo Educando por Amor ?
                 </label>
-                {{activity_and_student.grupo_edu_amor}}
+                {% if activity_and_student.grupo_edu_amor %}
+                    SI
+                {% else %}
+                    NO
+                {% endif %}
             </div>
             
             <div class="col">
                 <label for="id_asignaturas_ayudante">Asignaturas:</label>
-                {{activity_and_student.asignaturas_ayudante}}
+                {% for asignatura in activity_and_student.asignaturas_ayudante.all %}
+                    {{asignatura.name}}
+                {% endfor %}
+                
             </div>
             
             <div class="col">
             <label for="id_evaluacion">Evaluación:</label>
-                {{activity_and_student.evaluacion}}
+                {{evaluacion}}
             </div>
         </div>
     <hr>
@@ -42,23 +54,23 @@
                 <label >
                     Donde has Realizado la PID?
                 </label>
-                {{activity_and_student.where_pid}}
+                {{where_pid}}
             </div>
 
             <div class="col">
                 <label >
                     Rol
                 </label>
-                {{activity_and_student.rol}}
+                {{rol}}
             </div>
             
             <div class="col">
             <label for="id_evaluacion">Evaluación:</label>
-                {{activity_and_student.evaluacion}}
+                {{evaluacion}}
             </div>
             <div class="col">
             <label for="id_evaluacion">Actividades:</label>
-                {{activity_and_student.actividades_pid}}
+                {{activity_and_student.get_actividades_pid_display}}
             </div>
         </div>
         <hr>
@@ -71,12 +83,19 @@
                 <label >
                     Arrastres?
                 </label>
-                {{activity_and_student.with_arrastres}}
+                {% if activity_and_student.with_arrastres %}
+                    SI
+                {% else %}
+                    NO
+                {% endif %}
+                
             </div>
 
             <div class="col">
                 <label for="id_asignaturas_ayudante">Asignaturas:</label>
-                {{activity_and_student.asignaturas_ayudante}}
+                {% for asignatura in activity_and_student.asignaturas_ayudante.all %}
+                    {{asignatura.name}}
+                {% endfor %}
             </div>
             
             
@@ -100,7 +119,7 @@
 
             <div class="col">
             <label for="id_evaluacion">Marque los Roles:</label>
-                {{activity_and_student.get_roles_display}}
+                {{roles}}
             </div>
 
             <div class="col">
@@ -119,12 +138,19 @@
                 <label >
                     Mundiales?
                 </label>
-                {{activity_and_student.with_mundiales}}
+                {% if activity_and_student.with_mundiales %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
+                
             </div>
 
             <div class="col">
                 <label for="id_asignaturas_ayudante">Asignaturas:</label>
-                {{activity_and_student.asignaturas_ayudante}}
+                {% for asignatura in activity_and_student.asignaturas_ayudante.all %}
+                    {{asignatura.name}}
+                {% endfor %}
             </div>
         </div>
         <hr>
@@ -137,7 +163,11 @@
                 <label >
                     Repitencias?
                 </label>
-                {{activity_and_student.with_repitencias}}
+                {% if activity_and_student.with_repitencias %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
             </div>
 
             <div class="col">
@@ -169,7 +199,11 @@
                 <label >
                     Tienes publicaciones como Autor o Coautor?:
                 </label>
-                {{activity_and_student.has_publicacion}}
+                {% if activity_and_student.has_publicacion %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
             </div>
             <div class="col">
                 <label >
@@ -181,13 +215,13 @@
                 <label >
                     Que nivel tienes como Co/Autor?:
                 </label>
-                {{activity_and_student.nivel_autor}}
+                {{activity_and_student.get_nivel_autor_display}}
             </div>
             <div class="col">
                 <label >
                     Nivel Alcanzado con la publicaciones:
                 </label>
-                {{activity_and_student.nivel_publicacion}}
+                {{activity_and_student.get_nivel_publicacion_display}}
             </div>
         </div>
         <hr>
@@ -200,19 +234,24 @@
                 <label >
                     Perteneces a una linea de investigacion?:
                 </label>
-                {{activity_and_student.has_investigacion}}
+                {% if activity_and_student.has_investigacion %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
+                
             </div>
             <div class="col">
                 <label >
                     Participacion en:
                 </label>
-                {{activity_and_student.participacion}}
+                {{activity_and_student.get_participacion_display}}
             </div>
             <div class="col">
                 <label >
                     Eventos:
                 </label>
-                {{activity_and_student.nivel_evento}}
+                {{activity_and_student.get_nivel_evento_display}}
             </div>
             
         </div>
@@ -226,19 +265,25 @@
                 <label >
                     Participacion en un evento?:
                 </label>
-                {{activity_and_student.is_evento}}
+                {% if activity_and_student.is_evento %}
+                    Si
+                {% else %}
+                    No
+                {% endif %}
             </div>
             <div class="col">
                 <label >
                     Marque los eventos:
                 </label>
-                {{activity_and_student.nombre_evento}}
+                {{nombre_evento}}
             </div>
             <div class="col">
+                {% if nombre_sub_evento != "" %}
                 <label >
                     Especifique los eventos de la Jornada de Ing. Ciencias Inactivity_and_studentatica:
                 </label>
-                {{activity_and_student.nombre_sub_evento}}
+                {{nombre_sub_evento}}
+                {% endif %}
             </div>
         </div>
         <div class="row my-5">
@@ -246,13 +291,13 @@
                 <label >
                     Nivel del Evento:               
                 </label>
-                {{activity_and_student.nivel}}
+                {{nivel}}
             </div>
             <div class="col">
                 <label >
                     Lugar Alcanzado:               
                 </label>
-                {{activity_and_student.result}}
+                {{lugar_alcanzados}}
             </div>
         </div>
         <hr>
@@ -261,7 +306,12 @@
                 <label >
                     Tienes Eventos Colateral:
                 </label>
-                {{activity_and_student.es_colateral}}
+                {% if activity_and_student.es_colateral %}
+                    SI
+                {% else %}
+                    NO
+                {% endif %}
+                
             </div>
             <div class="col-4">
                 <label >
@@ -274,7 +324,7 @@
                 <label >
                     Resultados alcanzados:
                 </label>
-                {{activity_and_student.result}}
+                {{result_alcanzados}}
             </div>
             
         </div>
@@ -340,7 +390,7 @@
                 </label>
                 {{activity_and_student.get_cargo_ujc_display}}
             </div>
-            
+
             <div class="col">
                 <label >
                     Evaluacion:
@@ -374,31 +424,42 @@
                 <label >
                     Distincion 13 de Marzo:
                 </label>
-                {{activity_and_student.distincion_marzo}}
+                {% if activity_and_student.distincion_marzo %}
+                    SI
+                {% endif %}
             </div>
             <div class="col">
                 <label >
                     Distincion futuro maestro:
                 </label>
-                {{activity_and_student.distincion_fututo_maestro}}
+                {% if activity_and_student.distincion_fututo_maestro %}
+                    SI
+                {% endif %}
+                
             </div>
             <div class="col">
                 <label >
                     Distincion Joven Maestro:
                 </label>
-                {{activity_and_student.distincion_joven}}
+                {% if activity_and_student.distincion_joven %}
+                    SI
+                {% endif %}
+                
             </div>
             <div class="col">
                 <label >
                     Eres Alumno Ayudante:
                 </label>
-                {{activity_and_student.is_ayudante}}
+                {% if activity_and_student.is_ayudante %}
+                    SI
+                {% endif %}
+                
             </div>
             <div class="col">
                 <label >
                     Evaluacion:
                 </label>
-                {{activity_and_student.evaluacion}}
+                {{evaluacion}}
             </div>
             
         </div>
@@ -411,7 +472,7 @@
     <label >
         Escriba las actividades en la residencia, trabajos voluntarios, etc que halla partiicipado:
     </label>
-        {{activity_and_student.descripcion}}
+        {{descripcion}}
     <hr>
     {% endif %}
 
@@ -423,7 +484,9 @@
             <label >
                 Eres Miembro?:
             </label>
-            {{activity_and_student.is_miembro}}
+            {% if activity_and_student.is_miembro %}
+                SI
+            {% endif %}
         </div>
         <div class="col-3">
             <label >
@@ -459,7 +522,10 @@
                 <label >
                     Participacion en el Festival de Artistas Aficionados:
                 </label>
-                {{activity_and_student.if_participacion_festivales}}
+                {% if activity_and_student.if_participacion_festivales %}
+                    SI
+                {% endif %}
+                
             </div>
             <div class="col-6">
                 <label >
@@ -473,13 +539,13 @@
                 <label >
                     Nivel del Evento:
                 </label>
-                {{activity_and_student.nivel_artista_aficionado}}
+                {{activity_and_student.get_nivel_artista_aficionado_display}}
             </div>
             <div class="col-6">
                 <label >
                     Premio:
                 </label>
-                {{activity_and_student.premio_artista_aficionado}}
+                {{activity_and_student.get_premio_artista_aficionado_display}}
             </div>
         </div>
         <hr>
@@ -515,7 +581,7 @@
                 <label >
                     Evaluacion:
                 </label>
-                {{activity_and_student.evaluacion}}
+                {{evaluacion}}
             </div>
         </div>
         <hr>
@@ -529,7 +595,12 @@
                 <label >
                     Participacion en los Juegos Mella:
                 </label>
-                {{activity_and_student.if_jjmm}}
+                {% if if_jjmm %}
+                    SI
+                {% else %}
+                    NO
+                {% endif %}
+                
             </div>
             <div id="loc" class="row"style="display:flex;justify-content:space-around;align-items:center;flex-direction:row">
                 <div id="otro" style="display:flex;justify-content:flex-start;align-items:center;flex-flow:row wrap">
@@ -537,7 +608,7 @@
                     <div id="inputs-container" class="col-12" style="display:flex; justify-content:center;align-items:flex-start;flex-flow:column wrap">
                         <label>Deporte</label>
                         {% comment %} <input type="text" pattern="^[A-Z][a-z]*$" title="Se espera que el nombre sean letras y comiencen con mayúscula" class="otroqwe" name="deporte" placeholder="Escribe un deporte"> {% endcomment %}
-                        {{activity_and_student.deporte}}
+                        {{deporte}}
                     </div>
                     {% comment %} <div class="col-3">
                     <label >
@@ -545,35 +616,22 @@
                     </label>
                     {{activity_and_student.resultado_deporte}}
                 </div> {% endcomment %}
-                <div class="col-3" id="id-input">
+                <div class="col-12" id="id-input">
                     <label>
                         Resultados:
                     </label>
-                    <select name="resultado_deporte" id="id_resultado_deporte" fdprocessedid="6sk1en" style="margin-bottom:1rem;width:12rem" class="activity_and_student-control">
-                    <option value="0" hidden selected >Selecciona una Opción</option>
-                    <option value="1">Oro</option>
-                    <option value="2">Plata</option>
-                    <option value="3">Bronce</option>
-                    <option value="4">Participacion</option>
-                    </select>
+                    {{resultado_deporte}}
                 </div>
             </div>
         </div>
         </div>
         <hr>
                 
-                {% comment %} <div class="col-3">
-                    <label >
-                        Deporte:
-                    </label>
-                    {{activity_and_student.deporte}}
-                </div> {% endcomment %}
-                
                 <div class="col-3">
                     <label >
                         Lugar:
                     </label>
-                    {{activity_and_student.lugar}}
+                    {{activity_and_student.get_lugar_display}}
                 </div>
             </div>
         <hr>
@@ -583,7 +641,12 @@
                     <label >
                         Participacion en Copas y/o Mundialitos:
                     </label>
-                    {{activity_and_student.if_copas_mundialess}}
+                    {% if activity_and_student.if_copas_mundialess %}
+                        SI
+                    {% else %}
+                        NO
+                    {% endif %}
+                    
                 </div>
                 <div class="col-3">
                     <label >
@@ -595,7 +658,7 @@
                     <label >
                         Resultados:
                     </label>
-                    {{activity_and_student.resultado_copas_mundiales}}
+                    {{resultados_copas_mundiales}}
                 </div>
                 <div class="col-3">
                     <label >
@@ -611,19 +674,24 @@
                     <label >
                         Participacion en el Proyecto Marabana:
                     </label>
-                    {{activity_and_student.if_marabana}}
+                    {% if activity_and_student.if_marabana %}
+                        SI
+                    {% else %}
+                        NO
+                    {% endif %}
+                    
                 </div>
                 <div class="col-3">
                     <label >
                         Nombre del Evento:
                     </label>
-                    {{activity_and_student.nombre_evento_marabana}}
+                    {{activity_and_student.get_nombre_evento_marabana_display}}
                 </div>
                 <div class="col-3">
                     <label >
                         Resultados:
                     </label>
-                    {{activity_and_student.resultado_copas_mundiales}}
+                    {{resultados_alcanzados_marabana}}
                 </div>
                 
             </div>
@@ -639,7 +707,8 @@
                 <label>
                     Cuartelerias:
                 </label>
-                {% for mes in meses %}
+                
+                {% for mes, evaluacion in cuartelerias.items %}
                     <div class="row my-2">
                         <div class="col-6">
                             <label >
@@ -647,7 +716,7 @@
                             </label>
                         </div>
                         <div class="col-6">
-                            {{activity_and_student.evaluacion_cuarteleria}}
+                            {{evaluacion}}
                         </div>
                     </div>
                 {% endfor %}
@@ -656,20 +725,25 @@
                 <label>
                     Responsabilidad:
                 </label>
-                    {{activity_and_student.responsabilidad}}
+                    {{activity_and_student.get_responsabilidad_display}}
                 
                 <div class="row my-3">
                 <label>
-                    Evaluacion:
+                    Evaluacion: {{evaluacion_responsabilidad}}
                 </label>
-                    {{activity_and_student.evaluacion_cuarteleria}}
+                    
                 </div>
             </div>
             <div class="col-4 border">
                 <div class="row">
                     <label>
-                        Acta en la residencia:{{activity_and_student.if_senalamiento_residencia}}
+                        Acta en la residencia:{% if activity_and_student.if_senalamiento_residencia %}
+                        SI
+                    {% else %}
+                        NO
+                    {% endif %}
                     </label>
+                        
                         {% comment %} {{activity_and_student.if_senalamiento_residencia}} {% endcomment %}
                 </div>
                 <label class='my-4'>
@@ -716,8 +790,13 @@
                 <div class="col-6">
                     <label >
                         Acta o senalamiento por incumplimientos en la guardia estudiantil:
+                        {% if activity_and_student.if_senalamiento_guardia_estudiantil %}
+                        SI
+                    {% else %}
+                        NO
+                    {% endif %}
                     </label>
-                    {{activity_and_student.if_senalamiento_guardia_estudiantil}}
+                    
                 </div>
                 <div class="col-6">
                     <label >
@@ -738,7 +817,12 @@
                     <label >
                         Participacion en actividades de organizacion y limpieza de apartamento y áreas comunes:
                     </label>
-                    {{activity_and_student.if_actividades_limpieza_areas_comunes}}
+                    {% if activity_and_student.if_actividades_limpieza_areas_comunes %}
+                        SI
+                    {% else %}
+                        NO
+                    {% endif %}
+                    
                 </div>
                 <div class="col-3">
                     <label >
@@ -766,7 +850,12 @@
                 <label >
                     Participacion en mi BK + Bonita:
                 </label>
-                {{activity_and_student.if_bk_mas_bonita}}
+                {% if activity_and_student.if_bk_mas_bonita %}
+                        SI
+                    {% else %}
+                        NO
+                    {% endif %}
+                
             </div>
             <div class="col-7">
                 <label >
@@ -872,7 +961,7 @@
                 <label >
                     Proceso:
                 </label>
-                {{activity_and_student.proceso}}
+                {{activity_and_student.get_proceso_display}}
             </div>
         </div>
         <hr>

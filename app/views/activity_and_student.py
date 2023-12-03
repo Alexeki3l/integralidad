@@ -945,11 +945,79 @@ class DetailsActivityAndStudentForProfessorView(DetailView):
         context["pk_activity"] = str(self.pk_activity)
         
         if object.activity.id == 7:
-            
             context['nivel'] = object.TYPE_NIVEL[int(object.nivel)][1]
             context['evaluacion_feu'] = object.TYPE_EVALUACION[int(str(object.evaluacion).split(',')[0])-1][1]
             context['evaluacion_ujc'] = object.TYPE_EVALUACION[int(str(object.evaluacion).split(',')[1])-1][1]
         
+        if object.activity.id == 11:
+            context['evaluacion'] = object.TYPE_EVALUACION[int(object.evaluacion)-1][1]
+        
+        if object.activity.id == 10:
+            context['evaluacion'] = object.TYPE_EVALUACION[int(object.evaluacion)-1][1]
+            context['rol'] = str(object.rol).replace("['"," ").replace("']"," ")
+            context['where_pid'] = str(object.where_pid).replace("['"," ").replace("']"," ")
+        
+        if object.activity.id == 4:
+            roles = str(object.roles).replace("['"," ").replace("']"," ")
+            cadena=""
+            for rol in roles:
+                cadena += f' {object.TYPE_ROLES[int(rol)-1][1]},'
+            context['roles'] = cadena[:-1]
+            
+        if object.activity.id == 3:
+            numbers_pos = str(object.nombre_evento).replace("['"," ").replace("']"," ").split(',')
+            cadena=""
+            for number in numbers_pos:
+                number = number.replace("'","")
+                if '4' in number:
+                    number_pos_2 = str(object.nombre_sub_evento).replace("['"," ").replace("']"," ")
+                    context['nombre_sub_evento'] = object.TYPE_JORNADA_ICI[int(number_pos_2)][1]
+                cadena += f' {object.TYPE_NOMBRE_EVENTO[int(number)][1]},'
+            context['nombre_evento'] = cadena[:-1]
+            
+            numbers_pos_nivel = str(object.nivel).replace("['"," ").replace("']"," ").split(',')
+            cadena = ""
+            for number in numbers_pos_nivel:
+                cadena += f' {object.TYPE_NIVEL[int(number)][1]},'
+            context['nivel'] = cadena[:-1]
+            
+            numbers_pos_result = str(object.result).replace("['"," ").replace("']"," ").split(',')
+            context['lugar_alcanzados'] = object.TYPE_RESULT[int(numbers_pos_result[0].replace("'",""))][1]   
+            context['result_alcanzados'] = object.TYPE_RESULT[int(numbers_pos_result[1].replace("'",""))][1]   
+            
+        if object.activity.id == 9:
+            context['evaluacion'] = object.TYPE_EVALUACION[int(object.evaluacion)][1]
+        
+        if object.activity.id == 17:
+            context['descripcion'] = str(object.descripcion).replace("['"," ").replace("']"," ")
+            
+        if object.activity.id == 20:
+            context['evaluacion'] = object.TYPE_EVALUACION[int(object.evaluacion)][1]
+            
+        if object.activity.id == 21:
+            numbers_pos = str(object.deporte).replace("['"," ").replace("']"," ").split(',')
+            cadena=""
+            for number in numbers_pos:
+                number = number.replace("'","")
+                cadena += f' {object.TYPE_DEPORTE[int(number)][1]},'
+            context['deporte'] = cadena[:-1]
+            
+            numbers_pos = str(object.resultado_deporte).replace("['"," ").replace("']"," ").split(',')
+            cadena=""
+            for number in numbers_pos:
+                number = number.replace("'","")
+                cadena += f' {object.TYPE_RESULTADO_DEPORTE[int(number)][1]},'
+            context['resultado_deporte'] = cadena[:-1]
+            
+            numbers_pos_resultado_copas_mundiales = str(object.resultado_copas_mundiales).replace("['"," ").replace("']"," ").split(',')
+            context['resultados_copas_mundiales'] = object.TYPE_RESULTADO_DEPORTE[int(numbers_pos_resultado_copas_mundiales[0].replace("'",""))][1]   
+            context['resultados_alcanzados_marabana'] = object.TYPE_RESULTADO_DEPORTE[int(numbers_pos_resultado_copas_mundiales[1].replace("'",""))][1]   
+        
+        if object.activity.id == 22:
+            context['evaluacion_responsabilidad'] = object.cuartelerias['evaluacion_responsabilidad']
+            dict_aux = object.cuartelerias.copy()
+            del dict_aux['evaluacion_responsabilidad']
+            context['cuartelerias'] = dict_aux
         
         return context
     

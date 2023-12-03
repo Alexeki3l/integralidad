@@ -288,25 +288,30 @@
                 <label >
                     Perteneces a la FEU?:
                 </label>
-                {{activity_and_student.is_feu}}
+                {% if activity_and_student.is_feu %}
+                    SI 
+                {% else %}
+                    NO
+                {% endif %}
+                
             </div>
             <div class="col">
                 <label >
                     Nivel:
                 </label>
-                {{activity_and_student.nivel}}
+                {{nivel}}
             </div>
             <div class="col">
                 <label >
                     Cargo Ocupado en la FEU:
                 </label>
-                {{activity_and_student.cargo_feu}}
+                {{activity_and_student.get_cargo_feu_display}}
             </div>
             <div class="col">
                 <label >
                     Evaluacion:
                 </label>
-                {{activity_and_student.evaluacion}}
+                {{evaluacion_feu}}
             </div>
         </div>
         <hr>
@@ -315,7 +320,12 @@
                 <label >
                     Perteneces a la UJC?:
                 </label>
-                {{activity_and_student.is_ujc}}
+                {% if activity_and_student.is_ujc %}
+                    SI 
+                {% else %}
+                    NO
+                {% endif %}
+                
             </div>
             <div class="col">
                 <label >
@@ -323,17 +333,19 @@
                 </label>
                 {{activity_and_student.comite_base}}
             </div>
+
             <div class="col">
                 <label >
                     Cargo Ocupado en la UJC::
                 </label>
-                {{activity_and_student.cargo_ujc}}
+                {{activity_and_student.get_cargo_ujc_display}}
             </div>
+            
             <div class="col">
                 <label >
                     Evaluacion:
                 </label>
-                {{activity_and_student.evaluacion}}
+                {{evaluacion_ujc}}
             </div>
             
         </div>
@@ -874,7 +886,7 @@
         {% endfor %}
     </div>
     <hr>
-    <form method= "POST" action="">
+    <form method= "POST" action="{% url "invalidar_actividad" activity_and_student.pk %}">
         {% csrf_token %}
         <label class="form-check-label" for="id_is_valid">
             Validar actividad:
@@ -882,8 +894,8 @@
         <input type="checkbox" class="form-check-input" name="is_valid" id="id_is_valid" checked="">
         <div class="my-3">
             <!-- <button class="btn btn-danger">Cancelar</button> -->
-            <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
-            <button class="btn btn-success">Añadir</button>
+            <a href="{% url "list_activities" %}" class="btn btn-success">Cancelar</a>
+            <button class="btn btn-warning">Invalidar</button>
           </div>
     </form>
 

@@ -24,6 +24,8 @@ from app.metodos_personalizados.message import *
 from django.views.generic.list import MultipleObjectMixin
 from django.shortcuts import get_object_or_404
 
+from django.http import Http404
+
 import math
 
 # ----------------------CRUD de ActividadAndStudent ----------------------------
@@ -33,6 +35,8 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
     template_name = 'activity_and_student/add_activity_and_student.html'
     
     def dispatch(self, request, *args, **kwargs):
+        
+        activities = Activity.objects.all()
         
         if request.method == 'POST':
             pk_activity = int(self.request.path.split('/')[-1])
@@ -56,7 +60,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 if defaults['where_pid'][0] and defaults['rol'][0] and defaults['evaluacion'] and defaults['actividades_pid']:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 else:
                     messages.error(request, ERROR_GENERAL)
                     return redirect('add_activities_and_student', pk = pk_activity)
@@ -122,7 +126,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     asignatura = Asignatura.objects.get(id=id_asignatura)
                     objeto.asignaturas_ayudante.add(asignatura)
 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
             
             #Arrastres
             elif 12 == pk_activity:
@@ -159,7 +163,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     asignatura = Asignatura.objects.get(id=id_asignatura)
                     objeto.asignaturas_ayudante.add(asignatura)
                 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
             # Mundiales
             elif 13 == pk_activity:
@@ -196,7 +200,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     asignatura = Asignatura.objects.get(id=id_asignatura)
                     objeto.asignaturas_ayudante.add(asignatura)
                 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
             
             # Repitencias
             elif 14 == pk_activity:
@@ -220,7 +224,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 objeto, creado, _ = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
         
             #Reconocimiento en otras esferas
             elif 15 == pk_activity:
@@ -232,7 +236,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 objeto, creado, _ = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
         
             # # # # # # INVESTIGATIVA # # # # # #
@@ -261,7 +265,8 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                return redirect('list_activities')
+                # return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
             # Eventos y Competenias
             elif 3 == pk_activity:
@@ -317,7 +322,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 objeto, creado, is_create_image = crear_objeto_activity_and_student(
                     request, pk_activity, pk_profile, defaults)
                 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
             # Pertenece a alguna linea de investigacion
             elif 5 == pk_activity:
@@ -334,7 +339,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 elif not defaults['has_investigacion'] and (defaults['participacion'][0] !='' ) and (defaults['nivel_evento'][0] !='' ):
                     messages.error(request, ERROR_GENERAL)
@@ -356,7 +361,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -405,7 +410,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 elif (defaults['is_ujc'] and (defaults['comite_base'][0] !='' ) and (defaults['cargo_ujc'][0] !='' ) and (defaults['evaluacion'] !='' )) and \
                     (not defaults['is_feu'] and (defaults['nivel'][0] =='' ) and (defaults['cargo_feu'][0] =='' ) ):
@@ -419,7 +424,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 elif (defaults['is_ujc'] and (defaults['comite_base'][0] !='' ) and (defaults['cargo_ujc'][0] !='' ) and (defaults['evaluacion'] !='' )) and \
                     (defaults['is_feu'] and (defaults['nivel'][0] !='' ) and (defaults['cargo_feu'][0] !='' ) and (defaults['evaluacion'] !='' )):
@@ -434,7 +439,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                         
                         objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                        return redirect('list_activities')
+                        return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_ORGANIZACIONES)
@@ -450,7 +455,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
             # Reconocimientos logrados en este ambito
             elif pk_activity == 9:
@@ -500,7 +505,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
 
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 if is_true and defaults['evaluacion'][0] == '':
                     messages.error(request, ERROR_GENERAL)
@@ -517,7 +522,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 else:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
 
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
             
             # Miembro o participacion en actividades de las Catedras de la Universidad
             elif pk_activity == 18: 
@@ -534,7 +539,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 if defaults['is_miembro'] and (defaults['nombre_catedra'] !='')  and (defaults['actividad_participado'] != ''):
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -567,7 +572,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                         defaults['premio_artista_aficionado'] = 0
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -583,7 +588,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     defaults['evaluacion'] = int(defaults['evaluacion'])
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -647,7 +652,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     defaults['lugar'] = int(defaults['lugar'])
                     
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -700,7 +705,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 defaults['cuartelerias'] = cuartelerias_dict
                 
                 objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                         
             elif pk_activity == 23:
                 try:
@@ -727,7 +732,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                     return redirect('add_activities_and_student', pk = pk_activity)
                 
                 objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                return redirect('list_activities')
+                return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
             
             elif pk_activity == 24:
                 try:
@@ -754,11 +759,11 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 if condicion_1:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 elif condicion_1 and condicion_2:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -772,7 +777,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 if condicion_1:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -786,7 +791,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 if condicion_1:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -797,7 +802,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 if defaults['senalamiento_curso']!="":
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -811,7 +816,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                 
                 if condicion_1:
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -831,7 +836,7 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
                         defaults['proceso'] = 0
                         
                     objeto, creado, is_create_image = crear_objeto_activity_and_student(request, pk_activity, pk_profile, defaults)
-                    return redirect('list_activities')
+                    return render(request, 'activity/activities.html', {'elemento_anadido':True, 'activities':activities})
                 
                 else:
                     messages.error(request, ERROR_GENERAL)
@@ -853,10 +858,28 @@ class AddActivityAndStudentView(LoginRequiredMixin, CreateView):
         context['meses'] = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Septiembre","Octubre","Noviembre","Diciembre"]
         return context
     
+
+
+
+
 def list_activity_and_student_for_profesor(request, pk_student):
     if request.user.profile.rol_fac != 1:
         data = {}
         list_annos = ["", 'Primer Año', 'Segundo Año', 'Tercer Año', 'Cuarto Año']
+        
+        in_valida = False
+        cadena=""
+        list_ids =[]
+        
+        act_and_student_filter = ActivityAndStudent.objects.filter(profile_id = pk_student, is_valid = False)
+        if act_and_student_filter.count() > 0:
+            for act_and_student in act_and_student_filter:
+                cadena += f' {act_and_student.activity.name},'
+                list_ids.append(act_and_student.activity.id)
+                # act_and_student.delete()
+            in_valida = True
+        cadena = cadena[:-1]
+        
         
         for pos, anno in enumerate(list_annos):
             if pos != 0:
@@ -867,7 +890,7 @@ def list_activity_and_student_for_profesor(request, pk_student):
                     continue
                 dict_aux = {}
                 for aspecto in Aspecto.objects.all():
-                    list_activitys_relationed_with_student = profile.activity_set.filter(aspecto = aspecto)
+                    list_activitys_relationed_with_student = profile.activity_set.filter(aspecto = aspecto).exclude(id__in=list_ids)
                     name = '_'.join(aspecto.name.split())
                     dict_aux[f'{name}'] = list_activitys_relationed_with_student
                 data[anno] = dict_aux
@@ -880,6 +903,8 @@ def list_activity_and_student_for_profesor(request, pk_student):
             'tercer_anno':data['Tercer Año'],
             'cuarto_anno':data['Cuarto Año'],
             'pk_student':pk_student,
+            'cadena': cadena,
+            'in_valida': in_valida
         }
         print(data['Cuarto Año'])
         return render(request, 'activity_and_student/list_activity_and_student_for_profesor.html', context=context)
@@ -903,7 +928,6 @@ class DetailsActivityAndStudentForProfessorView(DetailView):
                     activity_id = self.pk_activity ,
                     profile = self.pk_student,
                     year = perfil.academy_year
-                    
                 )
             except:
                 pass
@@ -917,7 +941,16 @@ class DetailsActivityAndStudentForProfessorView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        object = context['object']
         context["pk_activity"] = str(self.pk_activity)
+        
+        if object.activity.id == 7:
+            
+            context['nivel'] = object.TYPE_NIVEL[int(object.nivel)][1]
+            context['evaluacion_feu'] = object.TYPE_EVALUACION[int(str(object.evaluacion).split(',')[0])-1][1]
+            context['evaluacion_ujc'] = object.TYPE_EVALUACION[int(str(object.evaluacion).split(',')[1])-1][1]
+        
+        
         return context
     
 
@@ -948,19 +981,29 @@ class ActivityAndStudentUpdateView(UpdateView):
                 raise Http404("ActivityAndStudent does not exist")
             
         if request.method == 'POST':
+            print(request.POST)
             print('POST',self.kwargs)
+            
+            defaults = request.POST.copy()
+            del defaults['csrfmiddlewaretoken']
+            
+            
             self.pk_student = self.request.user.profile.id
             self.pk_activity = self.kwargs.get('pk_activity_int')
         
             perfil = Profile.objects.get(id = self.pk_student)
             try:
-                act_and_student_obj = ActivityAndStudent.objects.update(
+                act_and_student_obj = ActivityAndStudent.objects.get(
                     activity_id = self.pk_activity ,
                     profile = self.pk_student,
                     year = perfil.academy_year
-                    
                 )
-                self.kwargs['pk'] = act_and_student_obj
+                
+                if act_and_student_obj:
+                    act_and_student_obj.delete()
+                    
+                return redirect('add_activities_and_student', pk=self.kwargs.get('pk_activity_int'))
+                
             except ActivityAndStudent.DoesNotExist as e:
                 print(e)
                 raise Http404("ActivityAndStudent does not exist")
@@ -971,5 +1014,29 @@ class ActivityAndStudentUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         context["pk_activity"] = self.request.path.split('/')[-1]
         context["pk_activity_int"] = int(self.request.path.split('/')[-1])
+        context['activity_and_student'] = ActivityAndStudent.objects.get(
+                    activity_id = int(self.request.path.split('/')[-1]) ,
+                    profile = self.request.user.profile,
+                    year = self.request.user.profile.academy_year
+                )
         return context
+    
+    
+def invalidar_actividad(request, pk):
+    defaults = request.POST.copy()
+    del defaults['csrfmiddlewaretoken']
+    
+    try:
+        if 'on' in defaults['is_valid']:
+            defaults['is_valid'] = True
+    except:
+        defaults['is_valid'] = False
+
+    if not defaults['is_valid']:
+        act_and_student = ActivityAndStudent.objects.get(id = pk)
+        act_and_student.is_valid = False
+        act_and_student.save()
+        
+    return redirect('list_activity_and_student_for_profesor', pk_student= act_and_student.profile.id)
+    
     

@@ -22,13 +22,24 @@ import math
 def list_activities(request):
     if request.user.profile.rol_fac == 1:
         
-        activities = Activity.objects.all().order_by('-id')
+        in_valida = False
+        cadena=""
         
-        # activities_and_student_filter = ActivityAndStudent.objects.filter(profile = request.user.profile).values_list('activity', flat=True)
-        # activities = activities.exclude(id__in = [activities_and_student_filter])
-        # print(activities)
+        activities = Activity.objects.all()
+        
+        act_and_student_filter = ActivityAndStudent.objects.filter(profile = request.user.profile, is_valid = False)
+        
+        if act_and_student_filter.count() > 0:
+            for act_and_student in act_and_student_filter:
+                cadena += f' {act_and_student.activity.name},'
+                act_and_student.delete()
+            in_valida = True
+        cadena = cadena[:-1]
+        
         context = {
-        'activities':activities
+            'activities':activities,
+            'cadena': cadena,
+            'in_valida': in_valida
         }
         return render(request, 'activity/activities.html', context=context)
     else:
@@ -40,11 +51,6 @@ class AddActivityView(LoginRequiredMixin, CreateView):
     model = Activity
     form_class = AddActivityView
     template_name = 'activity/add_activity.html'
-
-    # def form_valid(self, form):
-    #     form.instance.created = timezone.now()
-    #     form.instance.encargado = self.request.user
-    #     return super().form_valid(form)
 
 
 # Detalle Actividades

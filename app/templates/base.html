@@ -44,7 +44,7 @@
                   </li>
                   {% endif %}
                   {% if request.user.profile.rol_fac != 1 %}
-                    <li class="nav-item dropdown-center">
+                    <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Roles
                       </a>
@@ -70,7 +70,7 @@
                     </li>
                   {% endif %}
                   {% if request.user.profile.rol_fac == 1 %}
-                  <li class="nav-item dropdown-center">
+                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Caracterizacion
                     </a>

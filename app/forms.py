@@ -35,7 +35,7 @@ class AddActivityAndStudentView(forms.ModelForm):
             
             'evaluacion':forms.Select(attrs={'class':'form-control'}),
             
-            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'distincion_marzo':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'distincion_fututo_maestro':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'distincion_joven':forms.CheckboxInput(attrs={'class':'form-check-input'}),
@@ -45,7 +45,7 @@ class AddActivityAndStudentView(forms.ModelForm):
             'nombre_evento':forms.SelectMultiple(attrs={'class':'form-control'}),
             'nombre_sub_evento':forms.Select(attrs={'class':'form-control'}),
             'es_colateral':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_evento_colateral':forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_evento_colateral':forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'nivel':forms.SelectMultiple(attrs={'class':'form-control'}),
             'result':forms.SelectMultiple(attrs={'class':'form-control'}),
             
@@ -58,12 +58,12 @@ class AddActivityAndStudentView(forms.ModelForm):
             'nivel_evento':forms.Select(attrs={'class':'form-control'}),
             
             'has_publicacion':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_publicacion': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_publicacion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'nivel_autor':forms.Select(attrs={'class':'form-control'}),
             'nivel_publicacion':forms.Select(attrs={'class':'form-control'}),
             
-            'where_pid': forms.TextInput(attrs={'class': 'form-control'}),
-            'rol': forms.TextInput(attrs={'class': 'form-control'}),
+            'where_pid': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'rol': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'actividades_pid':forms.Select(attrs={'class':'form-control'}),
             
             'grupo_edu_amor':forms.CheckboxInput(attrs={'class':'form-check-input'}),
@@ -73,24 +73,24 @@ class AddActivityAndStudentView(forms.ModelForm):
             'with_repitencias':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'cantidad_repitencias':forms.NumberInput(attrs={'class':'form-control'}),
             
-            'other_reconocimiento':forms.Textarea(attrs={'class':'form-control'}),
+            'other_reconocimiento':forms.Textarea(attrs={'class':'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'is_miembro':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_catedra': forms.TextInput(attrs={'class': 'form-control'}),
-            'actividad_participado': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_catedra': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'actividad_participado': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'actividades_participacion_actos_matutinos':forms.Textarea(attrs={'class':'form-control', 
-                                                                            'placeholder':"Escribe actos y matutinos que hallas participado."}),
+                                                                            'placeholder':"Escribe actos y matutinos que hallas participado.", 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_participacion_festivales':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'manifestacion_festivales': forms.TextInput(attrs={'class': 'form-control'}),            
+            'manifestacion_festivales': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),            
             'nivel_artista_aficionado':forms.Select(attrs={'class':'form-control'}),
             'premio_artista_aficionado':forms.Select(attrs={'class':'form-control'}),
 
-            'nombre_actividad_facultad': forms.TextInput(attrs={'class': 'form-control'}),
-            'manifestacion_actividad_facultad': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_actividad_facultad': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'manifestacion_actividad_facultad': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'lugar_dnd_realizo': forms.TextInput(attrs={'class': 'form-control'}),
+            'lugar_dnd_realizo': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_jjmm':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'deporte':forms.Select(attrs={'class':'form-control'}),
@@ -98,9 +98,9 @@ class AddActivityAndStudentView(forms.ModelForm):
             'lugar':forms.Select(attrs={'class':'form-control'}),
             
             'if_copas_mundialess':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_evento_copas_mundiales': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_evento_copas_mundiales': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'resultado_copas_mundiales':forms.Select(attrs={'class':'form-control'}),
-            'lugar_copas_mundiales': forms.TextInput(attrs={'class': 'form-control'}),
+            'lugar_copas_mundiales': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_marabana':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'nombre_evento_marabana':forms.Select(attrs={'class':'form-control'}),
@@ -121,30 +121,30 @@ class AddActivityAndStudentView(forms.ModelForm):
             'cantidad_senalamiento_guardia_estudiantil':forms.NumberInput(attrs={'class':'form-control'}),
             
             'if_actividades_limpieza_areas_comunes':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control'}),
-            'mes': forms.TextInput(attrs={'class': 'form-control'}),
-            'resultado_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'mes': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'resultado_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_bk_mas_bonita':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             
-            'reconocimiento_otorgado_por': forms.TextInput(attrs={'class': 'form-control'}),
+            'reconocimiento_otorgado_por': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'sanciones_o_medida': forms.TextInput(attrs={'class': 'form-control'}),
-            'motivo_sancion': forms.TextInput(attrs={'class': 'form-control'}),
+            'sanciones_o_medida': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'motivo_sancion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'senalamiento_curso': forms.TextInput(attrs={'class': 'form-control'}),
+            'senalamiento_curso': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'nombre_distincion': forms.TextInput(attrs={'class': 'form-control'}),
-            'organismo_otorga_distincion': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_distincion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'organismo_otorga_distincion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'nombre_mision': forms.TextInput(attrs={'class': 'form-control'}),
-            'funsion_desempenada': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_mision': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'funsion_desempenada': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'proceso':forms.Select(attrs={'class':'form-control'}),
             
             'asignaturas_ayudante':forms.SelectMultiple(attrs={'class':'form-control'}),
             
-            'comite_base': forms.TextInput(attrs={'class': 'form-control'}),
+            'comite_base': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             
         }
@@ -179,7 +179,7 @@ class EditActivityAndStudentView(forms.ModelForm):
             
             'evaluacion':forms.Select(attrs={'class':'form-control'}),
             
-            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'distincion_marzo':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'distincion_fututo_maestro':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'distincion_joven':forms.CheckboxInput(attrs={'class':'form-check-input'}),
@@ -189,7 +189,7 @@ class EditActivityAndStudentView(forms.ModelForm):
             'nombre_evento':forms.SelectMultiple(attrs={'class':'form-control'}),
             'nombre_sub_evento':forms.Select(attrs={'class':'form-control'}),
             'es_colateral':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_evento_colateral':forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_evento_colateral':forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'nivel':forms.SelectMultiple(attrs={'class':'form-control'}),
             'result':forms.SelectMultiple(attrs={'class':'form-control'}),
             
@@ -202,12 +202,12 @@ class EditActivityAndStudentView(forms.ModelForm):
             'nivel_evento':forms.Select(attrs={'class':'form-control'}),
             
             'has_publicacion':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_publicacion': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_publicacion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'nivel_autor':forms.Select(attrs={'class':'form-control'}),
             'nivel_publicacion':forms.Select(attrs={'class':'form-control'}),
             
-            'where_pid': forms.TextInput(attrs={'class': 'form-control'}),
-            'rol': forms.TextInput(attrs={'class': 'form-control'}),
+            'where_pid': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'rol': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'actividades_pid':forms.Select(attrs={'class':'form-control'}),
             
             'grupo_edu_amor':forms.CheckboxInput(attrs={'class':'form-check-input'}),
@@ -217,24 +217,24 @@ class EditActivityAndStudentView(forms.ModelForm):
             'with_repitencias':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'cantidad_repitencias':forms.NumberInput(attrs={'class':'form-control'}),
             
-            'other_reconocimiento':forms.Textarea(attrs={'class':'form-control'}),
+            'other_reconocimiento':forms.Textarea(attrs={'class':'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'is_miembro':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_catedra': forms.TextInput(attrs={'class': 'form-control'}),
-            'actividad_participado': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_catedra': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'actividad_participado': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'actividades_participacion_actos_matutinos':forms.Textarea(attrs={'class':'form-control', 
-                                                                            'placeholder':"Escribe actos y matutinos que hallas participado."}),
+                                                                            'placeholder':"Escribe actos y matutinos que hallas participado.", 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_participacion_festivales':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'manifestacion_festivales': forms.TextInput(attrs={'class': 'form-control'}),            
+            'manifestacion_festivales': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),            
             'nivel_artista_aficionado':forms.Select(attrs={'class':'form-control'}),
             'premio_artista_aficionado':forms.Select(attrs={'class':'form-control'}),
 
-            'nombre_actividad_facultad': forms.TextInput(attrs={'class': 'form-control'}),
-            'manifestacion_actividad_facultad': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_actividad_facultad': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'manifestacion_actividad_facultad': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'lugar_dnd_realizo': forms.TextInput(attrs={'class': 'form-control'}),
+            'lugar_dnd_realizo': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_jjmm':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'deporte':forms.Select(attrs={'class':'form-control'}),
@@ -242,9 +242,9 @@ class EditActivityAndStudentView(forms.ModelForm):
             'lugar':forms.Select(attrs={'class':'form-control'}),
             
             'if_copas_mundialess':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_evento_copas_mundiales': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_evento_copas_mundiales': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             'resultado_copas_mundiales':forms.Select(attrs={'class':'form-control'}),
-            'lugar_copas_mundiales': forms.TextInput(attrs={'class': 'form-control'}),
+            'lugar_copas_mundiales': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_marabana':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'nombre_evento_marabana':forms.Select(attrs={'class':'form-control'}),
@@ -265,30 +265,30 @@ class EditActivityAndStudentView(forms.ModelForm):
             'cantidad_senalamiento_guardia_estudiantil':forms.NumberInput(attrs={'class':'form-control'}),
             
             'if_actividades_limpieza_areas_comunes':forms.CheckboxInput(attrs={'class':'form-check-input'}),
-            'nombre_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control'}),
-            'mes': forms.TextInput(attrs={'class': 'form-control'}),
-            'resultado_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'mes': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'resultado_actividades_limpieza_areas_comunes': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'if_bk_mas_bonita':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             
-            'reconocimiento_otorgado_por': forms.TextInput(attrs={'class': 'form-control'}),
+            'reconocimiento_otorgado_por': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'sanciones_o_medida': forms.TextInput(attrs={'class': 'form-control'}),
-            'motivo_sancion': forms.TextInput(attrs={'class': 'form-control'}),
+            'sanciones_o_medida': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'motivo_sancion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'senalamiento_curso': forms.TextInput(attrs={'class': 'form-control'}),
+            'senalamiento_curso': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'nombre_distincion': forms.TextInput(attrs={'class': 'form-control'}),
-            'organismo_otorga_distincion': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_distincion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'organismo_otorga_distincion': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
-            'nombre_mision': forms.TextInput(attrs={'class': 'form-control'}),
-            'funsion_desempenada': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre_mision': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'funsion_desempenada': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
             
             'proceso':forms.Select(attrs={'class':'form-control'}),
             
             'asignaturas_ayudante':forms.SelectMultiple(attrs={'class':'form-control'}),
             
-            'comite_base': forms.TextInput(attrs={'class': 'form-control'}),
+            'comite_base': forms.TextInput(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$" }),
             
             
         }

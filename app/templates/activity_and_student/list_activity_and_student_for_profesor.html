@@ -2,6 +2,13 @@
 {% load static %}
 {% block content %}
 
+{% if in_valida %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Actividades Invalidadas: <strong>{{cadena}}</strong> 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+{% endif %}
+
 <div class="row my-3">
     <div class="col-2">
       <div id="list-example" class="list-group">

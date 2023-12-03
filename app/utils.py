@@ -69,7 +69,7 @@ def generar_parrafo(perfil, year):
     cadena_investigativa= ""
     cadena_pol_ideo= ""
     dict_aux = {}
-    list_actividades = ActivityAndStudent.objects.filter(profile_id = perfil, year = year)
+    list_actividades = ActivityAndStudent.objects.filter(profile_id = perfil, year = year, is_valid=True)
     for obj in list_actividades:
         # Investigativa
         if obj.activity.id == 3:
@@ -117,12 +117,12 @@ def generar_parrafo(perfil, year):
         if obj.activity.id == 7:
             evaluacion = obj.evaluacion.split(',')
             if obj.is_feu:
-                evaluacion_feu = int((evaluacion[0]))
+                evaluacion_feu = int((evaluacion[0])) - 1
                 cadena_pol_ideo += f"""Perteneci a la Federacion Estudiantil Universitaria(FEU). Ocupando el cargo de {
                     obj.TYPE_NIVEL_CARGO_FEU[obj.cargo_feu][1]} a nivel {obj.TYPE_NIVEL[int(obj.nivel)][1]
                     } con evaluacion de {obj.TYPE_EVALUACION[evaluacion_feu][1]} durante ese periodo."""
             if obj.is_ujc:
-                evaluacion_ujc = int((evaluacion[1]))
+                evaluacion_ujc = int((evaluacion[1])) - 1
                 cadena_pol_ideo += f"""Perteneci a la Union de Jovenes Comunistas(UJC). Ocupando el cargo de {obj.TYPE_NIVEL_CARGO_UJC[obj.cargo_ujc][1]
                     } en el comite de base {obj.comite_base} con evaluacion de {obj.TYPE_EVALUACION[evaluacion_ujc][1]} durante ese periodo."""
         dict_aux['Investigativa'] = cadena_investigativa
@@ -305,29 +305,33 @@ def return_dict_integrality(request, perfil):
             cadena_inv = ""
             aux_dict = {}
             try:
-                cadena_inv += f"""<h5>Periodo de Primer Año</h5><p>{parrafo_primer_anno[f'{aspecto.name}']}</p>"""
-                aux_dict['Primer Año'] = parrafo_primer_anno[f'{aspecto.name}']
+                if parrafo_cuarto_anno[f'{aspecto.name}'] != '':
+                    cadena_inv += f"""<h5>Periodo de Primer Año</h5><p>{parrafo_primer_anno[f'{aspecto.name}']}</p>"""
+                    aux_dict['Primer Año'] = parrafo_primer_anno[f'{aspecto.name}']
             except:
                 cadena_inv += ""
                 # aux_dict['Primer Año'] = {}
             
             try:
-                cadena_inv += f"""<h5 class='text-mute'>Periodo de Segundo Año</h5><p>{parrafo_segundo_anno[f'{aspecto.name}']}</p>"""
-                aux_dict['Segundo Año'] = parrafo_segundo_anno[f'{aspecto.name}']
+                if parrafo_cuarto_anno[f'{aspecto.name}'] != '':
+                    cadena_inv += f"""<h5 class='text-mute'>Periodo de Segundo Año</h5><p>{parrafo_segundo_anno[f'{aspecto.name}']}</p>"""
+                    aux_dict['Segundo Año'] = parrafo_segundo_anno[f'{aspecto.name}']
             except:
                 cadena_inv += ""
                 # aux_dict['Segundo Año'] = {}
                 
             try:
-                cadena_inv += f"""<h5>Periodo de Tercer Año</h5><p>{parrafo_tercer_anno[f'{aspecto.name}']}</p>"""
-                aux_dict['Tercer Año'] = parrafo_tercer_anno[f'{aspecto.name}']
+                if parrafo_cuarto_anno[f'{aspecto.name}'] != '':
+                    cadena_inv += f"""<h5>Periodo de Tercer Año</h5><p>{parrafo_tercer_anno[f'{aspecto.name}']}</p>"""
+                    aux_dict['Tercer Año'] = parrafo_tercer_anno[f'{aspecto.name}']
             except:
                 cadena_inv += ""
                 # aux_dict['Tercer Año'] = {}
             
             try:
-                cadena_inv += f"""<strong class='text-mute'>Periodo de Cuarto Año</strong><p>{parrafo_cuarto_anno[f'{aspecto.name}']}</p>"""
-                aux_dict['Cuarto Año'] = parrafo_cuarto_anno[f'{aspecto.name}']
+                if parrafo_cuarto_anno[f'{aspecto.name}'] != '':
+                    cadena_inv += f"""<strong class='text-mute'>Periodo de Cuarto Año</strong><p>{parrafo_cuarto_anno[f'{aspecto.name}']}</p>"""
+                    aux_dict['Cuarto Año'] = parrafo_cuarto_anno[f'{aspecto.name}']
             except:
                 cadena_inv += ""
                 # aux_dict['Cuarto Año'] = {}

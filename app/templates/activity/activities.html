@@ -5,7 +5,28 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css"> {% endcomment %}
 <div class="row justify-content-between my-3">
     <h5 class="col-sm-4 mx-2">Actividades</h5>
-    
+    {% if elemento_anadido %}
+        <div id="alerta" class="alert alert-success">
+            La Actividad se ha añadido correctamente.
+        </div>
+    {% endif %}
+    {% if in_valida %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Se ha invalidado la Actividad: <strong>{{cadena}}</strong> 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
+    <script>
+        // JavaScript para hacer desaparecer el alerta después de unos segundos
+        document.addEventListener('DOMContentLoaded', function () {
+            var alerta = document.getElementById('alerta');
+            if (alerta) {
+                setTimeout(function () {
+                    alerta.style.display = 'none';
+                }, 5000);  // 5000 milisegundos (5 segundos)
+            }
+        });
+    </script>
     {% comment %} <button class="col-sm-1 btn btn-secondary mx-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="mdi mdi-plus"></i></button>  {% endcomment %}
     {% if not request.user.profile.rol_fac %}
         <a href="{% url "add_activities" %}" class="col-sm-1 btn btn-success mx-3"><i class="mdi mdi-plus"></i></a>
@@ -18,7 +39,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Aspecto</th>
-                    <th>Activa?</th>
+                    {% comment %} <th>Valida?</th> {% endcomment %}
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -26,13 +47,9 @@
             <tbody>
                 {% for actividad in activities %}
                 <tr>
-                    <td>{{actividad.name}} -- {{actividad.id}}</td>
+                    <td>{{actividad.name}}</td>
                     <td>{{actividad.aspecto}}</td>
-                    {% if actividad.is_open %}
-                        <td>Si</td>
-                    {% else %}
-                        <td>No</td>
-                    {% endif %}
+                    
                     <td class="table-action">
                         
                         
@@ -43,10 +60,10 @@
                             data-bs-title="Llenar formulario de Actividad."> <i class="mdi mdi-plus"></i></a>
 
                         {% else %}
-                            <a href="{% url "details_activity" actividad.pk %}" class="action-icon text-success"
+                            {% comment %} <a href="{% url "details_activity" actividad.pk %}" class="action-icon text-success"
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-custom-class="custom-tooltip"
-                            data-bs-title="Ver detalles."> <i class="mdi mdi-eye"></i></a>
+                            data-bs-title="Ver detalles."> <i class="mdi mdi-eye"></i></a> {% endcomment %}
                             
                             <a href="{% url "activity_and_student_update" actividad.pk %}" class="action-icon text-primary"
                             data-bs-toggle="tooltip" data-bs-placement="top"

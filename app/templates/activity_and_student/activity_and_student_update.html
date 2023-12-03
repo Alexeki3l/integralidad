@@ -873,6 +873,14 @@
                                 </div>
                                 <hr>
                             {% endif %}
+                            <div class="input-group mb-3">
+                                <label class="mx-3">
+                                    Evidencia:
+                                </label>
+                                {% for media in activity_and_student.multimedia_set.all %}
+                                    <img src="{{media.file.url}}" width='150'>
+                                {% endfor %}
+                            </div>
                             {% comment %} <div class="input-group mb-3">
                                 <label class="mx-3">
                                     Evidencia:
@@ -903,7 +911,7 @@
                             <button type="submit" class="btn btn-success">Guardar cambios</button>
                           </div> {% endcomment %}
                         <a href="{% url "list_activities" %}" class="btn btn-danger">Cancelar</a>
-                        <button type="submit" class="btn btn-success">Guardar cambios</button>
+                        <button type="submit" class="btn btn-success">Eliminar y volver adicionar</button>
         </form>
 
 {% endblock content %}

@@ -2,7 +2,7 @@ from django.urls import path
 from app.views.actividades import list_activities, DetailsActivityView, EditActivityView, DeleteActivityView, AddActivityView
 from app.views.profile import list_roles, DetailsProfileView, EditProfileView, list_roles_by_rol
 from app.views.activity_and_student import AddActivityAndStudentView, list_activity_and_student_for_profesor\
-    ,DetailsActivityAndStudentForProfessorView, ActivityAndStudentUpdateView
+    ,DetailsActivityAndStudentForProfessorView, ActivityAndStudentUpdateView, invalidar_actividad
     
 from app.views.caracterizacion import caracterizacion, evaluacion_integral_student, exportar_pdf_student
 
@@ -27,8 +27,7 @@ urlpatterns = [
     path('details_activity_and_student_for_profesor/<int:pk_student>/<int:pk_activity>', DetailsActivityAndStudentForProfessorView.as_view(), name='details_activity_and_student_for_profesor'),
     
     
-    
-    # Caracterizacion
+    # Caracterizacion #
     path('caracterizacion', caracterizacion, name='caracterizacion_pk_student'),
     path('caracterizacion/evaluacion_integral', caracterizacion, name='evaluacion_integral'),
     path('caracterizacion/exportar_pdf', caracterizacion, name='exportar_pdf'),
@@ -42,6 +41,8 @@ urlpatterns = [
     path('details_rol/<int:pk>', DetailsProfileView.as_view(), name='details_rol'),
     path('edit_rol/<int:pk>', EditProfileView.as_view(), name='edit_rol'),
     
-    path('roles/list_roles_by_rol/<int:id_profile>', list_roles_by_rol, name='list_roles_by_rol')
+    path('roles/list_roles_by_rol/<int:id_profile>', list_roles_by_rol, name='list_roles_by_rol'),
+    
+    path('invalidar/<int:pk>', invalidar_actividad, name='invalidar_actividad')
     
 ]

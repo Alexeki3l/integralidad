@@ -26,6 +26,9 @@ def list_activities(request):
         cadena=""
         
         activities = Activity.objects.all()
+        act_and_student_all = Activity.objects.filter(activityandstudent__year = request.user.profile.academy_year)
+        
+        profile = Profile.objects.get(id = request.user.profile.id)
         
         act_and_student_filter = ActivityAndStudent.objects.filter(profile = request.user.profile, is_valid = False)
         
@@ -39,7 +42,8 @@ def list_activities(request):
         context = {
             'activities':activities,
             'cadena': cadena,
-            'in_valida': in_valida
+            'in_valida': in_valida,
+            'act_and_student_all':act_and_student_all
         }
         return render(request, 'activity/activities.html', context=context)
     else:

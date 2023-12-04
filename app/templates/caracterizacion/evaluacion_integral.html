@@ -65,7 +65,10 @@
               <th scope="col">Provincia</th>
               <th scope="col">Municipio</th>
               <th scope="col">Militante</th>
-              <th scope="col">Indice Integralidad</th>
+              {% if integralidad_obj.was_generate %}
+                <th scope="col">Indice Integralidad</th>
+              {% endif %}
+              
             </tr>
           </thead>
           <tbody>
@@ -75,7 +78,10 @@
               <td class='text-center'>{{profile.provincia}}</td>
               <td class='text-center'>{{profile.municipio}}</td>
               <td class='text-center'>No</td>
-              <td class='text-center'>0.985</td>
+              {% if integralidad_obj.was_generate %}
+                <td class='text-center'>{{integralidad_obj.valor_final}}</td>
+              {% endif %}
+              
             </tr>
           </tbody>
         </table>

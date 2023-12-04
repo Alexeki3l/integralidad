@@ -35,7 +35,7 @@ class AddActivityAndStudentView(forms.ModelForm):
             
             'evaluacion':forms.Select(attrs={'class':'form-control'}),
             
-            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$"}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'pattern':"^[A-Z][a-z]*$", 'title':"Debe empezar con letra inicial mayuscula."}),
             'distincion_marzo':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'distincion_fututo_maestro':forms.CheckboxInput(attrs={'class':'form-check-input'}),
             'distincion_joven':forms.CheckboxInput(attrs={'class':'form-check-input'}),

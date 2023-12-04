@@ -47,13 +47,11 @@
             <tbody>
                 {% for actividad in activities %}
                 <tr>
-                    <td>{{actividad.name}} {{actividad.id}} </td>
+                    <td>{{actividad.name}} {{actividad.id}}</td>
                     <td>{{actividad.aspecto}}</td>
                     
                     <td class="table-action">
-                        
-                        
-                        {% if request.user.profile not in actividad.profiles.all %}
+                        {% if actividad not in act_and_student_all %}
                             <a href="{% url "add_activities_and_student" actividad.pk %}" class="action-icon text-success"
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             data-bs-custom-class="custom-tooltip"
@@ -73,6 +71,9 @@
                             {% if request.user.profile.rol_fac != 1 %}
                             <a href="{% url "delete_activity" actividad.pk %}" class="action-icon text-danger"> <i class="mdi mdi-delete"></i></a>
                         {% endif %}
+                        {% comment %} {% endwith %} {% endcomment %}
+                        
+                        
                     </td>
                 </tr>
                 {% endfor %}

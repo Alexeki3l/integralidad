@@ -1,7 +1,7 @@
 from typing import Any
 from django.db import models
 from django.shortcuts import render, redirect
-from ..models import Activity, Aspecto, ActivityAndStudent, Asignatura
+from ..models import Activity, Aspecto, ActivityAndStudent, Asignatura, Integralidad
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.db.models import Q
 
@@ -29,7 +29,6 @@ def caracterizacion(request):
     
     dict_integral, dict_integral_pdf, list_parrafo = return_dict_integrality(request, perfil)
     
-    print(request.path)
     if request.path == "/caracterizacion":
         context={
             'parrafo_primer_anno':list_parrafo[0],
@@ -49,17 +48,27 @@ def caracterizacion(request):
         response['Content-Disposition'] = f'attachment; filename="{name_pdf}.pdf"'
         
         exportar_pdf(dict_integral_pdf, perfil, response, request)
-        
         return response
+    
     else:
+        integralidad_obj = Integralidad.objects.get(user = request.user)
+        
         context={
             'parrafo_integral':dict_integral,
             'profile':perfil,
+            'integralidad_obj':integralidad_obj
         }
         return render(request, 'caracterizacion/evaluacion_integral.html', context)
     
 
 def evaluacion_integral_student(request, pk_student):
+    
+    profile = Profile.objects.get(id=pk_student)
+    integralidad = Integralidad.objects.filter(user = profile.user).count()
+    if not integralidad:
+        is_integral = False
+    else:
+        is_integral = True
     
     perfil = Profile.objects.get(id = pk_student)
     
@@ -68,6 +77,8 @@ def evaluacion_integral_student(request, pk_student):
     context={
             'parrafo_integral':dict_integral,
             'profile':perfil,
+            'is_integral':is_integral,
+            'integralidad_obj':integralidad,
         }
     return render(request, 'caracterizacion/evaluacion_integral_para_profesores.html', context)
 

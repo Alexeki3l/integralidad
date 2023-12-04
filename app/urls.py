@@ -2,7 +2,8 @@ from django.urls import path
 from app.views.actividades import list_activities, DetailsActivityView, EditActivityView, DeleteActivityView, AddActivityView
 from app.views.profile import list_roles, DetailsProfileView, EditProfileView, list_roles_by_rol
 from app.views.activity_and_student import AddActivityAndStudentView, list_activity_and_student_for_profesor\
-    ,DetailsActivityAndStudentForProfessorView, ActivityAndStudentUpdateView, invalidar_actividad
+    ,DetailsActivityAndStudentForProfessorView, ActivityAndStudentUpdateView,\
+        invalidar_actividad, generar_integralidad
     
 from app.views.caracterizacion import caracterizacion, evaluacion_integral_student, exportar_pdf_student
 
@@ -43,6 +44,8 @@ urlpatterns = [
     
     path('roles/list_roles_by_rol/<int:id_profile>', list_roles_by_rol, name='list_roles_by_rol'),
     
-    path('invalidar/<int:pk>', invalidar_actividad, name='invalidar_actividad')
+    path('invalidar/<int:pk>', invalidar_actividad, name='invalidar_actividad'),
+    
+    path('generar_integralidad/<int:pk_student>', generar_integralidad, name='generar_integralidad')
     
 ]

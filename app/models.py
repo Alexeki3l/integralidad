@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.db import models
 from authentication.models import Profile
 from django.contrib.auth.models import User
@@ -21,6 +22,9 @@ class Aspecto(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def save(self, force_insert: bool = ..., force_update: bool = ..., using: str | None = ..., update_fields: Iterable[str] | None = ...) -> None:
+        return super().save(force_insert, force_update, using, update_fields)
 
 class Activity(models.Model):
     # MONTHS = (
@@ -435,22 +439,24 @@ class ActivityAndStudent(models.Model):
     def get_absolute_url(self):
         return reverse('list_activities')
 
-class Caracterizacion(models.Model):
+class Integralidad(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
-    fac = models.CharField(max_length=4)
-    in_production = models.CharField(max_length=1)
-    is_investigation = models.CharField(max_length=1)
+    was_generate = models.BooleanField(default=False)
     
-    deporte = models.CharField(max_length=1)
-    guardia = models.CharField(max_length=1)
-    cultura = models.CharField(max_length=1)
-    residencia = models.CharField(max_length=1)
-    tsu = models.CharField(max_length=1)
+    fac = models.CharField(max_length=4, null=True, blank=False)
+    in_production = models.CharField(max_length=1, null=True, blank=False)
+    is_investigation = models.CharField(max_length=1, null=True, blank=False)
     
-    feu_ujc = models.CharField(max_length=1)
-    premio_mella = models.BooleanField(default=False)
-    titulo_oro = models.BooleanField(default=False)
+    deporte = models.CharField(max_length=1, null=True, blank=False)
+    guardia = models.CharField(max_length=1, null=True, blank=False)
+    cultura = models.CharField(max_length=1, null=True, blank=False)
+    residencia = models.CharField(max_length=1, null=True, blank=False)
+    tsu = models.CharField(max_length=1, null=True, blank=False)
+    
+    feu_ujc = models.CharField(max_length=1, null=True, blank=False)
+    premio_mella = models.BooleanField(default=False, null=True, blank=False)
+    titulo_oro = models.BooleanField(default=False, null=True, blank=False)
     #medidas disciplinarias
     menos_graves = models.IntegerField(default=0)
     graves = models.IntegerField(default=0)
